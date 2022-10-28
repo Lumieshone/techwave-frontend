@@ -34,7 +34,6 @@
 </template>
 
 <script>
-// import { validUsername } from "@/utils/validate";
 import { required, max, min } from "vee-validate/dist/rules";
 import {
   extend,
