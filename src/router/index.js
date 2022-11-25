@@ -80,6 +80,21 @@ const createRouter = () => new Router({
   routes: constantRoutes
 })
 
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+ export const asyncRoutes = [
+  {
+    path: '/admin-login',
+    component: () => import('@/views/admin-login/index'),
+    hidden: true
+  },
+
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
+]
+
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465

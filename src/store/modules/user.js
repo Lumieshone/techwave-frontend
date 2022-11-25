@@ -57,6 +57,7 @@ const actions = {
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        // TODO: 对于是不是学号认证 是不是版主 是不是管理员进行区分
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -68,7 +69,7 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        removeToken() // must remove  token  first
+        removeToken() // must remove token first
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -81,7 +82,7 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeToken() // must remove  token  first
+      removeToken() // must remove token first
       commit('RESET_STATE')
       resolve()
     })
