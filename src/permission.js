@@ -4,7 +4,7 @@ import store from './store'
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login','/news','/post','/section','/forum','/register','/404'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -17,10 +17,10 @@ router.beforeEach(async(to, from, next) => {
   const hasToken = getToken()
 
   if (hasToken) {
+    // TODO 之后需要对二手交易的相关页面做出特判
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
-      // NProgress.done()
+      next({ path: '/home' })
     } else {
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
@@ -29,7 +29,6 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           await store.dispatch('user/getInfo')
-
           next()
         } catch (error) {
           // remove token and go to login page to re-login
@@ -42,19 +41,17 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
-
+    // TODO: 帖子，论坛等一般都有后面的?参数，需要额外处理
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       next(`/login?redirect=${to.path}`)
-      // NProgress.done()
     }
   }
 })
 
 router.afterEach(() => {
   // finish progress bar
-  // NProgress.done()
 })

@@ -58,6 +58,7 @@ extend("required", {
 });
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   components: {
     ValidationProvider,
@@ -93,8 +94,7 @@ export default {
       this.$store
         .dispatch("user/login", {username:this.username, password:this.password})
         .then(() => {
-          this.$router.push({ path: this.redirect || "/" });
-          this.loading = false;
+          this.$router.push({ path: this.redirect || "/home" });
         })
         .catch(() => {});
     },
