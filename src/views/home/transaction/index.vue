@@ -1,11 +1,11 @@
 <template>
-    <p>管理员管理页面</p>
+    <p>求购或者出售的帖子</p>
 </template>
 
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "AdminDashboard",
+  name: "TransactionPost",
   data() {
     return {};
   },

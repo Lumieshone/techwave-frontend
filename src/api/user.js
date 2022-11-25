@@ -10,6 +10,14 @@ export function login(data) {
   })
 }
 
+export function adminlogin(data) {
+  return request({
+    url: baseURL + '/admin/login',
+    method: 'post',
+    data
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: baseURL + '/user/info',

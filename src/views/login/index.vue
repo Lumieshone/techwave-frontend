@@ -7,7 +7,7 @@
         rules="required|max:10"
       >
         <v-text-field
-          v-model="username"
+          v-model="mail"
           :counter="10"
           :error-messages="errors"
           label="Name"
@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      username: "admin",
+      mail: "user_mail",
       password: "111111",
       redirect: undefined,
     };
@@ -92,14 +92,16 @@ export default {
     },
     handleLogin() {
       this.$store
-        .dispatch("user/login", {username:this.username, password:this.password})
+        .dispatch("user/login", {mail:this.mail, password:this.password})
         .then(() => {
           this.$router.push({ path: this.redirect || "/home" });
         })
-        .catch(() => {});
+        .catch(() => {
+          console.log('login fail')
+        });
     },
     clear() {
-      this.username = "";
+      this.mail = "";
       this.password = "";
       this.$refs.observer.reset();
     },

@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -29,78 +29,135 @@ Vue.use(Router)
  */
 export const constantRoutes = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    meta: { title: "登录" },
+    hidden: true,
   },
 
   {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
+    path: "/admin-login",
+    component: () => import("@/views/admin-login/index"),
+    meta: { title: "管理员登录" },
+
+    hidden: true,
   },
 
   {
-    path: '/home',
-    redirect: '/news',
-    component: () => import('@/views/home/index'),
+    path: "/admin-dashboard",
+    component: () => import("@/views/admin-dashboard/index"),
+    meta: { title: "管理面板" },
+
+    children: [], //TODO: 未做的管理员功能
+    hidden: true,
+  },
+
+  {
+    path: "/register",
+    component: () => import("@/views/register/index"),
+    meta: { title: "注册" },
+
+    hidden: true,
+  },
+
+  {
+    path: "/",
+    redirect: "/home",
+  },
+
+  {
+    path: "/home",
+    redirect: "/news",
+    hidden: true,
+    component: () => import("@/views/home/index"),
     children: [
       {
-        path:'/news',
-        component: () => import('@/views/home/get-news/index'),
+        path: "/news",
+        meta: { title: "首页咨询" },
+
+        component: () => import("@/views/home/get-news/index"),
       },
       {
-        path:'/forum',
-        component: () => import('@/views/home/forum/index'),
+        path: "/forum",
+        meta: { title: "论坛首页" },
+
+        component: () => import("@/views/home/forum/index"),
       },
       {
-        path:'/section',
-        component: () => import('@/views/home/section/index'),
+        path: "/section",
+        meta: { title: "版块" },
+
+        component: () => import("@/views/home/section/index"),
       },
       {
-        path:'/post',
-        component: () => import('@/views/home/post/index'),
+        path: "/post",
+        meta: { title: "帖子" },
+
+        component: () => import("@/views/home/post/index"),
       },
-    ]
+      {
+        path: "/account",
+        meta: { title: "个人管理" },
+
+        component: () => import("@/views/home/account/index"),
+        children: [], // TODO: 个人信息页面的各种功能
+      },
+      {
+        path: "/sale",
+        meta: { title: "交易求购" },
+
+        component: () => import("@/views/home/sale/index"),
+      },
+      {
+        path: "/transaction",
+        meta: { title: "交易帖子" },
+
+        component: () => import("@/views/home/transaction/index"),
+      },
+    ],
   },
 
   {
-    path: '/404',
-    component: () => import('@/views/page-404'),
-    hidden: true
+    path: "/404",
+    meta: { title: "404" },
+
+    component: () => import("@/views/page-404"),
+    hidden: true,
   },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: "*", redirect: "/404", hidden: true },
+];
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+  });
 
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
- export const asyncRoutes = [
-  {
-    path: '/admin-login',
-    component: () => import('@/views/admin-login/index'),
-    hidden: true
-  },
+//  export const asyncRoutes = [
+//   {
+//     path: '/admin-dashboard',
+//     component: () => import('@/views/admin-dashboard/index'),
+//     meta: {roles:['admin']},
+//     hidden: true,
+//   },
 
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+//   // 404 page must be placed at the end !!!
+//   { path: '*', redirect: '/404', hidden: true }
+// ]
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;
