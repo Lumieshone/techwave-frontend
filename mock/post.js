@@ -6,11 +6,13 @@ module.exports = [
     url: baseURL + "/post_data.*",
     type: "get",
     response: (config) => {
+      // eslint-disable-next-line no-unused-vars
       const { id } = config.query;
-      console.log(id);
       return {
         post_data: {
           title: "an Apple a day keeps op away",
+          // collect
+          is_collected: false,
           layer_data: [
             {
               floor: 1,
