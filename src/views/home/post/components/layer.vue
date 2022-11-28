@@ -1,42 +1,50 @@
 <template>
   <v-container>
-    <h1>{{ post_data.title }}</h1>
-    <p>帖子id: {{post_id}}</p>
-    <v-col
-      v-for="singlelayer_data in post_data.layer_data"
-      :key="singlelayer_data.floor"
-    >
-      <v-card>
-        <v-card-title>
-          <span style="margin: 5px">{{ singlelayer_data.floor }} 楼 </span>
-          <span style="margin: 5px">{{ singlelayer_data.author }}</span>
-          <v-avatar>
-            <img
-              :src="singlelayer_data.avatar"
-              :alt="singlelayer_data.author"
-            />
-          </v-avatar>
-        </v-card-title>
-        <v-card-subtitle
-          ><span>{{ singlelayer_data.time }}</span></v-card-subtitle
+    <v-card>
+      <v-card-title>
+        <span style="margin: 5px">{{ layer_data.floor }} 楼 </span>
+        <span style="margin: 5px">{{ layer_data.author }}</span>
+        <v-avatar>
+          <img :src="layer_data.avatar" :alt="layer_data.author" />
+        </v-avatar>
+      </v-card-title>
+      <v-card-subtitle
+        ><span>{{ layer_data.time }}</span></v-card-subtitle
+      >
+      <v-card-text>
+        <span>{{ layer_data.content }}</span>
+        <PostComment :comment_data="layer_data.comment_data"></PostComment>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          fab
+          small
+          v-on:click="open_reply_dialog(layer_data.floor)"
         >
-        <v-card-text>
-          <span>{{ singlelayer_data.content }}</span>
-          <PostComment></PostComment>
-        </v-card-text>
-      </v-card>
-    </v-col>
+          <v-icon>mdi-comment</v-icon>
+        </v-btn>
+        <v-btn
+          color="primary"
+          fab
+          small
+          v-show="layer_data.able_to_delete"
+          v-on:click="open_delete_dialog(layer_data.floor)"
+        >
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 
-    <!-- comment on post -->
-    <v-col>
+    <!-- reply -->
+    <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>发表你的看法..</v-card-title>
-        <v-card-subtitle>请文明发言哦~</v-card-subtitle>
+        <v-card-title>回复给 {{ reply_to_floor }} 楼</v-card-title>
         <v-card-text>
           <v-textarea
-            v-model="comment_data"
+            v-model="reply_content"
             outlined
-            label="评论"
+            label="输入你的评论（请文明发言~）"
           ></v-textarea>
         </v-card-text>
         <v-card-actions>
@@ -44,12 +52,39 @@
             color="blue"
             class="ma-2 white--text"
             small
-            @click="comment_on_post"
-            >发表评论
+            @click="close_reply_dialog"
+            >取消
           </v-btn>
-        </v-card-actions>
+          <v-btn color="blue" class="ma-2 white--text" small @click="reply">
+            回复
+          </v-btn></v-card-actions
+        >
       </v-card>
-    </v-col>
+    </v-dialog>
+
+    <!-- delete -->
+    <v-dialog v-model="show_delete_dialog">
+      <v-card>
+        <v-card-title>确认删除 {{delete_floor}} 楼？</v-card-title>
+        <v-card-actions>
+          <v-btn
+            color="blue"
+            class="ma-2 white--text"
+            small
+            @click="close_delete_dialog"
+            >取消
+          </v-btn>
+          <v-btn
+            color="blue"
+            class="ma-2 white--text"
+            small
+            @click="delete_comment"
+          >
+            删除
+          </v-btn></v-card-actions
+        >
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -59,48 +94,62 @@ import PostComment from "@/views/home/post/components/comment.vue";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostLayer",
+  props: {
+    layer_data: {
+      floor: Number,
+      avatar: String,
+      author: String,
+      time: Date,
+      content: undefined,
+      comment_data: undefined,
+      able_to_delete: Boolean,
+    },
+  },
   components: {
     PostComment,
   },
   data() {
     return {
-      // comment
-      comment_data: "",
-      // post id (from query)
-      post_id: undefined,
-      // post data (from backend)
-      post_data: {
-        title: "an Apple a day keeps op away",
-        layer_data: [
-          {
-            floor: 1,
-            avatar:
-              "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-            author: "baokker",
-            time: new Date(),
-            content:
-              "apple nb,\n但是说到原神《原神》为我们的女儿我们唯一也是正确的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
-          },
-          {
-            floor: 2,
-            avatar:
-              "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-            author: "ph",
-            time: new Date(),
-            content: "iphone nb",
-          },
-        ],
-      },
+      // reply to some floor
+      show_reply_dialog: false,
+      reply_to_floor: undefined,
+      reply_content: undefined,
+
+      // delete my floor
+      show_delete_dialog: false,
+      delete_floor: undefined,
     };
   },
   methods: {
-    comment_on_post() {
-      console.log("comment on " + this.post_id);
-      // 可能会有一个重新加载post_data的过程...
+    // reply
+    open_reply_dialog(floor) {
+      this.show_reply_dialog = true;
+      this.reply_to_floor = floor;
+      this.reply_content = "";
     },
-  },
-  mounted() {
-    this.post_id = this.$route.params.post_id;
+    close_reply_dialog() {
+      this.show_reply_dialog = false;
+      this.reply_to_floor = undefined;
+      this.reply_content = "";
+    },
+    reply() {
+      console.log("reply successfully");
+      this.show_reply_dialog = false;
+    },
+
+    // delete
+    open_delete_dialog(floor) {
+      this.show_delete_dialog = true;
+      this.delete_floor = floor;
+    },
+    close_delete_dialog() {
+      this.show_delete_dialog = false;
+      this.delete_floor = undefined;
+    },
+    delete_comment() {
+      console.log("delete floor successfully");
+      this.show_delete_dialog = false;
+    },
   },
 };
 </script>

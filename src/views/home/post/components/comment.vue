@@ -1,18 +1,18 @@
 <template>
   <v-container>
     <v-col
-      v-for="singleCommentData in commentData"
-      :key="singleCommentData.comment_id"
+      v-for="singlecomment_data in comment_data"
+      :key="singlecomment_data.comment_id"
     >
       <v-card>
-        <v-card-title>{{ singleCommentData.author }}</v-card-title>
-        <v-card-subtitle v-show="singleCommentData.reply_to"
+        <v-card-title>{{ singlecomment_data.author }}</v-card-title>
+        <v-card-subtitle v-show="singlecomment_data.reply_to"
           ><span
-            >回复给 {{ singleCommentData.reply_to }}
-            {{ singleCommentData.time }}</span
+            >回复给 {{ singlecomment_data.reply_to }}
+            {{ singlecomment_data.time }}</span
           ></v-card-subtitle
         >
-        <v-card-text>{{ singleCommentData.content }}</v-card-text>
+        <v-card-text>{{ singlecomment_data.content }}</v-card-text>
         <v-card-actions>
           <v-btn
             color="primary"
@@ -20,8 +20,8 @@
             small
             v-on:click="
               open_reply_dialog(
-                singleCommentData.author,
-                singleCommentData.comment_id
+                singlecomment_data.author,
+                singlecomment_data.comment_id
               )
             "
           >
@@ -31,8 +31,8 @@
             color="primary"
             fab
             small
-            v-show="singleCommentData.able_to_delete"
-            v-on:click="open_delete_dialog(singleCommentData.comment_id)"
+            v-show="singlecomment_data.able_to_delete"
+            v-on:click="open_delete_dialog(singlecomment_data.comment_id)"
           >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
@@ -96,6 +96,16 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostComment",
+  props:{
+    comment_data:{
+        comment_id: Number,
+        time: Date,
+        author: String,
+        reply_to: String,
+        content: String,
+        able_to_delete: Boolean,
+    },
+  },
   data() {
     return {
       // reply
@@ -107,37 +117,10 @@ export default {
       // delete
       show_delete_dialog: false,
       delete_comment_id: undefined,
-
-      // comment
-      commentData: [
-        {
-          comment_id: 1,
-          time: new Date(),
-          author: "ysj",
-          reply_to: "mb",
-          content: "woww it' s a little bit ee",
-          able_to_delete: false,
-        },
-        {
-          comment_id: 2,
-          time: new Date(),
-          author: "mb",
-          reply_to: "ysj",
-          content: "woww it' s a ssss bit ee",
-          able_to_delete: false,
-        },
-        {
-          comment_id: 3,
-          time: new Date(),
-          author: "fbc",
-          reply_to: "",
-          content: "jialguajian",
-          able_to_delete: true,
-        },
-      ],
     };
   },
   methods: {
+    // TODO: 帖子分页
     // arrow methods can't bind to this, so use function instead!!
 
     // reply
