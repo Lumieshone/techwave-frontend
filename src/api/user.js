@@ -1,10 +1,8 @@
 import request from '@/utils/request'
 
-let baseURL = process.env.VUE_APP_BASE_API;
-
 export function login(data) {
   return request({
-    url: baseURL + '/user/login',
+    url: '/user/login',
     method: 'post',
     data
   })
@@ -12,7 +10,7 @@ export function login(data) {
 
 export function adminlogin(data) {
   return request({
-    url: baseURL + '/admin/login',
+    url: '/admin/login',
     method: 'post',
     data
   })
@@ -20,7 +18,7 @@ export function adminlogin(data) {
 
 export function getInfo(token) {
   return request({
-    url: baseURL + '/user/info',
+    url: '/user/info',
     method: 'get',
     params: { token }
   })
@@ -28,7 +26,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: baseURL + '/user/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }

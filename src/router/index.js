@@ -83,13 +83,13 @@ export const constantRoutes = [
         component: () => import("@/views/home/forum/index"),
       },
       {
-        path: "/section",
+        path: "/section/:forum_id/",
         meta: { title: "版块" },
 
         component: () => import("@/views/home/section/index"),
       },
       {
-        path: "/post",
+        path: "/post/:post_id/",
         meta: { title: "帖子" },
 
         component: () => import("@/views/home/post/index"),
