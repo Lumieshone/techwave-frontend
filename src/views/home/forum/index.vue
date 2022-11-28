@@ -1,5 +1,7 @@
 <template>
+    <v-card>
     <p>forum首页</p>
+    </v-card>
 </template>
 
 <script>

@@ -69,12 +69,11 @@ export const constantRoutes = [
     path: "/home",
     redirect: "/news",
     hidden: true,
-    component: () => import("@/views/home/index"),
+    component: () => import("@/components/HeaderBar"),
     children: [
       {
         path: "/news",
         meta: { title: "首页资讯" },
-
         component: () => import("@/views/home/get-news/index"),
       },
       {
