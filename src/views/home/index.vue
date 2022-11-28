@@ -51,9 +51,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-a {
-  margin: 0px;
-}
-</style>
