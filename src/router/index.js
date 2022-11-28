@@ -73,7 +73,7 @@ export const constantRoutes = [
     children: [
       {
         path: "/news",
-        meta: { title: "首页咨询" },
+        meta: { title: "首页资讯" },
 
         component: () => import("@/views/home/get-news/index"),
       },

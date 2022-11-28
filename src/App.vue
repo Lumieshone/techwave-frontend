@@ -13,13 +13,18 @@
     </v-main>
 
     <v-footer app>
-      <!-- -->
+      <Footer></Footer>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import Footer from "@/components/Footer.vue";
+
 export default {
   name: "App",
+  components: {
+    Footer,
+  },
 };
 </script>
