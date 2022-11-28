@@ -2,6 +2,7 @@
   <v-footer
       app
       dark
+      padless
   >
     <v-col
         class="text-center"
