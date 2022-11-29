@@ -84,6 +84,7 @@ export default {
         .dispatch("user/logout")
         .then(() => {
           console.log("logout completed");
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);

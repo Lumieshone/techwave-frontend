@@ -94,8 +94,7 @@ module.exports = [
           content:
             "apple nb,\n但是3l3l3l3l3的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
           able_to_delete: false,
-          comment_data: [
-          ],
+          comment_data: [],
         },
         {
           floor: 4,
@@ -106,8 +105,7 @@ module.exports = [
           content: "iphodadsdsdsa4l4l4l4lne nb",
           able_to_delete: true,
           // comment
-          comment_data: [
-          ],
+          comment_data: [],
         },
         {
           floor: 5,
@@ -173,17 +171,23 @@ module.exports = [
             },
           ],
         },
-      ]
+      ];
       // eslint-disable-next-line no-unused-vars
-      const { id ,offset,limit} = config.query;
-      
+      const { id, offset, limit } = config.query;
+
       return {
+        code: 20000,
         post_data: {
           title: "an Apple a day keeps op away",
           // collect
           is_collected: false,
           total_page: full_layer_data.length,
-          layer_data: full_layer_data.slice(offset,offset+limit>=full_layer_data.length?full_layer_data.length:offset+limit),
+          layer_data: full_layer_data.slice(
+            offset,
+            offset + limit >= full_layer_data.length
+              ? full_layer_data.length
+              : offset + limit
+          ),
         },
       };
     },

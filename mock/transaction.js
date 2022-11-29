@@ -24,6 +24,7 @@ module.exports = [
       const { id } = config.query;
 
       return {
+        code: 20000,
         contact_info: {
           method: "微信",
           number: "13432",
