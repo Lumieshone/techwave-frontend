@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <h1>{{ post_data.title }}</h1>
-    <p>帖子id: {{ post_id }} </p>
+    <p>帖子id: {{ post_id }}</p>
 
     <!-- // 是否收藏 -->
     <v-btn
       :disabled="this.$store.getters.roles.length == 0"
       v-on:click="collect"
     >
-      <v-icon :color="post_data.is_collected?'red':'grey'">mdi-star</v-icon>
+      <v-icon :color="post_data.is_collected ? 'red' : 'grey'">mdi-star</v-icon>
       收藏
     </v-btn>
     <v-col
@@ -49,7 +49,7 @@
 <script>
 import PostLayer from "@/views/home/post/components/layer.vue";
 
-import { get_post_info } from "@/api/post";
+import { get_post_info, collect_post } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -80,7 +80,9 @@ export default {
     },
 
     collect() {
-      this.post_data.is_collected = !this.post_data.is_collected;
+      collect_post(this.post_id).then(() => {
+        this.post_data.is_collected = !this.post_data.is_collected;
+      });
     },
   },
   mounted() {

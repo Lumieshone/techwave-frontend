@@ -1,6 +1,20 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
 module.exports = [
+  // collect post
+  // add or cancel collection
+  {
+    url: baseURL + "/collect_post",
+    type: "post",
+    response: (config) => {
+      // eslint-disable-next-line no-unused-vars
+      const { id } = config.body;
+      return {
+        code: 20000,
+        message: "add or cancel collection",
+      };
+    },
+  },
   // get post info
   {
     url: baseURL + "/post_data.*",
