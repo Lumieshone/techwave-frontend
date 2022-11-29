@@ -9,14 +9,27 @@
       v-on:click="collect"
     >
       <v-icon :color="post_data.is_collected ? 'red' : 'grey'">mdi-star</v-icon>
-      收藏
+      {{ able_to_collect ? "收藏" : "请先登录再收藏" }}
     </v-btn>
+
+    <!-- 楼层 -->
     <v-col
       v-for="singlelayer_data in post_data.layer_data"
       :key="singlelayer_data.floor"
     >
       <PostLayer :layer_data="singlelayer_data" />
     </v-col>
+
+    <!-- 分页 -->
+    <v-pagination
+      v-if="Math.ceil(post_data.total_page / limit) > 1"
+      class="pagination"
+      v-model="curPage"
+      :length="Math.ceil(post_data.total_page / limit)"
+      total-visible="7"
+      @input="onPageChange(curPage, limit)"
+    ></v-pagination>
+
     <!-- comment on post -->
     <v-col>
       <v-card>
@@ -59,6 +72,10 @@ export default {
   },
   data() {
     return {
+      // pagination
+      curPage: 1,
+      limit: 5,
+
       // comment
       comment_data: "",
       comment_image_info: undefined,
@@ -74,11 +91,29 @@ export default {
     };
   },
   methods: {
+    // pagination
+    onPageChange(curPage, limit) {
+      this.refreshList(curPage, limit);
+    },
+    refreshList(curPage = this.curPage, limit = this.limit) {
+      get_post_info({
+        id: this.post_id,
+        offset: (curPage - 1) * limit,
+        limit: limit,
+      })
+        .then((res) => {
+          this.post_data = res.post_data;
+        })
+        .catch((err) => console.log("error: " + err));
+    },
+
+    // comment
     comment_on_post() {
       console.log("comment on " + this.post_id);
       // 可能会有一个重新加载post_data的过程...
     },
 
+    // collect
     collect() {
       collect_post(this.post_id).then(() => {
         this.post_data.is_collected = !this.post_data.is_collected;
@@ -87,11 +122,7 @@ export default {
   },
   mounted() {
     this.post_id = this.$route.params.post_id;
-    get_post_info(this.post_id)
-      .then((res) => {
-        this.post_data = res.post_data;
-      })
-      .catch((err) => console.log("error: " + err));
+    this.refreshList();
   },
 };
 </script>
