@@ -41,7 +41,7 @@ module.exports = [
       if (!token) {
         return {
           code: 60204,
-          message: "Account and password are incorrect.",
+          message: "Acsmallcount and password are incorrect.",
         };
       }
 
@@ -106,7 +106,6 @@ module.exports = [
     response: (_) => {
       return {
         code: 20000,
-        data: "success",
       };
     },
   },
