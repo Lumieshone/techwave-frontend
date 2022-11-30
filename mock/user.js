@@ -4,7 +4,7 @@ const tokens = {
   admin: {
     token: "admin-token",
   },
-  user_mail: {
+  'user_mail@qq.com': {
     token: "user-token",
   },
 };

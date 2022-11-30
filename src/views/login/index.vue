@@ -1,40 +1,43 @@
 <template>
-  <validation-observer ref="observer" v-slot="{ invalid }">
-    <form @submit.prevent="handleLogin">
-      <validation-provider
-        v-slot="{ errors }"
-        name="Name"
-        rules="required|max:10"
-      >
-        <v-text-field
-          v-model="mail"
-          :counter="10"
-          :error-messages="errors"
-          label="Name"
-          required
-        ></v-text-field>
-      </validation-provider>
-      <validation-provider
-        v-slot="{ errors }"
-        name="Name"
-        rules="required|min:6"
-      >
-        <v-text-field
-          v-model="password"
-          :counter="10"
-          :error-messages="errors"
-          label="Password"
-          required
-        ></v-text-field>
-      </validation-provider>
-      <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-      <v-btn @click="clear"> clear </v-btn>
-    </form>
-  </validation-observer>
+  <v-card>
+    <v-card-title>Login - 登录</v-card-title>
+    <v-card-text>
+      <validation-observer ref="observer" v-slot="{ invalid }">
+        <form @submit.prevent="handleLogin">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Mail"
+            rules="required|email"
+          >
+            <v-text-field
+              v-model="mail"
+              :error-messages="errors"
+              label="Mail"
+              required
+            ></v-text-field>
+          </validation-provider>
+          <validation-provider
+            v-slot="{ errors }"
+            name="Password"
+            rules="required"
+          >
+            <v-text-field
+              v-model="password"
+              :error-messages="errors"
+              label="Password"
+              required
+            ></v-text-field>
+          </validation-provider>
+          <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
+          <v-btn @click="clear"> clear </v-btn>
+        </form>
+      </validation-observer>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-import { required, max, min } from "vee-validate/dist/rules";
+import { required, max, min, email } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -56,6 +59,10 @@ extend("required", {
   ...required,
   message: "{_field_} can not be empty",
 });
+extend("email", {
+  ...email,
+  message: "{_field_} must be a valid email address",
+});
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -66,7 +73,7 @@ export default {
   },
   data() {
     return {
-      mail: "user_mail",
+      mail: "user_mail@qq.com",
       password: "111111",
       redirect: undefined,
     };
@@ -92,12 +99,12 @@ export default {
     },
     handleLogin() {
       this.$store
-        .dispatch("user/login", {mail:this.mail, password:this.password})
+        .dispatch("user/login", { mail: this.mail, password: this.password })
         .then(() => {
           this.$router.push({ path: this.redirect || "/home" });
         })
         .catch(() => {
-          console.log('login fail')
+          console.log("login fail");
         });
     },
     clear() {
