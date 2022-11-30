@@ -19,9 +19,9 @@ service.interceptors.request.use(
 
     if (store.getters.token) {
       // let each request carry token
-      // ['SSE-Token'] is a custom headers key
+      // ['JK-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers["SSE-Token"] = getToken();
+      config.headers["JK-Token"] = getToken();
     }
 
     console.log(config);

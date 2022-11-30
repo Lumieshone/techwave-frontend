@@ -38,3 +38,11 @@ export function register(data) {
     data,
   });
 }
+
+export function find_password(data) {
+  return request({
+    url: "/user/find_password",
+    method: "post",
+    data,
+  });
+}

@@ -24,7 +24,7 @@
 
           <validation-provider
             v-slot="{ errors }"
-            name="Mail"
+            name="Username"
             rules="required|min:1|max:20"
           >
             <v-text-field
@@ -37,10 +37,14 @@
 
           <validation-provider
             v-slot="{ errors }"
+            vid="password"
             name="Password"
             rules="required|min:8|max:20"
           >
             <v-text-field
+              :append-icon="show_password1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show_password1 ? 'text' : 'password'"
+              @click:append="show_password1 = !show_password1"
               v-model="password"
               :error-messages="errors"
               label="Password"
@@ -51,10 +55,13 @@
           <validation-provider
             v-slot="{ errors }"
             name="Repeat Password"
-            rules="required|samepassword"
+            rules="required|confirmed:password"
           >
             <v-text-field
-              v-model="password"
+              :append-icon="show_password2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show_password2 ? 'text' : 'password'"
+              @click:append="show_password2 = !show_password2"
+              v-model="repeat_password"
               :error-messages="errors"
               label="Repeat Password"
               required
@@ -72,7 +79,7 @@
 <script>
 import { register } from "@/api/user";
 
-import { required, max, min, email } from "vee-validate/dist/rules";
+import { required, max, min, email, confirmed } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -98,16 +105,14 @@ extend("email", {
   ...email,
   message: "{_field_} must be a valid email address",
 });
-extend("samepassword", {
-  validate(value) {
-    return value != this.password;
-  },
-  message: "{_field_} must be same as the password above",
+extend("confirmed", {
+  ...confirmed,
+  message: "{_field_} must be the same as the password above",
 });
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
+  name: "Register",
   components: {
     ValidationProvider,
     ValidationObserver,
@@ -123,8 +128,9 @@ export default {
       // loading logo
       loading: false,
 
-      // 重定向
-      redirect: undefined,
+      // show password
+      show_password1: true,
+      show_password2: true,
     };
   },
   methods: {

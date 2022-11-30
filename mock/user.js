@@ -4,7 +4,7 @@ const tokens = {
   admin: {
     token: "admin-token",
   },
-  'user_mail@qq.com': {
+  "user_mail@qq.com": {
     token: "user-token",
   },
 };
@@ -111,18 +111,43 @@ module.exports = [
     },
   },
 
-    // user register
-    {
-      url: baseURL + "/user/register",
-      type: "post",
-      // eslint-disable-next-line no-unused-vars
-      response: (config) => {
-        const data = config.query;
-        console.log(data);
+  // user register
+  {
+    url: baseURL + "/user/register",
+    type: "post",
+    // eslint-disable-next-line no-unused-vars
+    response: (config) => {
+      const data = config.query;
+      console.log(data);
+      if (Math.random() < 0.9) {
         return {
           code: 20000,
           data: "success",
         };
-      },
+      } else {
+        return {
+          code: 20001,
+          message: "注册失败！",
+        };
+      }
     },
+  },
+
+  // find password
+  {
+    url: baseURL + "/user/find_password",
+    type: "post",
+    response: () => {
+      if (Math.random() < 0.5) {
+        return {
+          code: 20000,
+        };
+      } else {
+        return {
+          code: 20001,
+          message: "原密码错误！",
+        };
+      }
+    },
+  },
 ];

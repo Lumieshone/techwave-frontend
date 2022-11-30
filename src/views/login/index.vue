@@ -1,49 +1,61 @@
 <template>
-  <v-card>
-    <v-card-title>Login - 登录</v-card-title>
-    <v-card-subtitle>
-      <router-link to="/register">注册</router-link>
-      <span style="margin: 10px">|</span>
-      <span @click="show_find_password_dialog = !show_find_password_dialog"
-        >找回密码</span
-      >
-    </v-card-subtitle>
-    <v-card-text>
-      <validation-observer ref="observer" v-slot="{ invalid }">
-        <form @submit.prevent="handleLogin">
-          <validation-provider
-            v-slot="{ errors }"
-            name="Mail"
-            rules="required|email"
-          >
-            <v-text-field
-              v-model="mail"
-              :error-messages="errors"
-              label="Mail"
-              required
-            ></v-text-field>
-          </validation-provider>
-          <validation-provider
-            v-slot="{ errors }"
-            name="Password"
-            rules="required"
-          >
-            <v-text-field
-              v-model="password"
-              :error-messages="errors"
-              label="Password"
-              required
-            ></v-text-field>
-          </validation-provider>
-          <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-          <v-btn @click="clear"> clear </v-btn>
-        </form>
-      </validation-observer>
-    </v-card-text>
-  </v-card>
+  <v-container>
+    <v-card>
+      <v-card-title>Login - 登录</v-card-title>
+      <v-card-subtitle>
+        <router-link to="/register">注册</router-link>
+        <span style="margin: 10px">|</span>
+        <v-dialog v-model="show_find_password_dialog" transition="dialog-bottom-transition">
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on">找回密码</span>
+          </template>
+          <FindPassword @close_find_password_dialog="show_find_password_dialog = false" />
+        </v-dialog>
+      </v-card-subtitle>
+      <v-card-text>
+        <validation-observer ref="observer" v-slot="{ invalid }">
+          <form @submit.prevent="handleLogin">
+            <validation-provider
+              v-slot="{ errors }"
+              name="Mail"
+              rules="required|email"
+            >
+              <v-text-field
+                v-model="mail"
+                :error-messages="errors"
+                label="Mail"
+                required
+              ></v-text-field>
+            </validation-provider>
+            <validation-provider
+              v-slot="{ errors }"
+              name="Password"
+              rules="required"
+            >
+              <v-text-field
+                :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show_password ? 'text' : 'password'"
+                @click:append="show_password = !show_password"
+                v-model="password"
+                :error-messages="errors"
+                label="Password"
+                required
+              ></v-text-field>
+            </validation-provider>
+            <v-btn class="mr-4" type="submit" :disabled="invalid">
+              submit
+            </v-btn>
+            <v-btn @click="clear"> clear </v-btn>
+          </form>
+        </validation-observer>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
+import FindPassword from "@/views/login/components/find-password/index";
+
 import { required, max, min, email } from "vee-validate/dist/rules";
 import {
   extend,
@@ -77,6 +89,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    FindPassword,
   },
   data() {
     return {
@@ -92,6 +105,9 @@ export default {
 
       // find password
       show_find_password_dialog: false,
+
+      // show password
+      show_password: true,
     };
   },
   watch: {
@@ -123,6 +139,9 @@ export default {
       this.password = "";
       this.$refs.observer.reset();
     },
+    close_find_password_dialog(){
+      this.find_password_dialog = false;
+    }
   },
 };
 </script>
