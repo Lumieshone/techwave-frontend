@@ -110,4 +110,19 @@ module.exports = [
       };
     },
   },
+
+    // user register
+    {
+      url: baseURL + "/user/register",
+      type: "post",
+      // eslint-disable-next-line no-unused-vars
+      response: (config) => {
+        const data = config.query;
+        console.log(data);
+        return {
+          code: 20000,
+          data: "success",
+        };
+      },
+    },
 ];

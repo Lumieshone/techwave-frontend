@@ -1,6 +1,13 @@
 <template>
   <v-card>
     <v-card-title>Login - 登录</v-card-title>
+    <v-card-subtitle>
+      <router-link to="/register">注册</router-link>
+      <span style="margin: 10px">|</span>
+      <span @click="show_find_password_dialog = !show_find_password_dialog"
+        >找回密码</span
+      >
+    </v-card-subtitle>
     <v-card-text>
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="handleLogin">
@@ -73,9 +80,18 @@ export default {
   },
   data() {
     return {
+      // info
       mail: "user_mail@qq.com",
       password: "111111",
+
+      // loading logo
+      loading: false,
+
+      // 重定向
       redirect: undefined,
+
+      // find password
+      show_find_password_dialog: false,
     };
   },
   watch: {
@@ -87,23 +103,18 @@ export default {
     },
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
-      } else {
-        this.passwordType = "password";
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
     handleLogin() {
+      this.loading = true;
       this.$store
         .dispatch("user/login", { mail: this.mail, password: this.password })
         .then(() => {
+          this.loading = false;
+          this.$message.success("登录成功！已为你跳转到首页");
           this.$router.push({ path: this.redirect || "/home" });
         })
         .catch(() => {
+          this.loading = false;
+          this.$message.error("登录出现了一点问题..");
           console.log("login fail");
         });
     },
@@ -115,3 +126,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+a {
+  color: #6d6d6d;
+  text-decoration: none;
+}
+
+.router-link-active {
+  text-decoration: none;
+}
+</style>
