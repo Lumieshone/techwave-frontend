@@ -5,6 +5,7 @@ import { resetRouter } from '@/router'
 const getDefaultState = () => {
   return {
     token: getToken(),
+    user_id: 0,
     name: '',
     avatar: '',
     roles: [],
@@ -20,6 +21,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_USERID: (state, user_id) => { // 是否为在校生
+    state.user_id = user_id
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -76,7 +80,7 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, is_authenticated} = data
+        const { roles, user_id, name, avatar, is_authenticated} = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -84,6 +88,7 @@ const actions = {
         }
 
         commit('SET_ROLES', roles)
+        commit('SET_USERID', user_id)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_AUTHENTICATION',is_authenticated)

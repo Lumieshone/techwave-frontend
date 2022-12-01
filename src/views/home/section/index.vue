@@ -139,7 +139,7 @@ export default {
   name: "Section",
   data(){
     return {
-      user_id: 23,
+      user_id: this.$store.getters.user_id,
       cur_page: 1,
       if_filter: false,
       show_post_dialog: false,
@@ -191,7 +191,7 @@ export default {
     refresh_list() {
       this.tag_id = 0;
       this.cur_page = 1;
-        get_section_info(this.section_id,1,10)
+        get_section_info(this.section_id,this.user_id,1,10)
             .then(res => {
               this.section_data = res.section_data;
             });
@@ -209,6 +209,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.user_id)
     this.section_id = this.$route.params.section_id;
     get_section_info(this.section_id,this.user_id,1,10)
         .then((res) => {
