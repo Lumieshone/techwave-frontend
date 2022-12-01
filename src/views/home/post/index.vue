@@ -23,7 +23,6 @@
     <!-- 分页 -->
     <v-pagination
       v-if="Math.ceil(post_data.total_page / limit) > 1"
-      class="pagination"
       v-model="curPage"
       :length="Math.ceil(post_data.total_page / limit)"
       total-visible="7"
