@@ -7,7 +7,7 @@ module.exports = [
         type: "get",
         response: () => {
             return {
-                code: "20000",
+                code: 20000,
                 section_data: {
                     title: "原神",
                     // collect
