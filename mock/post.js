@@ -173,7 +173,9 @@ module.exports = [
         },
       ];
       // eslint-disable-next-line no-unused-vars
-      const { id, offset, limit } = config.query;
+      let { id, offset, limit } = config.query;
+      offset = Number(offset);
+      limit = Number(limit);
 
       return {
         code: 20000,
@@ -184,9 +186,7 @@ module.exports = [
           total_page: full_layer_data.length,
           layer_data: full_layer_data.slice(
             offset,
-            offset + limit >= full_layer_data.length
-              ? full_layer_data.length
-              : offset + limit
+            offset + limit
           ),
         },
       };

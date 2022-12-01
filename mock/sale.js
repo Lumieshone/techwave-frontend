@@ -366,7 +366,7 @@ module.exports = [
         filter_data = filter_data.filter((t) => t.campus_zone == campus_zone);
       }
 
-      console.log(offset+limit);
+      console.log(limit+offset);
       filter_data = filter_data.slice(offset, offset+limit);
 
       return {
