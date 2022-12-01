@@ -6,6 +6,7 @@ module.exports = [
     url: baseURL + "/post_data.*",
     type: "get",
     response: (config) => {
+      console.log(config)
       // eslint-disable-next-line no-unused-vars
       const { id } = config.query;
       return {

@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-container>
     <v-app-bar
         app
         color="#6A76AB"
@@ -85,7 +85,7 @@
       ></v-avatar>
     </v-app-bar>
     <router-view />
-  </v-card>
+  </v-container>
 </template>
 
 <script>

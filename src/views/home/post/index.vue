@@ -8,7 +8,7 @@
       :disabled="this.$store.getters.roles.length == 0"
       v-on:click="collect"
     >
-      <v-icon :color="post_data.is_collected?'red':'grey'">mdi-star</v-icon>
+      <v-icon :color="post_data.is_collected?'orange':'grey'">mdi-star</v-icon>
       收藏
     </v-btn>
     <v-col
