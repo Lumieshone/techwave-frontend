@@ -8,6 +8,7 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     roles: [],
+    is_authenticated: false,
   }
 }
 
@@ -28,7 +29,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  }
+  },
+  SET_AUTHENTICATION: (state, is_authenticated) => { // 是否为在校生
+    state.is_authenticated = is_authenticated
+  },
 }
 
 const actions = {
@@ -72,7 +76,7 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar } = data
+        const { roles, name, avatar, is_authenticated} = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -82,6 +86,7 @@ const actions = {
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_AUTHENTICATION',is_authenticated)
 
         resolve(data)
       }).catch(error => {

@@ -7,6 +7,10 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// Message
+import Message from './components/Message/index.js'
+Vue.prototype.$message = Message
+
 Vue.config.productionTip = false
 
 Vue.prototype.$baseURL = process.env.VUE_APP_BASE_API

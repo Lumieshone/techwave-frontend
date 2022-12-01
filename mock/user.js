@@ -4,7 +4,7 @@ const tokens = {
   admin: {
     token: "admin-token",
   },
-  user_mail: {
+  "user_mail@qq.com": {
     token: "user-token",
   },
 };
@@ -16,6 +16,7 @@ const users = {
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     name: "Super Admin",
+    is_authenticated: true,
   },
   "user-token": {
     roles: ["user"],
@@ -23,6 +24,7 @@ const users = {
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     name: "Normal User",
+    is_authenticated: true,
   },
 };
 
@@ -39,7 +41,7 @@ module.exports = [
       if (!token) {
         return {
           code: 60204,
-          message: "Account and password are incorrect.",
+          message: "Acsmallcount and password are incorrect.",
         };
       }
 
@@ -104,8 +106,47 @@ module.exports = [
     response: (_) => {
       return {
         code: 20000,
-        data: "success",
       };
+    },
+  },
+
+  // user register
+  {
+    url: baseURL + "/user/register",
+    type: "post",
+    // eslint-disable-next-line no-unused-vars
+    response: (config) => {
+      const data = config.query;
+      console.log(data);
+      if (Math.random() < 0.9) {
+        return {
+          code: 20000,
+          data: "success",
+        };
+      } else {
+        return {
+          code: 20001,
+          message: "注册失败！",
+        };
+      }
+    },
+  },
+
+  // find password
+  {
+    url: baseURL + "/user/find_password",
+    type: "post",
+    response: () => {
+      if (Math.random() < 0.5) {
+        return {
+          code: 20000,
+        };
+      } else {
+        return {
+          code: 20001,
+          message: "原密码错误！",
+        };
+      }
     },
   },
 ];

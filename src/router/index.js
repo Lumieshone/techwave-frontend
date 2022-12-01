@@ -108,7 +108,7 @@ export const constantRoutes = [
         component: () => import("@/views/home/sale/index"),
       },
       {
-        path: "/transaction",
+        path: "/transaction/:transaction_id",
         meta: { title: "交易帖子" },
 
         component: () => import("@/views/home/transaction/index"),

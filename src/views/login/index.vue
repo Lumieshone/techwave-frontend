@@ -1,40 +1,62 @@
 <template>
-  <validation-observer ref="observer" v-slot="{ invalid }">
-    <form @submit.prevent="handleLogin">
-      <validation-provider
-        v-slot="{ errors }"
-        name="Name"
-        rules="required|max:10"
-      >
-        <v-text-field
-          v-model="mail"
-          :counter="10"
-          :error-messages="errors"
-          label="Name"
-          required
-        ></v-text-field>
-      </validation-provider>
-      <validation-provider
-        v-slot="{ errors }"
-        name="Name"
-        rules="required|min:6"
-      >
-        <v-text-field
-          v-model="password"
-          :counter="10"
-          :error-messages="errors"
-          label="Password"
-          required
-        ></v-text-field>
-      </validation-provider>
-      <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-      <v-btn @click="clear"> clear </v-btn>
-    </form>
-  </validation-observer>
+  <v-container>
+    <v-card>
+      <v-card-title>Login - 登录</v-card-title>
+      <v-card-subtitle>
+        <router-link to="/register">注册</router-link>
+        <span style="margin: 10px">|</span>
+        <v-dialog v-model="show_find_password_dialog" transition="dialog-bottom-transition">
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on">找回密码</span>
+          </template>
+          <FindPassword @close_find_password_dialog="show_find_password_dialog = false" />
+        </v-dialog>
+      </v-card-subtitle>
+      <v-card-text>
+        <validation-observer ref="observer" v-slot="{ invalid }">
+          <form @submit.prevent="handleLogin">
+            <validation-provider
+              v-slot="{ errors }"
+              name="Mail"
+              rules="required|email"
+            >
+              <v-text-field
+                v-model="mail"
+                :error-messages="errors"
+                label="Mail"
+                required
+              ></v-text-field>
+            </validation-provider>
+            <validation-provider
+              v-slot="{ errors }"
+              name="Password"
+              rules="required"
+            >
+              <v-text-field
+                :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show_password ? 'text' : 'password'"
+                @click:append="show_password = !show_password"
+                v-model="password"
+                :error-messages="errors"
+                label="Password"
+                required
+              ></v-text-field>
+            </validation-provider>
+            <v-btn class="mr-4" type="submit" :disabled="invalid">
+              submit
+            </v-btn>
+            <v-btn @click="clear"> clear </v-btn>
+          </form>
+        </validation-observer>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
-import { required, max, min } from "vee-validate/dist/rules";
+import FindPassword from "@/views/login/components/find-password/index";
+
+import { required, max, min, email } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -56,6 +78,10 @@ extend("required", {
   ...required,
   message: "{_field_} can not be empty",
 });
+extend("email", {
+  ...email,
+  message: "{_field_} must be a valid email address",
+});
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -63,12 +89,25 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    FindPassword,
   },
   data() {
     return {
-      mail: "user_mail",
+      // info
+      mail: "user_mail@qq.com",
       password: "111111",
+
+      // loading logo
+      loading: false,
+
+      // 重定向
       redirect: undefined,
+
+      // find password
+      show_find_password_dialog: false,
+
+      // show password
+      show_password: true,
     };
   },
   watch: {
@@ -80,24 +119,19 @@ export default {
     },
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
-      } else {
-        this.passwordType = "password";
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
     handleLogin() {
+      this.loading = true;
       this.$store
-        .dispatch("user/login", {mail:this.mail, password:this.password})
+        .dispatch("user/login", { mail: this.mail, password: this.password })
         .then(() => {
+          this.loading = false;
+          this.$message.success("登录成功！已为你跳转到首页");
           this.$router.push({ path: this.redirect || "/home" });
         })
         .catch(() => {
-          console.log('login fail')
+          this.loading = false;
+          this.$message.error("登录出现了一点问题..");
+          console.log("login fail");
         });
     },
     clear() {
@@ -105,6 +139,20 @@ export default {
       this.password = "";
       this.$refs.observer.reset();
     },
+    close_find_password_dialog(){
+      this.find_password_dialog = false;
+    }
   },
 };
 </script>
+
+<style scoped>
+a {
+  color: #6d6d6d;
+  text-decoration: none;
+}
+
+.router-link-active {
+  text-decoration: none;
+}
+</style>
