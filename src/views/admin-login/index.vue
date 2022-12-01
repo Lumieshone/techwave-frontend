@@ -5,7 +5,7 @@
       <form @submit.prevent="handleLogin">
         <validation-provider v-slot="{ errors }" name="Name" rules="required">
           <v-text-field
-            v-model="account"
+            v-model="username"
             :error-messages="errors"
             label="Name"
             required
@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      account: "admin",
+      username: "admin",
       password: "111111",
       redirect: undefined,
     };
@@ -91,7 +91,7 @@ export default {
     handleLogin() {
       this.$store
         .dispatch("user/adminlogin", {
-          account: this.account,
+          username: this.username,
           password: this.password,
         })
         .then(() => {
@@ -102,7 +102,7 @@ export default {
         });
     },
     clear() {
-      this.account = "";
+      this.username = "";
       this.password = "";
       this.$refs.observer.reset();
     },

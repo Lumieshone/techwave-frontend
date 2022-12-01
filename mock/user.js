@@ -59,8 +59,8 @@ module.exports = [
     url: baseURL + "/admin/login",
     type: "post",
     response: (config) => {
-      const { account } = config.body;
-      const token = tokens[account];
+      const { username } = config.body;
+      const token = tokens[username];
 
       // mock error
       if (!token) {
