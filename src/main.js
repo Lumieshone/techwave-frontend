@@ -3,6 +3,7 @@ import App from './App'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import router from './router'
+import VueParticles from 'vue-particles'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -14,6 +15,7 @@ Vue.prototype.$message = Message
 Vue.config.productionTip = false
 
 Vue.prototype.$baseURL = process.env.VUE_APP_BASE_API
+Vue.use(VueParticles)
 
 if (process.env.NODE_ENV === 'development') {
   const { mockXHR } = require('../mock')

@@ -2,9 +2,10 @@
   <v-container>
     <v-row no-gutters justify="center">
       <v-col  md="10">
-        <v-card >
+        <v-card>
           <v-banner
               single-line
+              tile
           >
             <v-chip
                 class="ma-2"
@@ -14,10 +15,10 @@
             >
               <strong>{{section_data.title}}</strong>
             </v-chip>
-            {{section_data.intro}}
+            <span class="section_intro">{{section_data.intro}}</span>
             <template v-slot:actions>
               <v-btn
-                  color="primary"
+                  color="#6A5ACD"
                   text
                   v-on:click="collect"
               >
@@ -25,7 +26,7 @@
                 收藏
               </v-btn>
               <v-btn
-                  color="primary"
+                  color="#6A5ACD"
                   text
                   v-on:click="post"
               >
@@ -40,11 +41,12 @@
         <v-card>
           <v-tabs
               light
+              color="#6A5ACD"
               next-icon="mdi-arrow-right-bold-box-outline"
               prev-icon="mdi-arrow-left-bold-box-outline"
               show-arrows
           >
-            <v-tabs-slider color="yellow"></v-tabs-slider>
+            <v-tabs-slider color="#6A5ACD"></v-tabs-slider>
             <v-tab @change="refresh_list">
               全部帖子
             </v-tab>
@@ -112,9 +114,9 @@
             </v-col>
             <v-col cols="4">
                 <v-row no-gutters>
-                    <span>跳转至第</span>
+                    <span class="lead">跳转至第</span>
                     <v-text-field class="shrink" solo dense v-model="which_page" ></v-text-field>
-                    <span>页</span>
+                    <span class="lead">页</span>
                     <v-btn class="goBtn" small fab @click="jump_page()">GO</v-btn>
                 </v-row>
             </v-col>
@@ -123,16 +125,18 @@
       </v-col>
     </v-row>
     <PostDialog
-        :tag_list="this.section_data.tags"
-        :user_id="this.user_id"
+        :tag_list="this.tag_list"
         :section_id="this.section_id"
-        :show_post_dialog="this.show_post_dialog">
+        :section_name="this.section_name"
+        :show_post_dialog="this.show_post_dialog"
+        @callBack="call_back"
+    >
     </PostDialog>
   </v-container>
 </template>
 
 <script>
-import {filter_post_by_tag, get_section_info} from "@/api/section";
+import {collect_section, filter_post_by_tag, get_section_info} from "@/api/section";
 import PostDialog from "@/views/home/section/components/PostDialog";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -145,14 +149,13 @@ export default {
       show_post_dialog: false,
       limit: 10,
       tag_id: 0,
+      tag_list: [],
       item_length: 20,
       which_page: 1,
       // ability to collect(is login?)
       able_to_collect: this.$store.getters.roles.length > 0,
-      // post id (from query)
       section_id: undefined,
-
-      // post data (from backend)
+      section_name: '',
       section_data: {},
     }
   },
@@ -160,8 +163,28 @@ export default {
     PostDialog
   },
   methods:{
+    call_back(flag){
+      this.show_post_dialog = flag
+    },
     collect() {
       this.section_data.is_collected = !this.section_data.is_collected;
+      collect_section(this.section_id)
+          .then(res => {
+            console.log(res.message)
+            if(res.code === 20000){
+              if(this.section_data.is_collected)
+                this.$message.success("收藏版块成功！")
+              else
+                this.$message.success("取消收藏成功！")
+            }
+            else{
+              if(this.section_data.is_collected)
+                this.$message.error("收藏版块失败！")
+              else
+                this.$message.success("取消收藏失败！")
+            }
+          })
+          .catch((err) => console.log("error: " + err));
     },
     post(){
       this.show_post_dialog = true;
@@ -174,10 +197,11 @@ export default {
     },
     on_page_change(cur_page, limit) {
       if(this.tag_id === 0)
-        get_section_info(this.section_id,this.user_id,cur_page,limit)
+        get_section_info(this.section_id,cur_page,limit)
             .then(res => {
               this.section_data = res.section_data;
-            });
+            })
+            .catch((err) => console.log("error: " + err));
       else{
         filter_post_by_tag(this.section_id,this.tag_id,cur_page,limit)
             .then((res) => {
@@ -191,10 +215,11 @@ export default {
     refresh_list() {
       this.tag_id = 0;
       this.cur_page = 1;
-        get_section_info(this.section_id,this.user_id,1,10)
+        get_section_info(this.section_id,1,10)
             .then(res => {
               this.section_data = res.section_data;
-            });
+            })
+            .catch((err) => console.log("error: " + err));
     },
     get_post_by_tag(id){
       this.cur_page = 1;
@@ -209,11 +234,13 @@ export default {
     }
   },
   mounted() {
-    console.log(this.user_id)
     this.section_id = this.$route.params.section_id;
-    get_section_info(this.section_id,this.user_id,1,10)
+    get_section_info(this.section_id,1,10)
         .then((res) => {
           this.section_data = res.section_data;
+          this.tag_list = res.section_data.tags;
+          this.section_name = res.section_data.title;
+          console.log(this.tag_list)
         })
         .catch((err) => console.log("error: " + err));
   },
@@ -221,8 +248,12 @@ export default {
 </script>
 
 <style scoped>
-span{
+.lead{
   margin-top:7px
+}
+.section_intro{
+  margin-left: 12px;
+  font-size: 14px;
 }
 .v-text-field{
   width:45px;
