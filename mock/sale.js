@@ -1,14 +1,25 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
 module.exports = [
+  // publish_transaction
+  {
+    url: baseURL + "/transaction",
+    type: "post",
+    response: () => {
+      return {
+        code: 20000,
+        message: "okk",
+      };
+    },
+  },
   {
     url: baseURL + "/sale_info",
     type: "get",
     response: (config) => {
       let { search_content, campus_zone, offset, limit, type } = config.query;
-      console.log(typeof(limit)) // string!!!!!!!!
-      limit = Number(limit)
-      offset = Number(offset)
+      console.log(typeof limit); // string!!!!!!!!
+      limit = Number(limit);
+      offset = Number(offset);
 
       let sell_data = [
         {
@@ -182,7 +193,7 @@ module.exports = [
       let seek_data = [
         {
           transaction_id: 1,
-          title: "iphone 14急出",
+          title: "iphone 14好想要啊啊啊啊",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -194,7 +205,7 @@ module.exports = [
         },
         {
           transaction_id: 2,
-          title: "iphone 13急出",
+          title: "iphone 13想要",
           price: 99299,
           image_url:
             "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
@@ -206,7 +217,7 @@ module.exports = [
         },
         {
           transaction_id: 3,
-          title: "iphone 15急出",
+          title: "iphone 1想要出",
           price: 9999,
           image_url:
             "https://pic1.zhimg.com/80/v2-695b6d3d8b4e07d9f2b3dd1026ad4f08_1440w.webp",
@@ -219,7 +230,7 @@ module.exports = [
         },
         {
           transaction_id: 4,
-          title: "iphone 11急出",
+          title: "iphone 11想要",
           price: 996599,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -232,7 +243,7 @@ module.exports = [
         },
         {
           transaction_id: 5,
-          title: "iphne 14急出",
+          title: "iphne 14想要",
           price: 999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -245,7 +256,7 @@ module.exports = [
         },
         {
           transaction_id: 6,
-          title: "iphone 14急出",
+          title: "iphone 14想要要",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -258,7 +269,7 @@ module.exports = [
         },
         {
           transaction_id: 7,
-          title: "iphone 19急出",
+          title: "iphone 1想要要",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -366,8 +377,8 @@ module.exports = [
         filter_data = filter_data.filter((t) => t.campus_zone == campus_zone);
       }
 
-      console.log(limit+offset);
-      filter_data = filter_data.slice(offset, offset+limit);
+      console.log(limit + offset);
+      filter_data = filter_data.slice(offset, offset + limit);
 
       return {
         code: 20000,

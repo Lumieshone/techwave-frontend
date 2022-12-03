@@ -183,7 +183,12 @@ module.exports = [
           title: "an Apple a day keeps op away",
           // collect
           is_collected: false,
-          total_page: full_layer_data.length,
+          tags: ['Apple','iPhone',],
+          section_id:1,
+          section_name: 'Apple',
+          subsection_id: 2,
+          subsection_name: 'iPhone',
+          total: full_layer_data.length,
           layer_data: full_layer_data.slice(
             offset,
             offset + limit

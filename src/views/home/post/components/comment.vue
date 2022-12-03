@@ -96,14 +96,14 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostComment",
-  props:{
-    comment_data:{
-        comment_id: Number,
-        time: Date,
-        author: String,
-        reply_to: String,
-        content: String,
-        able_to_delete: Boolean,
+  props: {
+    comment_data: {
+      comment_id: Number,
+      time: Date,
+      author: String,
+      reply_to: String,
+      content: String,
+      able_to_delete: Boolean,
     },
   },
   data() {
@@ -120,7 +120,6 @@ export default {
     };
   },
   methods: {
-    // TODO: 帖子分页
     // arrow methods can't bind to this, so use function instead!!
 
     // reply

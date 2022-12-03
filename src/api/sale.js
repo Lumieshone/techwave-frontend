@@ -7,3 +7,11 @@ export function get_sale_info(params) {
     params,
   });
 }
+
+export function publish_transaction(data) {
+  return request({
+    url: "/transaction",
+    method: "post",
+    data,
+  });
+}

@@ -1,15 +1,25 @@
 <template>
   <v-container>
+    <!-- corresponding sections -->
+    <v-btn text :to="`/forum`">论坛</v-btn>
+    <span>></span>
+    <v-btn text :to="`/section/${post_data.section_id}`">{{
+      post_data.section_name
+    }}</v-btn>
+    <span>></span>
+    <v-btn text>{{ post_data.subsection_name }}</v-btn>
+      
+    <!-- title -->
     <h1>{{ post_data.title }}</h1>
     <p>帖子id: {{ post_id }}</p>
 
-    <!-- // 是否收藏 -->
-    <v-btn
-      :disabled="this.$store.getters.roles.length == 0"
-      v-on:click="collect"
-    >
-      <v-icon :color="post_data.is_collected ? 'red' : 'grey'">mdi-star</v-icon>
-      {{ able_to_collect ? "收藏" : "请先登录再收藏" }}
+    <!-- tags -->
+      <!-- <v-chip class="ma-2" v-for="tag in post_data.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
+
+    <!-- 是否收藏 -->
+    <v-btn :disabled="!is_login" v-on:click="collect">
+      <v-icon :color="post_data.is_collected ? 'orange' : 'grey'">mdi-star</v-icon>
+      {{ is_login ? "收藏" : "请先登录再收藏" }}
     </v-btn>
 
     <!-- 楼层 -->
@@ -22,9 +32,9 @@
 
     <!-- 分页 -->
     <v-pagination
-      v-if="Math.ceil(post_data.total_page / limit) > 1"
+      v-if="Math.ceil(post_data.total / limit) > 1"
       v-model="curPage"
-      :length="Math.ceil(post_data.total_page / limit)"
+      :length="Math.ceil(post_data.total / limit)"
       total-visible="7"
       @input="onPageChange(curPage, limit)"
     ></v-pagination>
@@ -35,7 +45,11 @@
         <v-card-title>发表你的看法..</v-card-title>
         <v-card-subtitle>请文明发言哦~</v-card-subtitle>
         <v-card-text>
-          <v-textarea v-model="comment_data" outlined label="评论"></v-textarea>
+          <v-textarea
+            v-model="comment_content"
+            outlined
+            label="评论"
+          ></v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-file-input
@@ -50,7 +64,9 @@
             class="ma-2 white--text"
             small
             @click="comment_on_post"
-            >发表评论
+            disabled="!is_login"
+          >
+            {{ is_login ? "评论" : "请先登录再发表评论" }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -76,11 +92,11 @@ export default {
       limit: 5,
 
       // comment
-      comment_data: "",
+      comment_content: "",
       comment_image_info: undefined,
 
-      // ability to collect(is login?)
-      able_to_collect: this.$store.getters.roles.length > 0,
+      // is login?
+      is_login: this.$store.getters.roles.length > 0,
 
       // post id (from query)
       post_id: undefined,

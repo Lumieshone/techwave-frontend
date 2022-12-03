@@ -116,19 +116,6 @@ extend("confirmed", {
   message: "{_field_} must be the same as the password above",
 });
 
-extend("notsamepassword", {
-  validate(new_password, { old_password }) {
-    return new_password != old_password;
-  },
-  message: "{_field_} must not be same as the Old Password above",
-});
-extend("samepassword", {
-  validate(repeat_password, { new_password }) {
-    return repeat_password == new_password;
-  },
-  message: "{_field_} must be same as the password above",
-});
-
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "FindPassword",

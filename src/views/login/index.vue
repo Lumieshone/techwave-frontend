@@ -125,7 +125,7 @@ export default {
         .dispatch("user/login", { mail: this.mail, password: this.password })
         .then(() => {
           this.loading = false;
-          this.$message.success("登录成功！已为你跳转到首页");
+          this.$message.success("登录成功！已为你自动跳转");
           this.$router.push({ path: this.redirect || "/home" });
         })
         .catch(() => {

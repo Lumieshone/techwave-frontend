@@ -1,6 +1,9 @@
 <template>
   <v-container>
     <v-card>
+      <v-chip label class="ma-2" color="#e6e6f9"><strong>{{transaction_info.tag1_name}}</strong></v-chip>
+      <v-chip label class="ma-2" color="#e6e6f9">{{transaction_info.tag2_name}}</v-chip>
+
       <v-card-title>
         <span style="margin: 20px 10px"
           >[{{ transaction_info.type }}] {{ transaction_info.title }}</span
@@ -91,7 +94,12 @@
     </v-dialog>
     <!-- authenticate -->
     <v-alert type="info" v-show="!able_to_see_transaction"
-      >请先完成学生认证！<v-btn outlined>前往学生认证</v-btn></v-alert
+      >请先完成登录且完成学生认证！<v-btn
+        style="margin-right: 10px"
+        outlined
+        :to="`/login?redirect=transaction/${transaction_id}`"
+        >登录</v-btn
+      ><v-btn outlined to="/account/certify">前往学生认证</v-btn></v-alert
     >
   </v-container>
 </template>

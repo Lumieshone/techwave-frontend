@@ -73,15 +73,51 @@
     ></v-pagination>
 
     <!-- 发布交易帖子 -->
+    <v-dialog
+      v-model="show_publish_dialog"
+      transition="dialog-bottom-transition"
+      max-width="50%"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn top absolute right v-bind="attrs" v-on="on"
+          >发布{{ topic == "seek" ? "求购" : "出售" }}帖子</v-btn
+        >
+      </template>
+      <PublishTransaction
+        @close_publish_dialog="show_publish_dialog = false"
+        :topic="topic"
+      />
+    </v-dialog>
+
+    <!-- 提示需要完成注册 -->
+    <v-row justify="center">
+      <v-dialog v-model="have_permission" persistent max-width="50%">
+        <v-card>
+          <v-card-title> 阿欧..你还没有完成学生认证.. </v-card-title>
+          <v-card-text
+            >为保护同学们的个人隐私，进入此页面需要先完成认证哦~</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn to="/news"> 前往认证 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { get_sale_info } from "@/api/sale";
 
+import PublishTransaction from "@/views/home/sale/components/publish-transaction.vue";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Sale",
+  components: {
+    PublishTransaction,
+  },
   data() {
     return {
       topic: "sell", // or seek
@@ -103,6 +139,12 @@ export default {
       // search
       search_content: "",
       search_loading: false,
+
+      // publish dialog
+      show_publish_dialog: false,
+
+      // if have permission
+      have_permission: this.$store.getters.is_authenticated,
     };
   },
   methods: {
