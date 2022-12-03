@@ -52,8 +52,10 @@
 
             <template v-slot:append>
               <div class="pa-5">
-                <v-btn block>
+                <v-btn block light>
+                  <span id="logout">
                   登出
+                  </span>
                 </v-btn>
               </div>
             </template>
@@ -91,3 +93,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#logout{
+  color: #483D8B
+}
+</style>
