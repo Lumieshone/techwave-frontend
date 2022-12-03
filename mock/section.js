@@ -199,4 +199,24 @@ module.exports = [
             };
         },
     },
+    {
+        url: baseURL + "/section/collect_section.*",
+        type: "post",
+        response: () => {
+            return {
+                code: 20000,
+                message: "okk"
+            };
+        },
+    },
+    {
+        url: baseURL + "/section/publish_post.*",
+        type: "post",
+        response: () => {
+            return {
+                code: 20000,
+                message: "okk"
+            };
+        },
+    },
 ];
