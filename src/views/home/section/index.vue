@@ -171,10 +171,18 @@ export default {
       collect_section(this.section_id)
           .then(res => {
             console.log(res.message)
-            if(res.code === 20000)
-              this.$message.success("收藏版块成功")
-            else
-              this.$message.error("收藏版块失败！")
+            if(res.code === 20000){
+              if(this.section_data.is_collected)
+                this.$message.success("收藏版块成功！")
+              else
+                this.$message.success("取消收藏成功！")
+            }
+            else{
+              if(this.section_data.is_collected)
+                this.$message.error("收藏版块失败！")
+              else
+                this.$message.success("取消收藏失败！")
+            }
           })
           .catch((err) => console.log("error: " + err));
     },
