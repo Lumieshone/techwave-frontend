@@ -5,10 +5,10 @@
         <v-card
             height="580"
             width="100%"
-            color="#6A5ACD"
+            color="#483D8B"
         >
           <v-navigation-drawer
-              color="#6A5ACD"
+              color="#483D8B"
               width="100%"
               dark
               permanent

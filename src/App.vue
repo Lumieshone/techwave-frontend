@@ -1,15 +1,15 @@
 <template>
   <v-app>
-    <v-main>
-      <v-container fluid id="our_container">
+    <v-main id="our_container">
+      <v-container fluid>
         <vue-particles
             id="particles-js"
-            color="#39AFFD"
+            color="#663399"
             :particleOpacity="0.7"
             :particlesNumber="100"
             shapeType="star"
             :particleSize="6"
-            linesColor="#409EFF"
+            linesColor="#BA55D3"
             :linesWidth="1"
             :lineLinked="true"
             :lineOpacity="0.4"
@@ -44,6 +44,6 @@ export default {
   position: absolute;
 }
 #our_container{
-  background: #000000
+  background: #E6E6FA
 }
 </style>
