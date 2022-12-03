@@ -2,6 +2,7 @@
   <v-footer
       app
       dark
+      color="#483D8B"
       padless
   >
     <v-col

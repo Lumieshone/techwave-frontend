@@ -98,6 +98,7 @@ export const constantRoutes = [
         path: "/account",
         meta: { title: "个人管理" },
         component: () => import("@/views/home/account/index"),
+        redirect: "/account/info",
         children: [
           {
             path: "/account/info",
