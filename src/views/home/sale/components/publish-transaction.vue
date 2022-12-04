@@ -1,8 +1,6 @@
 <template>
   <v-card
-    ><v-card-title
-      >发布{{ topic == "seek" ? "求购" : "出售" }}帖子</v-card-title
-    >
+    ><v-card-title>发布{{ topic == 1 ? "求购" : "出售" }}帖子</v-card-title>
     <v-card-subtitle>*可以查看联系方式的用户均经过学号认证</v-card-subtitle>
     <v-card-text>
       <validation-observer ref="observer" v-slot="{ invalid }">
@@ -43,7 +41,7 @@
             <v-col cols="2">
               <validation-provider
                 v-slot="{ errors }"
-                name="Description"
+                name="Campus Zone"
                 rules="required"
               >
                 <v-select
@@ -54,11 +52,10 @@
                 ></v-select> </validation-provider
             ></v-col>
 
-            <v-spacer></v-spacer>
             <v-col cols="2">
               <validation-provider
                 v-slot="{ errors }"
-                name="Description"
+                name="Contact Type"
                 rules="required"
               >
                 <v-select
@@ -70,7 +67,7 @@
               </validation-provider>
             </v-col>
 
-            <v-col cols="7">
+            <v-col cols="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="Contact Number"
@@ -82,6 +79,43 @@
                   label="Contact Number"
                   required
                 ></v-text-field>
+              </validation-provider>
+            </v-col>
+            <v-spacer></v-spacer>
+
+            <v-col cols="2">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Tag"
+                rules="required"
+              >
+                <v-select
+                  :error-messages="errors"
+                  v-model="transaction_info.tag_id"
+                  :items="tags"
+                  item-text="name"
+                  item-value="id"
+                  label="Tag"
+                  persistent-hint
+                  @change="get_subtags()"
+                ></v-select>
+              </validation-provider>
+            </v-col>
+            <v-col cols="2">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Sub Tag"
+                rules="required"
+              >
+                <v-select
+                  :error-messages="errors"
+                  v-model="transaction_info.subtag_id"
+                  :items="subtags"
+                  item-text="name"
+                  item-value="id"
+                  label="Sub Tag"
+                  persistent-hint
+                ></v-select>
               </validation-provider>
             </v-col>
           </v-row>
@@ -126,7 +160,11 @@
 </template>
 
 <script>
-import { publish_transaction } from "@/api/sale";
+import {
+  publish_transaction,
+  get_all_first_tags,
+  get_subtags,
+} from "@/api/sale";
 
 import { required, numeric } from "vee-validate/dist/rules";
 import {
@@ -152,23 +190,25 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PublishTransaction",
   props: {
-    topic: String,
+    topic: Number,
   },
   data() {
     return {
+      tags: [],
+      subtags: [],
       campus_zones: ["嘉定", "四平", "彰武", "沪西"],
-      contact_types: ["微信", "QQ", "手机", ""],
+      contact_types: ["微信", "QQ", "手机", "领英", "邮箱"],
       transaction_info: {
         title: "iphone 18",
         price: 1234,
         image: [],
         time: new Date(),
+        tag_id: undefined,
+        subtag_id: undefined,
         description: "十分帝豪啊",
         campus_zone: "嘉定",
         contact_type: "微信",
         contact_number: "1234",
-        tag1: undefined,
-        tag2: undefined,
       },
     };
   },
@@ -181,13 +221,36 @@ export default {
       this.$emit("close_publish_dialog");
     },
 
+    get_subtags() {
+      get_subtags(this.transaction_info.tag_id)
+        .then((res) => {
+          this.subtags = res.tags;
+        })
+        .error(() => {
+          this.$message.error("获取二级tag失败...");
+        });
+
+      this.subtag_id = undefined;
+    },
+
     handlePublishTransaction() {
       this.$refs.observer
         .validate()
         .then(() => {
-          publish_transaction({
-            ...this.transaction_info,
-          }).then(() => {
+          let fd = new FormData();
+          fd.append("topic", this.topic == 0 ? "sell" : "seek");
+          fd.append("title", this.transaction_info.title);
+          fd.append("price", this.transaction_info.price);
+          fd.append("time", this.transaction_info.time);
+          fd.append("tag_id", this.transaction_info.tag_id);
+          fd.append("subtag_id", this.transaction_info.subtag_id);
+
+          fd.append("description", this.transaction_info.description);
+          fd.append("campus_zone", this.transaction_info.campus_zone);
+          fd.append("contact_type", this.transaction_info.contact_type);
+          fd.append("contact_number", this.transaction_info.contact_number);
+          this.transaction_info.image.forEach((f) => fd.append("image", f));
+          publish_transaction(fd).then(() => {
             this.$message.success("发布成功！");
           });
         })
@@ -195,6 +258,15 @@ export default {
           this.$message.error("发布失败！");
         });
     },
+  },
+  mounted() {
+    get_all_first_tags()
+      .then((res) => {
+        this.tags = res.tags;
+      })
+      .error(() => {
+        this.$message.error("获取一级tag失败...");
+      });
   },
 };
 </script>

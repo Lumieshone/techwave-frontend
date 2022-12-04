@@ -1,6 +1,54 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
 module.exports = [
+  // delete comment
+  {
+    url: baseURL + "/comment",
+    type: "delete",
+    response: () => {
+      return {
+        code: 20000,
+      };
+    },
+  },
+  // delete layer
+  {
+    url: baseURL + "/layer",
+    type: "delete",
+    response: () => {
+      return {
+        code: 20000,
+      };
+    },
+  },
+  // reply on post
+  {
+    url: baseURL + "/reply_on_post",
+    type: "post",
+    response: () => {
+      return {
+        code: 20000,
+      };
+    },
+  },
+  {
+    url: baseURL + "/reply_on_layer",
+    type: "post",
+    response: () => {
+      return {
+        code: 20000,
+      };
+    },
+  },
+  {
+    url: baseURL + "/reply_on_comment",
+    type: "post",
+    response: () => {
+      return {
+        code: 20000,
+      };
+    },
+  },
   // collect post
   // add or cancel collection
   {
@@ -183,16 +231,13 @@ module.exports = [
           title: "an Apple a day keeps op away",
           // collect
           is_collected: false,
-          tags: ['Apple','iPhone',],
-          section_id:1,
-          section_name: 'Apple',
+          tags: ["Apple", "iPhone"],
+          section_id: 1,
+          section_name: "Apple",
           subsection_id: 2,
-          subsection_name: 'iPhone',
+          subsection_name: "iPhone",
           total: full_layer_data.length,
-          layer_data: full_layer_data.slice(
-            offset,
-            offset + limit
-          ),
+          layer_data: full_layer_data.slice(offset, offset + limit),
         },
       };
     },

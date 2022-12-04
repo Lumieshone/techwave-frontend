@@ -18,6 +18,7 @@
             color="primary"
             fab
             small
+            :disabled="!is_login"
             v-on:click="
               open_reply_dialog(
                 singlecomment_data.author,
@@ -93,10 +94,13 @@
 </template>
 
 <script>
+import { reply_on_comment, delete_comment } from "@/api/post";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostComment",
   props: {
+    is_login: Boolean,
     comment_data: {
       comment_id: Number,
       time: Date,
@@ -136,8 +140,21 @@ export default {
       this.reply_content = "";
     },
     reply() {
-      console.log("reply successfully");
-      this.show_reply_dialog = false;
+      if (this.reply_content == "") {
+        this.$message.error("评论内容还为空哦");
+        return;
+      }
+
+      reply_on_comment({
+        reply_content: this.reply_content,
+        reply_to_comment_id: this.reply_to_comment_id,
+      })
+        .then((res) => {
+          if (res.code === 20000) this.$message.success("回复成功！");
+          else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          this.show_reply_dialog = false;
+        })
+        .catch((err) => console.log("error: " + err));
     },
 
     // delete
@@ -150,7 +167,10 @@ export default {
       this.delete_comment_id = undefined;
     },
     delete_comment() {
-      console.log("delete reply successfully");
+      delete_comment(this.comment_id).then((res) => {
+        if (res.code === 20000) this.$message.success("删除成功！");
+        else this.$message.error("阿欧，好像删除出现了一点小问题..");
+      });
       this.show_delete_dialog = false;
     },
   },

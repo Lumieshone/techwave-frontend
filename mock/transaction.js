@@ -38,10 +38,10 @@ module.exports = [
           time: new Date(),
           campus_zone: "嘉定",
           collect_number: 12,
-          tag1_id: 1,
-          tag1_name: "苹果",
-          tag2_id: 2,
-          tag2_name: "iPhone",
+          tag_id: 1,
+          tag_name: "苹果",
+          subtag_id: 2,
+          subtag_name: "iPhone",
           description:
             "ejhsbfjahsjajeh你说得对，但是原神前面忘了中间忘了后面忘了 集美们真的很好咱就是说赶快冲了就是说",
           images_url: [

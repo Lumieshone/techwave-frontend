@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-card>
-      <v-chip label class="ma-2" color="#e6e6f9"><strong>{{transaction_info.tag1_name}}</strong></v-chip>
-      <v-chip label class="ma-2" color="#e6e6f9">{{transaction_info.tag2_name}}</v-chip>
+      <v-chip label class="ma-2" color="#e6e6f9"><strong>{{transaction_info.tag_name}}</strong></v-chip>
+      <v-chip label class="ma-2" color="#e6e6f9">{{transaction_info.subtag_name}}</v-chip>
 
       <v-card-title>
         <span style="margin: 20px 10px"
@@ -92,6 +92,7 @@
         >
       </v-card>
     </v-dialog>
+    
     <!-- authenticate -->
     <v-alert type="info" v-show="!able_to_see_transaction"
       >请先完成登录且完成学生认证！<v-btn
@@ -114,7 +115,7 @@ export default {
   data() {
     return {
       // authenticate
-      able_to_see_transaction: this.$store.getters.is_authenticated,
+      able_to_see_transaction: this.$store.getters.roles.length > 0 && this.$store.getters.is_authenticated,
 
       // is collected (for 出售)
       is_collected: false,

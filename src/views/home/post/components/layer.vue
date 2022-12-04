@@ -13,13 +13,14 @@
       >
       <v-card-text>
         <span>{{ layer_data.content }}</span>
-        <PostComment :comment_data="layer_data.comment_data"></PostComment>
+        <PostComment :comment_data="layer_data.comment_data" :is_login="Boolean(is_login)"></PostComment>
       </v-card-text>
       <v-card-actions>
         <v-btn
           color="primary"
           fab
           small
+          :disabled="!is_login"
           v-on:click="open_reply_dialog(layer_data.floor)"
         >
           <v-icon>mdi-comment</v-icon>
@@ -65,7 +66,7 @@
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
       <v-card>
-        <v-card-title>确认删除 {{delete_floor}} 楼？</v-card-title>
+        <v-card-title>确认删除 {{ delete_floor }} 楼？</v-card-title>
         <v-card-actions>
           <v-btn
             color="blue"
@@ -78,7 +79,7 @@
             color="blue"
             class="ma-2 white--text"
             small
-            @click="delete_comment"
+            @click="delete_layer"
           >
             删除
           </v-btn></v-card-actions
@@ -90,6 +91,7 @@
 
 <script>
 import PostComment from "@/views/home/post/components/comment.vue";
+import { reply_on_layer, delete_layer } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -104,6 +106,8 @@ export default {
       comment_data: undefined,
       able_to_delete: Boolean,
     },
+    post_id: Number,
+    is_login: Boolean,
   },
   components: {
     PostComment,
@@ -133,8 +137,22 @@ export default {
       this.reply_content = "";
     },
     reply() {
-      console.log("reply successfully");
-      this.show_reply_dialog = false;
+      if (this.reply_content == "") {
+        this.$message.error("评论内容还为空哦");
+        return;
+      }
+
+      reply_on_layer({
+        content: this.reply_content,
+        layer: this.reply_to_floor,
+        post_id: this.post_id,
+      })
+        .then((res) => {
+          if (res.code === 20000) this.$message.success("回复成功！");
+          else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          this.show_reply_dialog = false;
+        })
+        .catch((err) => console.log("error: " + err));
     },
 
     // delete
@@ -146,8 +164,11 @@ export default {
       this.show_delete_dialog = false;
       this.delete_floor = undefined;
     },
-    delete_comment() {
-      console.log("delete floor successfully");
+    delete_layer() {
+      delete_layer(this.delete_floor, this.post_id).then((res) => {
+        if (res.code === 20000) this.$message.success("删除成功！");
+        else this.$message.error("阿欧，好像删除出现了一点小问题..");
+      });
       this.show_delete_dialog = false;
     },
   },

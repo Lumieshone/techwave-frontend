@@ -4,6 +4,7 @@
       dark
       color="#483D8B"
       padless
+      absolute
   >
     <v-col
         class="text-center"

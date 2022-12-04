@@ -1,6 +1,56 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
 module.exports = [
+  {
+    url: baseURL + "/tag",
+    type: "get",
+    response: () => {
+      return {
+        code: 20000,
+        tags: [
+          { id: 1, name: "Apple" },
+          { id: 2, name: "Huawei" },
+        ],
+      };
+    },
+  },
+  {
+    url: baseURL + "/subtag",
+    type: "get",
+    response: (config) => {
+      const { id } = config.query;
+      if (id == 1) {
+        return {
+          code: 20000,
+          tags: [
+            {
+              id: 1,
+              name: "iPhone",
+            },
+            {
+              id: 2,
+              name: "iPad",
+            },
+          ],
+        };
+      }
+      if (id == 2) {
+        return {
+          code: 20000,
+          tags: [
+            {
+              id: 1,
+              name: "matex",
+            },
+            {
+              id: 2,
+              name: "matebook",
+            },
+          ],
+        };
+      }
+    },
+  },
   // publish_transaction
   {
     url: baseURL + "/transaction",
@@ -8,7 +58,6 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        message: "okk",
       };
     },
   },
@@ -16,10 +65,21 @@ module.exports = [
     url: baseURL + "/sale_info",
     type: "get",
     response: (config) => {
-      let { search_content, campus_zone, offset, limit, type } = config.query;
-      console.log(typeof limit); // string!!!!!!!!
+      let {
+        search_content,
+        tag_id,
+        subtag_id,
+        campus_zone,
+        offset,
+        limit,
+        type,
+      } = config.query;
+      // console.log(typeof limit); // string!!!!!!!!
+
       limit = Number(limit);
       offset = Number(offset);
+      tag_id = Number(tag_id);
+      subtag_id = Number(subtag_id);
 
       let sell_data = [
         {
@@ -31,8 +91,8 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 2,
@@ -43,8 +103,8 @@ module.exports = [
           campus_zone: "嘉定",
           description: "集美们快充呀苹果爸爸就上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 3,
@@ -56,8 +116,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 4,
@@ -69,8 +129,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 5,
@@ -82,8 +142,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 6,
@@ -95,12 +155,12 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 7,
-          title: "iphone 19急出",
+          title: "华为笔记本急出",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -108,21 +168,20 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 2,
+          subtag_id: 2,
         },
         {
           transaction_id: 8,
-          title: "iphone 4急出",
+          title: "华为手机急出",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
           campus_zone: "四平",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 2,
+          subtag_id: 1,
         },
         {
           transaction_id: 9,
@@ -134,8 +193,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag: "Apple",
+          subtag: "iPhone",
         },
         {
           transaction_id: 10,
@@ -147,12 +206,12 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag: "Apple",
+          subtag: "iPhone",
         },
         {
           transaction_id: 11,
-          title: "小米12 13 14急出",
+          title: "华为笔记本12 13 14急出",
           price: 456,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -160,8 +219,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "小米（Mi）",
-          tag2: "数字系列",
+          tag_id: 2,
+          subtag_id: 2,
         },
         {
           transaction_id: 12,
@@ -173,8 +232,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Huawei",
-          tag2: "Mate",
+          tag_id: 2,
+          subtag_id: 1,
         },
         {
           transaction_id: 13,
@@ -186,8 +245,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
       ];
       let seek_data = [
@@ -200,8 +259,8 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 2,
@@ -212,8 +271,8 @@ module.exports = [
           campus_zone: "嘉定",
           description: "集美们快充呀苹果爸爸就上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 3,
@@ -225,8 +284,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 4,
@@ -238,8 +297,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 5,
@@ -251,25 +310,24 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 6,
-          title: "iphone 14想要要",
+          title: "huawei 14想要要",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
           campus_zone: "四平",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 2,
+          subtag_id: 1,
         },
         {
           transaction_id: 7,
-          title: "iphone 1想要要",
+          title: "matebook想要要",
           price: 9999,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -277,8 +335,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 2,
+          subtag_id: 2,
         },
         {
           transaction_id: 8,
@@ -290,8 +348,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 9,
@@ -303,8 +361,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 10,
@@ -316,12 +374,12 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
         {
           transaction_id: 11,
-          title: "小米12 13 14急出",
+          title: "huawei12 13 14急出",
           price: 456,
           image_url:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
@@ -329,8 +387,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "小米（Mi）",
-          tag2: "数字系列",
+          tag_id: 2,
+          subtag_id: 1,
         },
         {
           transaction_id: 12,
@@ -342,8 +400,8 @@ module.exports = [
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
-          tag1: "Huawei",
-          tag2: "Mate",
+          tag_id: 2,
+          subtag_id: 1,
         },
         {
           transaction_id: 13,
@@ -354,9 +412,8 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
-          tag1: "Apple",
-          tag2: "iPhone",
+          tag_id: 1,
+          subtag_id: 1,
         },
       ];
 
@@ -377,13 +434,21 @@ module.exports = [
         filter_data = filter_data.filter((t) => t.campus_zone == campus_zone);
       }
 
-      console.log(limit + offset);
-      filter_data = filter_data.slice(offset, offset + limit);
+      console.log(filter_data);
+      console.log(tag_id);
+      if (!isNaN(tag_id)) {
+        filter_data = filter_data.filter((t) => t.tag_id == tag_id);
+      }
+      console.log(filter_data);
+
+      if (!isNaN(subtag_id)) {
+        filter_data = filter_data.filter((t) => t.subtag_id == subtag_id);
+      }
 
       return {
         code: 20000,
-        total: 20,
-        transactions_data: filter_data,
+        total: filter_data.length,
+        transactions_data: filter_data.slice(offset, offset + limit),
       };
     },
   },

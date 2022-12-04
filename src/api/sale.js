@@ -13,5 +13,23 @@ export function publish_transaction(data) {
     url: "/transaction",
     method: "post",
     data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
+export function get_all_first_tags() {
+  return request({
+    url: "/tag",
+    method: "get",
+  });
+}
+
+export function get_subtags(tag_id) {
+  return request({
+    url: "/subtag",
+    method: "get",
+    params: { id: tag_id },
   });
 }
