@@ -430,6 +430,8 @@ module.exports = [
         );
       }
 
+      console.log(filter_data)
+
       if (campus_zone != "全部") {
         filter_data = filter_data.filter((t) => t.campus_zone == campus_zone);
       }

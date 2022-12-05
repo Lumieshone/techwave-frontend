@@ -170,7 +170,6 @@ export default {
       tag_id: undefined,
       subtag_id: undefined,
 
-
       // search
       search_content: "",
       search_loading: false,
@@ -225,7 +224,7 @@ export default {
         subtag_id: this.subtag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;
@@ -242,7 +241,7 @@ export default {
         tag_id: this.tag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;
@@ -270,7 +269,7 @@ export default {
         subtag_id: this.subtag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;
