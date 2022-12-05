@@ -6,7 +6,9 @@ const post = require("./post");
 const transaction = require("./transaction");
 const sale = require("./sale");
 const section = require("./section");
-const mocks = [...user, ...post, ...section, ...transaction, ...sale];
+const forum = require("./forum");
+
+const mocks = [...user, ...post, ...section, ...transaction, ...sale, ...forum];
 
 // for front mock
 // please use it cautiously, it will redefine XMLHttpRequest,
