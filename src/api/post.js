@@ -16,19 +16,19 @@ export function collect_post(id) {
   });
 }
 
+export function delete_reply(reply_id) {
+  return request({
+    url: "/reply",
+    method: "delete",
+    data: { reply_id: reply_id },
+  });
+}
+
 export function delete_comment(comment_id) {
   return request({
     url: "/comment",
     method: "delete",
-    data: { comment_id: comment_id },
-  });
-}
-
-export function delete_layer(layer, post_id) {
-  return request({
-    url: "/layer",
-    method: "delete",
-    data: { layer: layer, post_id: post_id },
+    data: { comment_id:comment_id},
   });
 }
 
@@ -42,16 +42,16 @@ export function reply_on_post(data) {
     },
   });
 }
-export function reply_on_layer(data) {
+export function reply_on_comment(data) {
   return request({
-    url: "/reply_on_layer",
+    url: "/reply_on_comment",
     method: "post",
     data,
   });
 }
-export function reply_on_comment(data) {
+export function reply_on_reply(data) {
   return request({
-    url: "/reply_on_comment",
+    url: "/reply_on_reply",
     method: "post",
     data,
   });

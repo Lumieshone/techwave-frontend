@@ -1,46 +1,50 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title>
-        <span style="margin: 5px">{{ layer_data.floor }} 楼 </span>
-        <span style="margin: 5px">{{ layer_data.author }}</span>
-        <v-avatar>
-          <img :src="layer_data.avatar" :alt="layer_data.author" />
-        </v-avatar>
-      </v-card-title>
-      <v-card-subtitle
-        ><span>{{ layer_data.time }}</span></v-card-subtitle
-      >
-      <v-card-text>
-        <span>{{ layer_data.content }}</span>
-        <PostComment :comment_data="layer_data.comment_data" :is_login="Boolean(is_login)"></PostComment>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          color="primary"
-          fab
-          small
-          :disabled="!is_login"
-          v-on:click="open_reply_dialog(layer_data.floor)"
+    <v-col
+      v-for="singlereply_data in reply_data"
+      :key="singlereply_data.reply_id"
+    >
+      <v-card>
+        <v-card-title>{{ singlereply_data.author }}</v-card-title>
+        <v-card-subtitle v-show="singlereply_data.reply_to"
+          ><span
+            >回复给 {{ singlereply_data.reply_to }}
+            {{ singlereply_data.time }}</span
+          ></v-card-subtitle
         >
-          <v-icon>mdi-comment</v-icon>
-        </v-btn>
-        <v-btn
-          color="primary"
-          fab
-          small
-          v-show="layer_data.able_to_delete"
-          v-on:click="open_delete_dialog(layer_data.floor)"
-        >
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        <v-card-text>{{ singlereply_data.content }}</v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            fab
+            small
+            :disabled="!is_login"
+            v-on:click="
+              open_reply_dialog(
+                singlereply_data.author,
+                singlereply_data.reply_id
+              )
+            "
+          >
+            <v-icon>mdi-comment</v-icon>
+          </v-btn>
+          <v-btn
+            color="primary"
+            fab
+            small
+            v-show="singlereply_data.able_to_delete"
+            v-on:click="open_delete_dialog(singlereply_data.reply_id)"
+          >
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
 
     <!-- reply -->
     <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>回复给 {{ reply_to_floor }} 楼</v-card-title>
+        <v-card-title>回复给 {{ reply_to_user_name }}</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="reply_content"
@@ -66,7 +70,7 @@
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
       <v-card>
-        <v-card-title>确认删除 {{ delete_floor }} 楼？</v-card-title>
+        <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
           <v-btn
             color="blue"
@@ -79,7 +83,7 @@
             color="blue"
             class="ma-2 white--text"
             small
-            @click="delete_layer"
+            @click="delete_reply"
           >
             删除
           </v-btn></v-card-actions
@@ -90,50 +94,49 @@
 </template>
 
 <script>
-import PostComment from "@/views/home/post/components/comment.vue";
-import { reply_on_layer, delete_layer } from "@/api/post";
+import { reply_on_reply, delete_reply } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "PostLayer",
+  name: "Postreply",
   props: {
-    layer_data: {
-      floor: Number,
-      avatar: String,
-      author: String,
+    is_login: Boolean,
+    reply_data: {
+      reply_id: Number,
       time: Date,
-      content: undefined,
-      comment_data: undefined,
+      author: String,
+      reply_to: String,
+      content: String,
       able_to_delete: Boolean,
     },
-    post_id: Number,
-    is_login: Boolean,
-  },
-  components: {
-    PostComment,
   },
   data() {
     return {
-      // reply to some floor
+      // reply
       show_reply_dialog: false,
-      reply_to_floor: undefined,
+      reply_id: undefined,
+      reply_to_user_name: "",
       reply_content: undefined,
 
-      // delete my floor
+      // delete
       show_delete_dialog: false,
-      delete_floor: undefined,
+      delete_reply_id: undefined,
     };
   },
   methods: {
+    // arrow methods can't bind to this, so use function instead!!
+
     // reply
-    open_reply_dialog(floor) {
+    open_reply_dialog(author, reply_id) {
       this.show_reply_dialog = true;
-      this.reply_to_floor = floor;
+      this.reply_id = reply_id;
+      this.reply_to_user_name = author;
       this.reply_content = "";
     },
     close_reply_dialog() {
       this.show_reply_dialog = false;
-      this.reply_to_floor = undefined;
+      this.reply_id = undefined;
+      this.reply_to_user_name = "";
       this.reply_content = "";
     },
     reply() {
@@ -142,10 +145,9 @@ export default {
         return;
       }
 
-      reply_on_layer({
-        content: this.reply_content,
-        layer: this.reply_to_floor,
-        post_id: this.post_id,
+      reply_on_reply({
+        reply_content: this.reply_content,
+        rreply_id: this.reply_id,
       })
         .then((res) => {
           if (res.code === 20000) this.$message.success("回复成功！");
@@ -156,16 +158,16 @@ export default {
     },
 
     // delete
-    open_delete_dialog(floor) {
+    open_delete_dialog(reply_id) {
       this.show_delete_dialog = true;
-      this.delete_floor = floor;
+      this.delete_reply_id = reply_id;
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
-      this.delete_floor = undefined;
+      this.delete_reply_id = undefined;
     },
-    delete_layer() {
-      delete_layer(this.delete_floor, this.post_id).then((res) => {
+    delete_reply() {
+      delete_reply(this.reply_id).then((res) => {
         if (res.code === 20000) this.$message.success("删除成功！");
         else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
