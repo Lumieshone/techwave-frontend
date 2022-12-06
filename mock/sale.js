@@ -8,8 +8,34 @@ module.exports = [
       return {
         code: 20000,
         tags: [
-          { id: 1, name: "Apple" },
-          { id: 2, name: "Huawei" },
+          {
+            id: 1,
+            name: "Apple",
+            subtags: [
+              {
+                id: 1,
+                name: "iPhone",
+              },
+              {
+                id: 2,
+                name: "iPad",
+              },
+            ],
+          },
+          {
+            id: 2,
+            name: "Huawei",
+            subtags: [
+              {
+                id: 1,
+                name: "matex",
+              },
+              {
+                id: 2,
+                name: "matebook",
+              },
+            ],
+          },
         ],
       };
     },
@@ -22,16 +48,7 @@ module.exports = [
       if (id == 1) {
         return {
           code: 20000,
-          tags: [
-            {
-              id: 1,
-              name: "iPhone",
-            },
-            {
-              id: 2,
-              name: "iPad",
-            },
-          ],
+          tags: [],
         };
       }
       if (id == 2) {
