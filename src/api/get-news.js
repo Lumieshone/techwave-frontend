@@ -9,7 +9,7 @@ export function get_news() {
 
 export function get_hot_posts() {
   return request({
-    url: "/hot_posts",
+    url: "/hot_post",
     method: "get",
   });
 }

@@ -128,7 +128,7 @@ let news = [
 
 module.exports = [
   {
-    url: baseURL + "/hot_posts",
+    url: baseURL + "/hot_post",
     type: "get",
     response: () => {
       return {

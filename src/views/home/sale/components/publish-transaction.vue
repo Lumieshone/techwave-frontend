@@ -202,7 +202,6 @@ export default {
         title: "iphone 18",
         price: 1234,
         image: [],
-        time: new Date(),
         tag_id: undefined,
         subtag_id: undefined,
         description: "十分帝豪啊",
@@ -241,7 +240,6 @@ export default {
           fd.append("topic", this.topic == 0 ? "sell" : "seek");
           fd.append("title", this.transaction_info.title);
           fd.append("price", this.transaction_info.price);
-          fd.append("time", this.transaction_info.time);
           fd.append("tag_id", this.transaction_info.tag_id);
           fd.append("subtag_id", this.transaction_info.subtag_id);
 

@@ -283,7 +283,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -296,7 +295,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -309,7 +307,6 @@ module.exports = [
           campus_zone: "四平",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -334,7 +331,6 @@ module.exports = [
           campus_zone: "彰武",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 2,
           subtag_id: 2,
         },
@@ -347,7 +343,6 @@ module.exports = [
           campus_zone: "四平",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -360,7 +355,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -373,7 +367,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 1,
           subtag_id: 1,
         },
@@ -386,7 +379,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 2,
           subtag_id: 1,
         },
@@ -399,7 +391,6 @@ module.exports = [
           campus_zone: "嘉定",
           description:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tag_id: 2,
           subtag_id: 1,
         },
@@ -430,7 +421,7 @@ module.exports = [
         );
       }
 
-      console.log(filter_data)
+      console.log(filter_data);
 
       if (campus_zone != "全部") {
         filter_data = filter_data.filter((t) => t.campus_zone == campus_zone);
