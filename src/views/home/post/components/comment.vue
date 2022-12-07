@@ -14,7 +14,7 @@
       <v-card-text>
         <span>{{ comment_data.content }}</span>
         <PostReply
-          :comment_data="comment_data.reply_data"
+          :reply_data="comment_data.reply_data"
           :is_login="Boolean(is_login)"
         ></PostReply>
       </v-card-text>
