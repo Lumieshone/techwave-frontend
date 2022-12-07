@@ -51,11 +51,11 @@
               全部帖子
             </v-tab>
             <v-tab
-                v-for="tag in section_data.tags"
-                :key="tag.id"
-                @change="get_post_by_tag(tag.id,1,10)"
+                v-for="subsection in section_data.subsections"
+                :key="subsection.id"
+                @change="get_post_by_subsection(subsection.id)"
             >
-              {{tag.name}}
+              {{subsection.name}}
             </v-tab>
           </v-tabs>
         </v-card>
@@ -125,7 +125,7 @@
       </v-col>
     </v-row>
     <PostDialog
-        :tag_list="this.tag_list"
+        :subsection_list="this.subsection_list"
         :section_id="this.section_id"
         :section_name="this.section_name"
         :show_post_dialog="this.show_post_dialog"
@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import {collect_section, filter_post_by_tag, get_section_info} from "@/api/section";
+import {collect_section, filter_post_by_subsection, get_section_info} from "@/api/section";
 import PostDialog from "@/views/home/section/components/PostDialog";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -148,8 +148,8 @@ export default {
       if_filter: false,
       show_post_dialog: false,
       limit: 10,
-      tag_id: 0,
-      tag_list: [],
+      subsection_id: 0,
+      subsection_list: [],
       item_length: 20,
       which_page: 1,
       // ability to collect(is login?)
@@ -196,14 +196,14 @@ export default {
       this.cur_page = Number(this.which_page);
     },
     on_page_change(cur_page, limit) {
-      if(this.tag_id === 0)
+      if(this.subsection_id === 0)
         get_section_info(this.section_id,cur_page,limit)
             .then(res => {
               this.section_data = res.section_data;
             })
             .catch((err) => console.log("error: " + err));
       else{
-        filter_post_by_tag(this.section_id,this.tag_id,cur_page,limit)
+        filter_post_by_subsection(this.section_id,this.subsection_id,cur_page,limit)
             .then((res) => {
               console.log(res.total)
               this.section_data.total = res.total;
@@ -213,7 +213,7 @@ export default {
       }
     },
     refresh_list() {
-      this.tag_id = 0;
+      this.subsection_id = 0;
       this.cur_page = 1;
         get_section_info(this.section_id,1,10)
             .then(res => {
@@ -221,10 +221,10 @@ export default {
             })
             .catch((err) => console.log("error: " + err));
     },
-    get_post_by_tag(id){
+    get_post_by_subsection(id){
       this.cur_page = 1;
-      this.tag_id = id;
-      filter_post_by_tag(this.section_id,this.tag_id,1,10)
+      this.subsection_id = id;
+      filter_post_by_subsection(this.section_id,this.subsection_id,1,10)
           .then((res) => {
             console.log(res.total)
             this.section_data.total = res.total;
@@ -238,9 +238,9 @@ export default {
     get_section_info(this.section_id,1,10)
         .then((res) => {
           this.section_data = res.section_data;
-          this.tag_list = res.section_data.tags;
+          this.subsection_list = res.section_data.subsections;
           this.section_name = res.section_data.title;
-          console.log(this.tag_list)
+          console.log(this.subsection_list)
         })
         .catch((err) => console.log("error: " + err));
   },

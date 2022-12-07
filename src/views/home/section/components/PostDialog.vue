@@ -20,108 +20,109 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-    <v-form
-        ref="form"
-        lazy-validation
-        class="pa-4 pt-6"
-    >
-      <v-text-field
-          color="#483D8B"
-          filled
-          readonly
-          dense
-          outlined
-          prepend-icon="mdi-form-select"
-          label="发帖分区"
-          :value="this.section_name"
-      ></v-text-field>
-      <v-text-field
-          v-model="form.title"
-          color="#483D8B"
-          maxlength="30"
-          :rules="title_rules"
-          filled
-          dense
-          outlined
-          prepend-icon="mdi-view-dashboard-edit-outline"
-          :counter="30"
-          label="帖子标题"
-          required
-      ></v-text-field>
-      <v-select
-          v-model="form.tag"
-          color="#483D8B"
-          prepend-icon="mdi-tag-heart-outline"
-          filled
-          dense
-          outlined
-          :items="tags"
-          :rules="[v => !!v || '请选择帖子分区']"
-          item-text="name"
-          item-value="id"
-          label="请选择对应分区"
-          required
-      ></v-select>
-      <v-textarea
-          v-model="form.content"
-          maxlength="400"
-          :rows="7"
-          filled
-          outlined
-          prepend-icon="mdi-draw-pen"
-          :counter="400"
-          :rules="content_rules"
-          color="#483D8B"
-          label="帖子内容"
-          required
-      ></v-textarea>
-      <v-file-input
-          v-model="files"
-          label="添加图片"
-          counter
-          dense
-          multiple
-          filled
-          outlined
-          :show-size="1000"
-          accept="image/*"
-          color="#483D8B"
-          prepend-icon="mdi-panorama-outline"
+      <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          class="pa-4 pt-6"
       >
-        <template v-slot:selection="{ index, text }">
-          <v-chip
-              v-if="index < 2"
-              label
-              dark
-              small
+        <v-text-field
+            color="#483D8B"
+            filled
+            readonly
+            dense
+            outlined
+            prepend-icon="mdi-form-select"
+            label="发帖分区"
+            :value="this.section_name"
+        ></v-text-field>
+        <v-text-field
+            v-model="form.title"
+            color="#483D8B"
+            maxlength="30"
+            :rules="title_rules"
+            filled
+            dense
+            outlined
+            prepend-icon="mdi-view-dashboard-edit-outline"
+            :counter="30"
+            label="帖子标题"
+            required
+        ></v-text-field>
+        <v-select
+            v-model="form.subsection"
+            color="#483D8B"
+            prepend-icon="mdi-tag-heart-outline"
+            filled
+            dense
+            outlined
+            :items="subsections"
+            :rules="[v => !!v || '请选择帖子分区']"
+            item-text="name"
+            item-value="id"
+            label="请选择对应分区"
+            required
+        ></v-select>
+        <v-textarea
+            v-model="form.content"
+            maxlength="400"
+            :rows="7"
+            filled
+            outlined
+            prepend-icon="mdi-draw-pen"
+            :counter="400"
+            :rules="content_rules"
+            color="#483D8B"
+            label="帖子内容"
+            required
+        ></v-textarea>
+        <v-file-input
+            v-model="files"
+            label="添加图片"
+            counter
+            dense
+            multiple
+            filled
+            outlined
+            :show-size="1000"
+            accept="image/*"
+            color="#483D8B"
+            prepend-icon="mdi-panorama-outline"
+        >
+          <template v-slot:selection="{ index, text }">
+            <v-chip
+                v-if="index < 2"
+                label
+                dark
+                small
+                color="#6A5ACD"
+            >
+              {{ text }}
+            </v-chip>
+            <span
+                v-else-if="index === 2"
+                class="text-overline grey--text text--darken-3 mx-2"
+            >
+          +{{ files.length - 2 }} Picture(s)
+        </span>
+          </template>
+        </v-file-input>
+        <v-row justify="end">
+          <v-btn
               color="#6A5ACD"
-          >
-            {{ text }}
-          </v-chip>
-          <span
-              v-else-if="index === 2"
-              class="text-overline grey--text text--darken-3 mx-2"
-          >
-        +{{ files.length - 2 }} Picture(s)
-      </span>
-        </template>
-      </v-file-input>
-      <v-row justify="end">
-        <v-btn
-            color="#6A5ACD"
-            class="ma-3 white--text"
-            @click="close_post_dialog"
-        >返回
-        </v-btn>
-        <v-btn
-            color="#6A5ACD"
-            :disabled="!valid"
-            class="ma-3 white--text"
-            @click="publish_post"
-        >发布
-        </v-btn>
-      </v-row>
-    </v-form>
+              class="ma-3 white--text"
+              @click="close_post_dialog"
+          >返回
+          </v-btn>
+          <v-btn
+              color="#6A5ACD"
+              :disabled="!valid"
+              class="ma-3 white--text"
+              @click="publish_post"
+          >发布
+          </v-btn>
+        </v-row>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -132,7 +133,7 @@ export default {
   name: "PostDialog",
   props:{
     show_post_dialog: Boolean,
-    tag_list: undefined,
+    subsection_list: undefined,
     section_id: undefined,
     section_name: String,
   },
@@ -140,7 +141,7 @@ export default {
     return{
       show_dialog: this.show_post_dialog,
       files: [],
-      tags: this.tag_list,
+      subsections: this.subsection_list,
       title_rules: [
         v => !!v || '请输入标题',
         v => (v && v.length <= 30) || '标题长度不应超过30个字符',
@@ -152,7 +153,7 @@ export default {
       valid: true,
       form:{
         title: '',
-        tag: '',
+        subsection: '',
         content: ''
       }
     }
@@ -160,7 +161,7 @@ export default {
   methods:{
     clear_dialog(){
       this.form.title = ''
-      this.form.tag = ''
+      this.form.subsection = ''
       this.form.content = ''
       this.files = []
       this.$refs.form.resetValidation()
@@ -175,7 +176,7 @@ export default {
         let fd = new FormData();
         fd.append('section_id',this.section_id)
         fd.append('title',this.form.title);
-        fd.append('tag',this.form.tag);
+        fd.append('subsection',this.form.subsection);
         fd.append('content',this.form.content);
         fd.append('picture_list',this.files);
         for (let [a, b] of fd.entries()) {
@@ -199,8 +200,8 @@ export default {
     show_post_dialog(val) {
       this.show_dialog = val
     },
-    tag_list(val){
-      this.tags = val
+    subsection_list(val){
+      this.subsections = val
     }
   }
 }
