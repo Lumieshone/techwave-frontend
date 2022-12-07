@@ -11,13 +11,13 @@ export function get_section_info(section_id,cur_page,limit) {
         },
     });
 }
-export function filter_post_by_tag(section_id,tag_id, cur_page,limit) {
+export function filter_post_by_subsection(section_id, subsection_id, cur_page, limit) {
     return request({
-        url: "/section/get_posts_by_tag",
+        url: "/section/get_posts_by_subsection",
         method: "get",
         params: {
             section_id,
-            tag_id,
+            subsection_id,
             cur_page,
             limit
         },

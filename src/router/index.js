@@ -101,36 +101,49 @@ export const constantRoutes = [
         redirect: "/account/info",
         children: [
           {
+            name: "info",
             path: "/account/info",
             meta: { title: "个人信息" },
             component: () => import("@/views/home/account/AccountInfo"),
           },
           {
+            name: "collect",
             path: "/account/collect",
             meta: { title: "我的收藏" },
             component: () => import("@/views/home/account/AccountCollect"),
           },
           {
+            name: "post",
             path: "/account/post",
             meta: { title: "我的帖子" },
             component: () => import("@/views/home/account/AccountPost"),
           },
           {
+            name: "reply",
             path: "/account/reply",
             meta: { title: "回复我的" },
             component: () => import("@/views/home/account/AccountReply"),
           },
           {
+            name: "transaction",
             path: "/account/transaction",
             meta: { title: "我的交易" },
             component: () => import("@/views/home/account/AccountTransaction"),
           },
           {
+            name:"section",
+            path: "/account/section",
+            meta: { title: "我的版块" },
+            component: () => import("@/views/home/account/AccountSection"),
+          },
+          {
+            name: "safety",
             path: "/account/safety",
             meta: { title: "安全设置" },
             component: () => import("@/views/home/account/AccountSafety"),
           },
           {
+            name: "certify",
             path: "/account/certify",
             meta: { title: "学生认证" },
             component: () => import("@/views/home/account/AccountCertify"),

@@ -6,15 +6,16 @@ const post = require("./post");
 const transaction = require("./transaction");
 const sale = require("./sale");
 const section = require("./section");
+const account = require("./account");
 const forum = require("./forum");
 const get_news = require("./get-news");
-
 const mocks = [
   ...user,
   ...post,
   ...section,
   ...transaction,
   ...sale,
+  ...account,
   ...forum,
   ...get_news,
 ];

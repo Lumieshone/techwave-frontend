@@ -14,7 +14,7 @@ module.exports = [
                     is_collected: false,
                     intro: "虚空鼓动，劫火高扬",
                     total: 250,
-                    tags: [
+                    subsections: [
                         {
                             id:1,
                             name:"冒险家协会",
@@ -146,9 +146,9 @@ module.exports = [
             };
         },
     },
-    // filter_post_by_tag
+    // filter_post_by_subsection
     {
-        url: baseURL + "/section/get_posts_by_tag.*",
+        url: baseURL + "/section/get_posts_by_subsection.*",
         type: "get",
         response: () => {
             return {

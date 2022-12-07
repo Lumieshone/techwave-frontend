@@ -1,10 +1,175 @@
 <template>
-    <p>个人信息</p>
+  <v-card height="100%" class="mx-4 my-5">
+    <v-card-title v-text="title"></v-card-title>
+    <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation
+        :readonly="is_readonly"
+        class="pa-8 pt-6"
+    >
+      <v-text-field
+          color="#483D8B"
+          dense
+          readonly
+          filled
+          outlined
+          prepend-icon="mdi-card-account-details-outline"
+          label="用户名"
+          :value="username"
+      ></v-text-field>
+      <v-text-field
+          color="#483D8B"
+          dense
+          outlined
+          maxlength="10"
+          :counter="10"
+          :filled="is_filled"
+          prepend-icon="mdi-account-circle-outline"
+          :rules="nameRules"
+          label="昵称"
+          v-model="nickname"
+          required
+      ></v-text-field>
+      <v-text-field
+          v-model="phoneNum"
+          color="#483D8B"
+          maxlength="11"
+          dense
+          outlined
+          :filled="is_filled"
+          prepend-icon="mdi-cellphone"
+          :rules="phoneRules"
+          label="联系方式"
+          required
+      ></v-text-field>
+      <v-select
+          v-model="gender"
+          color="#483D8B"
+          prepend-icon="mdi-gender-transgender"
+          dense
+          outlined
+          :filled="is_filled"
+          :items="genderList"
+          :rules="[v => !!v || '请选择性别']"
+          item-text="name"
+          item-value="id"
+          label="性别"
+          required
+      ></v-select>
+      <v-textarea
+          v-model="intro"
+          maxlength="100"
+          :rows="3"
+          outlined
+          no-resize
+          :filled="is_filled"
+          :rules="introRules"
+          prepend-icon="mdi-face-man-shimmer"
+          :counter="100"
+          color="#483D8B"
+          label="自我介绍"
+          required
+      ></v-textarea>
+      <v-row justify="end">
+        <v-btn
+            color="#6A5ACD"
+            class="ma-4 white--text"
+            :disabled="is_disabled"
+            @click="change_info"
+        >更改
+        </v-btn>
+        <v-btn
+            color="#6A5ACD"
+            :disabled="!valid || !is_disabled"
+            class="ma-4 white--text"
+            @click="submit_change"
+        >保存
+        </v-btn>
+      </v-row>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
+import {edit_info, get_user_info} from "@/api/account";
+
 export default {
-  name: "AccountInfo"
+  name: "AccountInfo",
+  data() {
+    return {
+      title: "个人信息",
+      is_readonly: true,
+      is_filled: true,
+      is_disabled:false,
+      valid: true,
+      avatar: require("@/assets/avatar.jpg"),
+      username: 'wlf',
+      nickname: "wlf_1989",
+      phoneNum: "19890604918",
+      gender: "男",
+      genderList: ["男", "女", "其他"],
+      intro: "你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。" +
+          "游戏发生在一个被称作「提瓦特」的幻想世界，" +
+          "在这里，被神选中的人将被授予「神之眼」，导引元素之力。后边忘了",
+      nameRules: [
+        v => !!v || '请输入昵称',
+        v => (v && v.length <= 10) || '昵称长度不应超过10个字符',
+      ],
+      phoneRules: [
+        v => !!v || '请输入电话号码',
+        v => (v && v.length >= 11) || '电话号码长度为11位',
+      ],
+      introRules: [
+        v => !!v || '请输入个人简介',
+        v => (v && v.length <= 100) || '自我介绍不应超过100个字符',
+      ],
+    }
+  },
+  methods:{
+    change_info(){
+      this.is_readonly = !this.is_readonly
+      this.is_filled = !this.is_filled
+      this.is_disabled = !this.is_disabled
+    },
+    submit_change(){
+      if(this.$refs.form.validate()){
+        this.is_disabled = !this.is_disabled
+        this.is_readonly = !this.is_readonly
+        this.is_filled = !this.is_filled
+        let form = {
+          nickname:this.nickname,
+          phone:this.phoneNum,
+          gender:this.gender,
+          intro:this.intro
+        }
+        edit_info(form).then((res) => {
+          console.log(res.message)
+          if(res.code === 20000)
+            this.$message.success("修改个人信息成功！")
+          else
+            this.$message.error("修改个人信息失败~");
+        }).catch((err) => console.log("error: " + err))
+      }
+    }
+  },
+  mounted(){
+    get_user_info()
+        .then(res => {
+          if(res.code === 20000){
+            console.log("获取用户信息成功")
+            this.nickname = res.nickname
+            this.username = res.username
+            this.phoneNum = res.phone
+            this.gender = res.gender
+            this.intro = res.intro
+          }
+          else{
+            this.$message.error("用户信息获取失败！")
+          }
+        })
+        .catch((err) => console.log("error: " + err));
+  }
 }
 </script>
 
