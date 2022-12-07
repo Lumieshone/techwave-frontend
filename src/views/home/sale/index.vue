@@ -25,7 +25,7 @@
           dense
           label="一级tag"
           persistent-hint
-          @change="filter_by_tag_and_get_subtags()"
+          @change="filter_by_tag()"
         ></v-select>
       </v-col>
       <v-col cols="2">
@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { get_sale_info, get_all_first_tags, get_subtags } from "@/api/sale";
+import { get_sale_info, get_all_first_tags } from "@/api/sale";
 
 import PublishTransaction from "@/views/home/sale/components/publish-transaction.vue";
 
@@ -166,10 +166,10 @@ export default {
 
       // filter by tags
       tags: undefined,
-      subtags: undefined,
       tag_id: undefined,
       subtag_id: undefined,
 
+      current_tag: undefined,
 
       // search
       search_content: "",
@@ -183,6 +183,16 @@ export default {
         this.$store.getters.roles.length > 0 &&
         this.$store.getters.is_authenticated,
     };
+  },
+  computed: {
+    subtags: function () {
+      if (this.tag_id == undefined) {
+        return [];
+      } else {
+        let filter_tags = this.tags.filter((t) => t.id == this.tag_id);
+        return filter_tags[0].subtags;
+      }
+    },
   },
   methods: {
     // change v-tab
@@ -225,7 +235,7 @@ export default {
         subtag_id: this.subtag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;
@@ -235,14 +245,14 @@ export default {
         .catch((err) => console.log("error: " + err));
     },
 
-    filter_by_tag_and_get_subtags() {
+    filter_by_tag() {
       get_sale_info({
         search_content: this.search_content,
         campus_zone: this.campus_zone_filter,
         tag_id: this.tag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;
@@ -250,16 +260,6 @@ export default {
           this.curPage = 1;
         })
         .catch((err) => console.log("error: " + err));
-
-      get_subtags(this.tag_id)
-        .then((res) => {
-          this.subtags = res.tags;
-        })
-        .error(() => {
-          this.$message.error("获取二级tag失败...");
-        });
-
-      this.subtag_id = undefined;
     },
 
     filter_by_subtag() {
@@ -270,7 +270,7 @@ export default {
         subtag_id: this.subtag_id,
         offset: 0,
         limit: this.limit,
-        type: this.type,
+        type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
           this.transactions_data = res.transactions_data;

@@ -12,6 +12,7 @@
     <!-- title -->
     <h1>{{ post_data.title }}</h1>
     <p>帖子id: {{ post_id }}</p>
+    <p>帖子浏览量: {{ post_data.browse_number }}</p>
 
     <!-- tags -->
     <!-- <v-chip class="ma-2" v-for="tag in post_data.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
@@ -24,13 +25,32 @@
       {{ is_login ? "收藏" : "请先登录再收藏" }}
     </v-btn>
 
-    <!-- 楼层 -->
+    <!-- 一楼 -->
+    <v-container>
+      <v-card>
+        <v-card-title>
+          <span style="margin: 5px">{{ post_data.floor }} 楼 </span>
+          <span style="margin: 5px">{{ post_data.author }}</span>
+          <v-avatar>
+            <img :src="post_data.avatar" :alt="post_data.author" />
+          </v-avatar>
+        </v-card-title>
+        <v-card-subtitle
+          ><span>{{ post_data.time }}</span></v-card-subtitle
+        >
+        <v-card-text>
+          {{ post_data.content }}
+        </v-card-text>
+      </v-card>
+    </v-container>
+
+    <!-- 浏览评论 -->
     <v-col
-      v-for="singlelayer_data in post_data.layer_data"
-      :key="singlelayer_data.floor"
+      v-for="singlecomment_data in comment_data"
+      :key="singlecomment_data.floor"
     >
-      <PostLayer
-        :layer_data="singlelayer_data"
+      <PostComment
+        :comment_data="singlecomment_data"
         :post_id="Number(post_id)"
         :is_login="Boolean(is_login)"
       />
@@ -77,39 +97,18 @@
         </v-card-actions>
       </v-card>
     </v-col>
-
-    <!-- test rich text editor -->
-    <div style="border: 1px solid #ccc">
-      <Toolbar
-        style="border-bottom: 1px solid #ccc"
-        :editor="editor"
-        :defaultConfig="toolbarConfig"
-        :mode="mode"
-      />
-      <Editor
-        style="height: 500px; overflow-y: hidden"
-        v-model="rich_post_data"
-        :defaultConfig="editorConfig"
-        :mode="mode"
-        @onCreated="onCreated"
-      />
-    </div>
   </v-container>
 </template>
 
 <script>
-import PostLayer from "@/views/home/post/components/layer.vue";
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-
+import PostComment from "@/views/home/post/components/comment.vue";
 import { get_post_info, collect_post, reply_on_post } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
   components: {
-    PostLayer,
-    Editor,
-    Toolbar,
+    PostComment,
   },
   data() {
     return {
@@ -130,12 +129,8 @@ export default {
       // post data (from backend)
       post_data: {},
 
-      // test rich text editor
-      editor: null,
-      toolbarConfig: {},
-      editorConfig: { placeholder: "请输入内容..." },
-      mode: "default", // or 'simple'
-      rich_post_data: '<p>hello</p>',
+      // comment data (from backend)
+      comment_data: {},
     };
   },
   methods: {
@@ -151,6 +146,11 @@ export default {
       })
         .then((res) => {
           this.post_data = res.post_data;
+          this.post_data.floor = 1;
+          this.comment_data = res.comment_data;
+          this.comment_data.forEach(
+            (c, i) => (c.floor = i + (this.curPage - 1) * this.limit + 2)
+          );
         })
         .catch((err) => console.log("error: " + err));
     },
@@ -182,26 +182,10 @@ export default {
         this.post_data.is_collected = !this.post_data.is_collected;
       });
     },
-
-    onCreated(editor) {
-      this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
-    },
   },
   mounted() {
     this.post_id = this.$route.params.post_id;
     this.refreshList();
-
-    setTimeout(() => {
-      this.html = "<p>模拟 Ajax 异步设置内容 HTML</p>";
-    }, 1500);
-  },
-
-  beforeDestroy() {
-    const editor = this.editor;
-    if (editor == null) return;
-    editor.destroy(); // 组件销毁时，及时销毁编辑器
   },
 };
 </script>
-
-<style src="@wangeditor/editor/dist/css/style.css"></style>

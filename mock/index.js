@@ -7,7 +7,18 @@ const transaction = require("./transaction");
 const sale = require("./sale");
 const section = require("./section");
 const account = require("./account");
-const mocks = [...user, ...post, ...section, ...transaction, ...sale,...account];
+const forum = require("./forum");
+const get_news = require("./get-news");
+const mocks = [
+  ...user,
+  ...post,
+  ...section,
+  ...transaction,
+  ...sale,
+  ...account,
+  ...forum,
+  ...get_news,
+];
 
 // for front mock
 // please use it cautiously, it will redefine XMLHttpRequest,
