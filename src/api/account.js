@@ -48,3 +48,52 @@ export function edit_email(password,email) {
         }
     });
 }
+export function get_folders() {
+    return request({
+        url: "/account/get_folders",
+        method: "get",
+        params: {
+        },
+    });
+}
+export function get_collect_info(folderId, curPage, limit) {
+    return request({
+        url: "/account/get_collect_info",
+        method: "get",
+        params: {
+            folderId,
+            curPage,
+            limit
+        },
+    });
+}
+
+export function rename_folder(folderId,folderName) {
+    return request({
+        url: "/account/rename_folder",
+        method: "post",
+        data: {
+            folderId:folderId,
+            folderName:folderName
+        }
+    });
+}
+export function create_folder(folderName) {
+    return request({
+        url: "/account/create_folder",
+        method: "post",
+        data: {
+            folderName:folderName
+        }
+    });
+}
+
+export function delete_folder(folderId) {
+    return request({
+        url: "/account/delete_folder",
+        method: "delete",
+        data: {
+            folderId:folderId
+        }
+    });
+}

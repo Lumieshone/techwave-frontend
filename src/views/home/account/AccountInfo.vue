@@ -77,7 +77,7 @@
             class="ma-4 white--text"
             :disabled="is_disabled"
             @click="change_info"
-        >更改
+        >编辑
         </v-btn>
         <v-btn
             color="#6A5ACD"

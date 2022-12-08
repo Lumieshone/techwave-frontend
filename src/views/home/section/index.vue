@@ -9,9 +9,9 @@
           >
             <v-chip
                 class="ma-2"
-                color="#F0E68C"
+                color="#E6E6FA"
                 label
-                text-color="#696969"
+                text-color="#6A5ACD"
             >
               <strong>{{section_data.title}}</strong>
             </v-chip>
@@ -69,14 +69,14 @@
               max-height="1000"
           >
             <v-list-item-group
-                active-class="brown--text"
+                active-class="deep-purple--text"
             >
               <template v-for="(item, index) in section_data.posts">
                 <v-list-item :key="item.id" @click="step_to_post(item.id)">
                   <template>
                     <v-list-item-avatar>
                       <v-chip
-                          color="#f5e8cb"
+                          color="#E6E6FA"
                           label
                           small
                       >
@@ -105,6 +105,7 @@
           <v-row>
             <v-col cols="8">
               <v-pagination
+                  color="#6A5ACD"
                   v-if="Math.ceil(section_data.total / limit) > 1"
                   v-model="cur_page"
                   :length="Math.ceil(section_data.total/ limit)"
@@ -254,6 +255,8 @@ export default {
 .section_intro{
   margin-left: 12px;
   font-size: 14px;
+  font-weight: bold;
+  color:#6A5ACD
 }
 .v-text-field{
   width:45px;

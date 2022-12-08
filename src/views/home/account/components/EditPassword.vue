@@ -27,6 +27,9 @@
       >
         <v-text-field
             v-model="oldPassword"
+            :append-icon="showPassword_1 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword_1 ? 'text' : 'password'"
+            @click:append="showPassword_1 = !showPassword_1"
             color="#483D8B"
             :rules="oldRules"
             dense
@@ -36,6 +39,9 @@
         ></v-text-field>
         <v-text-field
             v-model="newPassword"
+            :append-icon="showPassword_2 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword_2 ? 'text' : 'password'"
+            @click:append="showPassword_2 = !showPassword_2"
             color="#483D8B"
             maxlength="30"
             :rules="newRules"
@@ -47,6 +53,9 @@
         ></v-text-field>
         <v-text-field
             v-model="password"
+            :append-icon="showPassword_3 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword_3 ? 'text' : 'password'"
+            @click:append="showPassword_3 = !showPassword_3"
             color="#483D8B"
             maxlength="30"
             :rules="Rules"
@@ -87,6 +96,9 @@ export default {
   data(){
     return{
       showDialog: this.dialogVisible,
+      showPassword_1:true,
+      showPassword_2:true,
+      showPassword_3:true,
       oldRules: [
         v => !!v || '请输入旧密码',
       ],
