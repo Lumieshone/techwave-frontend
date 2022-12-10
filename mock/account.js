@@ -214,4 +214,84 @@ module.exports = [
             };
         },
     },
+    // delete my post
+    {
+        url: baseURL + "/account/delete_my_post.*",
+        type: "delete",
+        response: () => {
+            return {
+                code: 20000,
+                message:"okk"
+            };
+        },
+    },
+    // get my post
+    {
+        url: baseURL + "/account/get_my_post.*",
+        type: "get",
+        response: () => {
+            return {
+                code: 20000,
+                total:30,
+                posts:[
+                    {
+                        id: 1,
+                        time: '16:12',
+                        reply:10,
+                        section:'原神',
+                        title: '公子和宵宫是不是真的有一腿？',
+                    },
+                    {
+                        id: 2,
+                        time: '17:35',
+                        reply:10,
+                        section: `原神`,
+                        title: '公子池逆天概率',
+                    },
+                    {
+                        id: 3,
+                        time: '11-28',
+                        reply:10,
+                        section: `原神`,
+                        title: '0命雷神就别劝新人抽了',
+                    },
+                    {
+                        id: 4,
+                        time: '11-23',
+                        reply:10,
+                        section: `原神`,
+                        title: 'xdm在蒙德教堂抽卡真的会有奇迹',
+                    },
+                    {
+                        id: 5,
+                        time: '10-05',
+                        reply:10,
+                        section: `原神`,
+                        title: '草神武装也就那样',
+                    },
+                    {
+                        id: 6,
+                        time: '10-05',
+                        reply:10,
+                        section: `原神`,
+                        title: '草神武装也就那样',
+                    },
+                    {
+                        id: 7,
+                        time: '10-05',
+                        reply:10,
+                        section: `原神`,
+                        title: '草神武装也就那样',
+                    },
+                    {
+                        id: 8,
+                        time: '10-05',
+                        reply:10,
+                        section: `原神`,
+                        title: '草神武装也就那样',
+                    }
+                ]
+            };
+        },
+    },
 ]

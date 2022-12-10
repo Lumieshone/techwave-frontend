@@ -97,3 +97,25 @@ export function delete_folder(folderId) {
         }
     });
 }
+
+export function get_my_post(curPage,limit) {
+    return request({
+        url: "/account/get_my_post",
+        method: "get",
+        data: {
+            type:'post',
+            curPage:curPage,
+            limit:limit
+        }
+    });
+}
+
+export function delete_my_post(postId) {
+    return request({
+        url: "/account/delete_my_post",
+        method: "delete",
+        data: {
+            postId:postId
+        }
+    });
+}
