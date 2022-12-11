@@ -1,62 +1,74 @@
 <template>
-    <div ref="wang"></div>
+  <div style="border: 1px solid #ccc">
+    <Toolbar
+      style="border-bottom: 1px solid #ccc"
+      :editor="editor"
+      :defaultConfig="toolbarConfig"
+      :mode="mode"
+    />
+    <Editor
+      style="height: 500px; overflow-y: hidden"
+      v-model="html"
+      :defaultConfig="editorConfig"
+      :mode="mode"
+      @onCreated="onCreated"
+    />
+  </div>
 </template>
 
 <script>
-import wangEditor from 'wangeditor'
+import Vue from "vue";
+// eslint-disable-next-line no-unused-vars
+import { IEditorConfig } from "@wangeditor/editor";
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 
-export default {
-    props: {
-        // wangEditor 的配置
-        option: {
-            type: Object,
-            default() {
-                return {}
-            }
-        },
-        // v-model 双向绑定：接受父组件的值
-        // https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model
-        value: {
-            type: String,
-            default: ''
-        }
+export default Vue.extend({
+  name: "WangEditor",
+  components: { Editor, Toolbar },
+  props: {
+    value: {
+      type: String,
+      default: "",
     },
-    watch: {
-        // 监听父组件传值，将值赋值给编辑器
-        value(n) {
-            if (this.editor && n !== this.temp) {
-                this.editor.$textElem.html(n)
-            }
-        }
+    upload_api: String,
+  },
+  data() {
+    return {
+      editor: null,
+      html: "<p>hello</p>",
+      toolbarConfig: {},
+      editorConfig: {
+        placeholder: "请输入内容...",
+      },
+      mode: "default", // or 'simple'
+    };
+  },
+  watch: {
+    // 监听父组件传值，将值赋值给编辑器
+    value(n) {
+      if (this.editor && n !== this.temp) {
+        this.editor.$textElem.html(n);
+      }
     },
-    data() {
-        return {
-            temp: '',   // 缓存当前的编辑器中的值，用于与父组件传入值进行对比
-            editor: null
-        }
-    },
-    mounted() {
-        this.editor = new wangEditor(this.$refs.wang)
+  },
 
-        // 合并配置项
-        Object.assign(this.editor.config, this.option)
-
-        // v-model 双向绑定：把值发送到父组件（不占用用户的 onchange 配置）
-        this.editor.txt.eventHooks.changeEvents.push(() => {
-            this.temp = this.editor.$textElem.html()
-            this.$emit('input', this.temp)
-        })
-
-        this.editor.create()
-        
-        if (this.value.length) {
-            this.editor.txt.html(this.value)
-        }
+  methods: {
+    onCreated(editor) {
+      this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
-    beforeDestroy() {
-        if (this.editor) {
-            this.editor.destroy()
-        }
-    }
-}
+  },
+  mounted() {
+    // 模拟 ajax 请求，异步渲染编辑器
+    setTimeout(() => {
+      this.html = "<p>模拟 Ajax 异步设置内容 HTML</p>";
+    }, 1500);
+  },
+  beforeDestroy() {
+    const editor = this.editor;
+    if (editor == null) return;
+    editor.destroy(); // 组件销毁时，及时销毁编辑器
+  },
+});
 </script>
+
+<style src="@wangeditor/editor/dist/css/style.css"></style>
