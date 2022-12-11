@@ -1,6 +1,6 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
-let sections_info = [
+let sectionsInfo = [
   {
     id: 1,
     name: "Apple",
@@ -74,7 +74,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        collect_sections_info: sections_info.slice(0, 2),
+        data: {
+          sectionsInfo: sectionsInfo.slice(0, 2),
+        },
       };
     },
   },
@@ -84,7 +86,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        sections_info: sections_info,
+        data: {
+          sectionsInfo: sectionsInfo,
+        },
       };
     },
   },
@@ -95,9 +99,11 @@ module.exports = [
       const { search_content } = config.query;
       return {
         code: 20000,
-        sections_info: sections_info.filter((s) =>
-          s.name.includes(search_content)
-        ),
+        data: {
+          sectionsInfo: sectionsInfo.filter((s) =>
+            s.name.includes(search_content)
+          ),
+        },
       };
     },
   },

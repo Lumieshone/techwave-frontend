@@ -22,7 +22,7 @@
             <v-list-item-group active-class="brown--text">
               <template>
                 <v-list-item
-                  v-for="item in news_info"
+                  v-for="item in newsInfo"
                   :key="item.id"
                   @click="step_to_post(item.id)"
                 >
@@ -67,7 +67,7 @@
             <v-list-item-group active-class="brown--text">
               <template>
                 <v-list-item
-                  v-for="item in posts_info"
+                  v-for="item in postsInfo"
                   :key="item.id"
                   @click="step_to_post(item.id)"
                 >
@@ -122,8 +122,8 @@ export default {
       ],
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
 
-      posts_info: [],
-      news_info: [],
+      postsInfo: [],
+      newsInfo: [],
     };
   },
   methods: {
@@ -134,12 +134,12 @@ export default {
   mounted() {
     get_hot_posts()
       .then((res) => {
-        this.posts_info = res.posts_info;
+        this.postsInfo = res.data.postsInfo;
       })
       .catch((err) => console.log("error: " + err));
     get_news()
       .then((res) => {
-        this.news_info = res.news_info;
+        this.newsInfo = res.data.newsInfo;
       })
       .catch((err) => console.log("error: " + err));
   },

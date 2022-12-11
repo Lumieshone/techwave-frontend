@@ -1,18 +1,15 @@
 <template>
   <v-container>
-    <v-col
-      v-for="singlereply_data in reply_data"
-      :key="singlereply_data.reply_id"
-    >
+    <v-col v-for="singlereplyData in replyData" :key="singlereplyData.replyId">
       <v-card>
-        <v-card-title>{{ singlereply_data.author }}</v-card-title>
-        <v-card-subtitle v-show="singlereply_data.reply_to"
+        <v-card-title>{{ singlereplyData.author }}</v-card-title>
+        <v-card-subtitle v-show="singlereplyData.replyTo"
           ><span
-            >回复给 {{ singlereply_data.reply_to }}
-            {{ singlereply_data.time }}</span
+            >回复给 {{ singlereplyData.replyTo }}
+            {{ singlereplyData.time }}</span
           ></v-card-subtitle
         >
-        <v-card-text>{{ singlereply_data.content }}</v-card-text>
+        <v-card-text>{{ singlereplyData.content }}</v-card-text>
         <v-card-actions>
           <v-btn
             color="primary"
@@ -20,10 +17,7 @@
             small
             :disabled="!is_login"
             v-on:click="
-              open_reply_dialog(
-                singlereply_data.author,
-                singlereply_data.reply_id
-              )
+              open_reply_dialog(singlereplyData.author, singlereplyData.replyId)
             "
           >
             <v-icon>mdi-comment</v-icon>
@@ -32,8 +26,9 @@
             color="primary"
             fab
             small
-            v-show="singlereply_data.able_to_delete"
-            v-on:click="open_delete_dialog(singlereply_data.reply_id)"
+            :disabled="!is_login"
+            v-show="is_login && singlereplyData.ableToDelete"
+            v-on:click="open_delete_dialog(singlereplyData.replyId)"
           >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
@@ -44,7 +39,7 @@
     <!-- reply -->
     <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>回复给 {{ reply_to_user_name }}</v-card-title>
+        <v-card-title>回复给 {{ replyTo_user_name }}</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="reply_content"
@@ -101,42 +96,42 @@ export default {
   name: "Postreply",
   props: {
     is_login: Boolean,
-    reply_data: {
-      reply_id: Number,
+    replyData: {
+      replyId: Number,
       time: Date,
       author: String,
-      reply_to: String,
+      replyTo: String,
       content: String,
-      able_to_delete: Boolean,
+      ableToDelete: Boolean,
     },
   },
   data() {
     return {
       // reply
       show_reply_dialog: false,
-      reply_id: undefined,
-      reply_to_user_name: "",
+      replyId: undefined,
+      replyTo_user_name: "",
       reply_content: undefined,
 
       // delete
       show_delete_dialog: false,
-      delete_reply_id: undefined,
+      delete_replyId: undefined,
     };
   },
   methods: {
     // arrow methods can't bind to this, so use function instead!!
 
     // reply
-    open_reply_dialog(author, reply_id) {
+    open_reply_dialog(author, replyId) {
       this.show_reply_dialog = true;
-      this.reply_id = reply_id;
-      this.reply_to_user_name = author;
+      this.replyId = replyId;
+      this.replyTo_user_name = author;
       this.reply_content = "";
     },
     close_reply_dialog() {
       this.show_reply_dialog = false;
-      this.reply_id = undefined;
-      this.reply_to_user_name = "";
+      this.replyId = undefined;
+      this.replyTo_user_name = "";
       this.reply_content = "";
     },
     reply() {
@@ -146,8 +141,8 @@ export default {
       }
 
       reply_on_reply({
-        reply_content: this.reply_content,
-        rreply_id: this.reply_id,
+        replyContent: this.reply_content,
+        replyId: this.replyId,
       })
         .then((res) => {
           if (res.code === 20000) this.$message.success("回复成功！");
@@ -158,16 +153,16 @@ export default {
     },
 
     // delete
-    open_delete_dialog(reply_id) {
+    open_delete_dialog(replyId) {
       this.show_delete_dialog = true;
-      this.delete_reply_id = reply_id;
+      this.delete_replyId = replyId;
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
-      this.delete_reply_id = undefined;
+      this.delete_replyId = undefined;
     },
     delete_reply() {
-      delete_reply(this.reply_id).then((res) => {
+      delete_reply(this.replyId).then((res) => {
         if (res.code === 20000) this.$message.success("删除成功！");
         else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });

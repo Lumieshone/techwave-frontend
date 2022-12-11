@@ -1,49 +1,52 @@
 <template>
   <v-container>
     <v-card>
-      <v-chip label class="ma-2" color="#e6e6f9"><strong>{{transaction_info.tag_name}}</strong></v-chip>
-      <v-chip label class="ma-2" color="#e6e6f9">{{transaction_info.subtag_name}}</v-chip>
+      <v-chip label class="ma-2" color="#e6e6f9"
+        ><strong>{{ transactionInfo.tagName }}</strong></v-chip
+      >
+      <v-chip label class="ma-2" color="#e6e6f9">{{
+        transactionInfo.subtagName
+      }}</v-chip>
 
       <v-card-title>
         <span style="margin: 20px 10px"
-          >[{{ transaction_info.type }}] {{ transaction_info.title }}</span
+          >[{{ transactionInfo.type }}] {{ transactionInfo.title }}</span
         ></v-card-title
       >
       <v-card-subtitle>
         <v-avatar>
-          <img :src="transaction_info.avatar" :alt="transaction_info.author" />
+          <img :src="transactionInfo.avatar" :alt="transactionInfo.author" />
         </v-avatar>
         <span style="margin: 10px">
-          {{ transaction_info.author }} {{ transaction_info.time }}
-          {{ transaction_info.campus_zone }} 校区</span
+          {{ transactionInfo.author }} {{ transactionInfo.time }}
+          {{ transactionInfo.campusZone }} 校区</span
         >
         <v-btn
           v-on:click="collect"
-          v-show="transaction_info.type == '出售'"
+          v-show="transactionInfo.type == '出售'"
           absolute
           right
         >
-          <v-icon :color="is_collected ? 'orange' : 'grey'">mdi-star</v-icon>
+          <v-icon :color="isCollected ? 'orange' : 'grey'">mdi-star</v-icon>
           收藏
           {{
-            transaction_info.type == "出售"
-              ? transaction_info.collect_number
-              : ""
+            transactionInfo.type == "出售" ? transactionInfo.collectNumber : ""
           }}
         </v-btn>
+        浏览{{ transactionInfo.viewCount }}
       </v-card-subtitle>
       <v-card-text>
-        <p>{{ transaction_info.description }}</p>
+        <p>{{ transactionInfo.description }}</p>
         <v-row>
           <v-col
-            v-for="image_url in transaction_info.images_url"
-            :key="image_url"
+            v-for="imageUrl in transactionInfo.imagesUrl"
+            :key="imageUrl"
             class="d-flex child-flex"
             cols="4"
           >
             <v-img
-              :src="image_url"
-              :lazy-src="image_url"
+              :src="imageUrl"
+              :lazy-src="imageUrl"
               aspect-ratio="1"
               class="grey lighten-2"
             >
@@ -78,7 +81,7 @@
       <v-card>
         <v-card-title>联系方式</v-card-title>
         <v-card-text
-          >{{ contact_info.method }} ： {{ contact_info.number }}
+          >{{ contactInfo.method }} ： {{ contactInfo.number }}
         </v-card-text>
         <v-card-actions>
           <v-btn
@@ -92,13 +95,13 @@
         >
       </v-card>
     </v-dialog>
-    
+
     <!-- authenticate -->
     <v-alert type="info" v-show="!able_to_see_transaction"
       >请先完成登录且完成学生认证！<v-btn
         style="margin-right: 10px"
         outlined
-        :to="`/login?redirect=transaction/${transaction_id}`"
+        :to="`/login?redirect=transaction/${transactionId}`"
         >登录</v-btn
       ><v-btn outlined to="/account/certify">前往学生认证</v-btn></v-alert
     >
@@ -115,18 +118,20 @@ export default {
   data() {
     return {
       // authenticate
-      able_to_see_transaction: this.$store.getters.roles.length > 0 && this.$store.getters.is_authenticated,
+      able_to_see_transaction:
+        this.$store.getters.roles.length > 0 &&
+        this.$store.getters.isAuthenticated,
 
       // is collected (for 出售)
-      is_collected: false,
+      isCollected: false,
 
       // contact
       show_contact_dialog: false,
-      contact_info: {},
+      contactInfo: {},
 
       // transaction
-      transaction_id: undefined,
-      transaction_info: {},
+      transactionId: undefined,
+      transactionInfo: {},
     };
   },
   methods: {
@@ -140,25 +145,25 @@ export default {
 
     // collect
     collect() {
-      collect_transaction(this.transaction_id)
+      collect_transaction(this.transactionId)
         .then(() => {
-          this.is_collected = !this.is_collected;
-          if (this.is_collected == true) {
-            this.transaction_info.collect_number++;
+          this.isCollected = !this.isCollected;
+          if (this.isCollected == true) {
+            this.transactionInfo.collectNumber++;
           } else {
-            this.transaction_info.collect_number--;
+            this.transactionInfo.collectNumber--;
           }
         })
         .catch((err) => console.log("error: " + err));
     },
   },
   mounted() {
-    this.transaction_id = this.$route.params.transaction_id;
+    this.transactionId = this.$route.params.transactionId;
     if (this.able_to_see_transaction) {
-      get_transaction_info(this.post_id)
+      get_transaction_info(this.postId)
         .then((res) => {
-          this.transaction_info = res.transaction_info;
-          this.contact_info = res.contact_info;
+          this.transactionInfo = res.data.transactionInfo;
+          this.contactInfo = res.data.contactInfo;
         })
         .catch((err) => console.log("error: " + err));
     }

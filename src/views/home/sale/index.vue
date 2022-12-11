@@ -7,18 +7,18 @@
     <v-row>
       <v-col cols="5">
         <v-text-field
-          v-model="search_content"
+          v-model="searchContent"
           label="输入搜索关键词~"
           outlined
           dense
           clearable
-          :append-icon="search_loading ? 'mdi-loading' : 'mdi-magnify'"
+          :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
           @click:append="search()"
         ></v-text-field>
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="tag_id"
+          v-model="tagId"
           :items="tags"
           item-text="name"
           item-value="id"
@@ -30,7 +30,7 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="subtag_id"
+          v-model="subtagId"
           :items="subtags"
           item-text="name"
           item-value="id"
@@ -42,8 +42,8 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="campus_zone_filter"
-          :items="campus_zones"
+          v-model="campusZoneFilter"
+          :items="campusZones"
           dense
           disable-lookup
           label="校区"
@@ -64,25 +64,25 @@
     <v-row>
       <v-col
         cols="4"
-        v-for="transaction_data in transactions_data"
-        :key="transaction_data.transaction_id"
+        v-for="transactionData in transactionsData"
+        :key="transactionData.transactionId"
       >
         <v-card
           height="360px"
-          :to="`/transaction/${transaction_data.transaction_id}`"
+          :to="`/transaction/${transactionData.transactionId}`"
         >
-          <v-img :src="transaction_data.image_url" height="200px"> </v-img>
-          <v-card-title v-text="transaction_data.title"></v-card-title>
+          <v-img :src="transactionData.imageUrl" height="200px"> </v-img>
+          <v-card-title v-text="transactionData.title"></v-card-title>
           <v-card-subtitle>
-            <span>{{ transaction_data.campus_zone }} 校区</span>
+            <span>{{ transactionData.campusZone }} 校区</span>
             <span style="margin: 10px">|</span>
-            <span>价格: {{ transaction_data.price }}</span>
+            <span>价格: {{ transactionData.price }}</span>
           </v-card-subtitle>
           <v-card-text>
             <span>{{
-              transaction_data.description.length > 40
-                ? transaction_data.description.slice(0, 40) + ".."
-                : transaction_data.description
+              transactionData.description.length > 40
+                ? transactionData.description.slice(0, 40) + ".."
+                : transactionData.description
             }}</span>
           </v-card-text>
         </v-card>
@@ -158,22 +158,20 @@ export default {
       total: undefined,
 
       // transaction data
-      transactions_data: [],
+      transactionsData: [],
 
       // filter by campus
-      campus_zones: ["全部", "四平", "嘉定", "彰武", "沪西"],
-      campus_zone_filter: "全部",
+      campusZones: ["全部", "四平", "嘉定", "彰武", "沪西"],
+      campusZoneFilter: "全部",
 
       // filter by tags
       tags: undefined,
-      tag_id: undefined,
-      subtag_id: undefined,
-
-      current_tag: undefined,
+      tagId: undefined,
+      subtagId: undefined,
 
       // search
-      search_content: "",
-      search_loading: false,
+      searchContent: "",
+      searchLoading: false,
 
       // publish dialog
       show_publish_dialog: false,
@@ -181,16 +179,15 @@ export default {
       // if have permission
       have_permission:
         this.$store.getters.roles.length > 0 &&
-        this.$store.getters.is_authenticated,
+        this.$store.getters.isAuthenticated,
     };
   },
   computed: {
     subtags: function () {
-      if (this.tag_id == undefined) {
+      if (this.tagId == undefined) {
         return [];
       } else {
-        let filter_tags = this.tags.filter((t) => t.id == this.tag_id);
-        return filter_tags[0].subtags;
+        return this.tags.find((t) => t.id == this.tagId).subtags;
       }
     },
   },
@@ -211,17 +208,17 @@ export default {
 
     refreshList(curPage = this.curPage, limit = this.limit) {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campusZone: this.campusZoneFilter,
+        tagId: this.tagId,
+        subtagId: this.subtagId,
         offset: (curPage - 1) * limit,
         limit: limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
+          this.transactionsData = res.data.transactionsData;
+          this.total = res.data.total;
         })
         .catch((err) => console.log("error: " + err));
     },
@@ -229,17 +226,17 @@ export default {
     // search
     search() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campusZone: this.campusZoneFilter,
+        tagId: this.tagId,
+        subtagId: this.subtagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
+          this.transactionsData = res.data.transactionsData;
+          this.total = res.data.total;
           this.curPage = 1;
         })
         .catch((err) => console.log("error: " + err));
@@ -247,16 +244,16 @@ export default {
 
     filter_by_tag() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
+        searchContent: this.searchContent,
+        campusZone: this.campusZoneFilter,
+        tagId: this.tagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
+          this.transactionsData = res.data.transactionsData;
+          this.total = res.data.total;
           this.curPage = 1;
         })
         .catch((err) => console.log("error: " + err));
@@ -264,16 +261,16 @@ export default {
 
     filter_by_subtag() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campus_zone: this.campusZoneFilter,
+        tagId: this.tagId,
+        subtagId: this.subtagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
         .then((res) => {
-          this.transactions_data = res.transactions_data;
+          this.transactionsData = res.transactionsData;
           this.total = res.total;
           this.curPage = 1;
         })
@@ -286,7 +283,7 @@ export default {
       this.refreshList();
       get_all_first_tags()
         .then((res) => {
-          this.tags = res.tags;
+          this.tags = res.data.tags;
         })
         .error(() => {
           this.$message.error("获取一级tag失败...");

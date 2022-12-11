@@ -12,21 +12,17 @@ const tokens = {
 const users = {
   "admin-token": {
     roles: ["admin"],
-    user_id: 123,
-    introduction: "I am a super administrator",
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     name: "Super Admin",
-    is_authenticated: true,
+    isAuthenticated: true,
   },
   "user-token": {
     roles: ["user"],
-    user_id: 123,
-    introduction: "I am an user",
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     name: "Normal User",
-    is_authenticated: true,
+    isAuthenticated: true,
   },
 };
 
@@ -49,7 +45,9 @@ module.exports = [
 
       return {
         code: 20000,
-        data: token,
+        data: {
+          token: token,
+        },
       };
     },
   },
@@ -72,7 +70,9 @@ module.exports = [
 
       return {
         code: 20000,
-        data: token,
+        data: {
+          token: token,
+        },
       };
     },
   },
@@ -123,7 +123,7 @@ module.exports = [
       if (Math.random() < 0.9) {
         return {
           code: 20000,
-          data: "success",
+          message: "success",
         };
       } else {
         return {
@@ -149,6 +149,28 @@ module.exports = [
           message: "原密码错误！",
         };
       }
+    },
+  },
+
+  {
+    url: baseURL + "/user/send-email-code",
+    type: "get",
+    response: () => {
+      return {
+        code: 20000,
+        message: "success",
+      };
+    },
+  },
+
+  {
+    url: baseURL + "/user/forget-pwd/",
+    type: "post",
+    response: () => {
+      return {
+        code: 20000,
+        message: "success",
+      };
     },
   },
 ];

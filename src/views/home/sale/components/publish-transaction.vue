@@ -13,7 +13,7 @@
                 rules="required"
               >
                 <v-text-field
-                  v-model="transaction_info.title"
+                  v-model="transactionInfo.title"
                   :error-messages="errors"
                   label="Title"
                   required
@@ -28,7 +28,7 @@
                 rules="required|numeric"
               >
                 <v-text-field
-                  v-model="transaction_info.price"
+                  v-model="transactionInfo.price"
                   :error-messages="errors"
                   label="Price(￥)"
                   required
@@ -45,8 +45,8 @@
                 rules="required"
               >
                 <v-select
-                  v-model="transaction_info.campus_zone"
-                  :items="campus_zones"
+                  v-model="transactionInfo.campusZone"
+                  :items="campusZones"
                   :error-messages="errors"
                   label="Campus Zone"
                 ></v-select> </validation-provider
@@ -59,8 +59,8 @@
                 rules="required"
               >
                 <v-select
-                  v-model="transaction_info.contact_type"
-                  :items="contact_types"
+                  v-model="transactionInfo.contactType"
+                  :items="contactTypes"
                   :error-messages="errors"
                   label="Contact Type"
                 ></v-select>
@@ -74,7 +74,7 @@
                 rules="required"
               >
                 <v-text-field
-                  v-model="transaction_info.contact_number"
+                  v-model="transactionInfo.contactNumber"
                   :error-messages="errors"
                   label="Contact Number"
                   required
@@ -91,7 +91,7 @@
               >
                 <v-select
                   :error-messages="errors"
-                  v-model="transaction_info.tag_id"
+                  v-model="transactionInfo.tagId"
                   :items="tags"
                   item-text="name"
                   item-value="id"
@@ -109,8 +109,8 @@
               >
                 <v-select
                   :error-messages="errors"
-                  v-model="transaction_info.subtag_id"
-                  :items="subtags"
+                  v-model="transactionInfo.subtagId"
+                  :items="tags.find((t) => t.id == transactionInfo.tagId).subtags"
                   item-text="name"
                   item-value="id"
                   label="Sub Tag"
@@ -128,7 +128,7 @@
                 rules="required"
               >
                 <v-textarea
-                  v-model="transaction_info.description"
+                  v-model="transactionInfo.description"
                   :error-messages="errors"
                   label="Description"
                   required
@@ -138,7 +138,7 @@
             </v-col>
           </v-row>
           <v-file-input
-            v-model="transaction_info.image"
+            v-model="transactionInfo.image"
             accept="image/*"
             small-chips
             multiple
@@ -160,11 +160,7 @@
 </template>
 
 <script>
-import {
-  publish_transaction,
-  get_all_first_tags,
-  get_subtags,
-} from "@/api/sale";
+import { publish_transaction, get_all_first_tags } from "@/api/sale";
 
 import { required, numeric } from "vee-validate/dist/rules";
 import {
@@ -195,19 +191,19 @@ export default {
   data() {
     return {
       tags: [],
-      subtags: [],
-      campus_zones: ["嘉定", "四平", "彰武", "沪西"],
-      contact_types: ["微信", "QQ", "手机", "领英", "邮箱"],
-      transaction_info: {
+
+      campusZones: ["嘉定", "四平", "彰武", "沪西"],
+      contactTypes: ["微信", "QQ", "手机", "领英", "邮箱"],
+      transactionInfo: {
         title: "iphone 18",
         price: 1234,
         image: [],
-        tag_id: undefined,
-        subtag_id: undefined,
+        tagId: undefined,
+        subtagId: undefined,
         description: "十分帝豪啊",
-        campus_zone: "嘉定",
-        contact_type: "微信",
-        contact_number: "1234",
+        campusZone: "嘉定",
+        contactType: "微信",
+        contactNumber: "1234",
       },
     };
   },
@@ -220,34 +216,21 @@ export default {
       this.$emit("close_publish_dialog");
     },
 
-    get_subtags() {
-      get_subtags(this.transaction_info.tag_id)
-        .then((res) => {
-          this.subtags = res.tags;
-        })
-        .error(() => {
-          this.$message.error("获取二级tag失败...");
-        });
-
-      this.subtag_id = undefined;
-    },
-
     handlePublishTransaction() {
       this.$refs.observer
         .validate()
         .then(() => {
           let fd = new FormData();
-          fd.append("topic", this.topic == 0 ? "sell" : "seek");
-          fd.append("title", this.transaction_info.title);
-          fd.append("price", this.transaction_info.price);
-          fd.append("tag_id", this.transaction_info.tag_id);
-          fd.append("subtag_id", this.transaction_info.subtag_id);
-
-          fd.append("description", this.transaction_info.description);
-          fd.append("campus_zone", this.transaction_info.campus_zone);
-          fd.append("contact_type", this.transaction_info.contact_type);
-          fd.append("contact_number", this.transaction_info.contact_number);
-          this.transaction_info.image.forEach((f) => fd.append("image", f));
+          fd.append("type", this.topic == 0 ? "sell" : "seek");
+          fd.append("title", this.transactionInfo.title);
+          fd.append("price", this.transactionInfo.price);
+          fd.append("tagId", this.transactionInfo.tagId);
+          fd.append("subtagId", this.transactionInfo.subtagId);
+          fd.append("content", this.transactionInfo.description);
+          fd.append("campusZone", this.transactionInfo.campusZone);
+          fd.append("contactType", this.transactionInfo.contactType);
+          fd.append("contactNumber", this.transactionInfo.contactNumber);
+          this.transactionInfo.image.forEach((f) => fd.append("image", f));
           publish_transaction(fd).then(() => {
             this.$message.success("发布成功！");
           });
@@ -260,10 +243,10 @@ export default {
   mounted() {
     get_all_first_tags()
       .then((res) => {
-        this.tags = res.tags;
+        this.tags = res.data.tags;
       })
       .error(() => {
-        this.$message.error("获取一级tag失败...");
+        this.$message.error("获取tag失败...");
       });
   },
 };

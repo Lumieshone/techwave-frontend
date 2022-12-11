@@ -1,6 +1,6 @@
 let baseURL = process.env.VUE_APP_BASE_API;
 
-let hot_posts = [
+let hotPosts = [
   {
     id: 1,
     reply: 2,
@@ -133,7 +133,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        posts_info: hot_posts,
+        data: {
+          postsInfo: hotPosts,
+        },
       };
     },
   },
@@ -143,7 +145,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        news_info: news,
+        data: {
+          newsInfo: news,
+        },
       };
     },
   },

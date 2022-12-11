@@ -3,23 +3,23 @@
     <!-- corresponding sections -->
     <v-btn text :to="`/forum`">论坛</v-btn>
     <span>></span>
-    <v-btn text :to="`/section/${post_data.section_id}`">{{
-      post_data.section_name
+    <v-btn text :to="`/section/${postData.sectionId}`">{{
+      postData.sectionName
     }}</v-btn>
     <span>></span>
-    <v-btn text>{{ post_data.subsection_name }}</v-btn>
+    <v-btn text>{{ postData.subsectionName }}</v-btn>
 
     <!-- title -->
-    <h1>{{ post_data.title }}</h1>
-    <p>帖子id: {{ post_id }}</p>
-    <p>帖子浏览量: {{ post_data.browse_number }}</p>
+    <h1>{{ postData.title }}</h1>
+    <p>帖子id: {{ postId }}</p>
+    <p>帖子浏览量: {{ postData.browseNumber }}</p>
 
     <!-- tags -->
-    <!-- <v-chip class="ma-2" v-for="tag in post_data.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
+    <!-- <v-chip class="ma-2" v-for="tag in postData.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
 
     <!-- 是否收藏 -->
     <v-btn :disabled="!is_login" v-on:click="collect">
-      <v-icon :color="post_data.is_collected ? 'orange' : 'grey'"
+      <v-icon :color="postData.isCollected ? 'orange' : 'grey'"
         >mdi-star</v-icon
       >
       {{ is_login ? "收藏" : "请先登录再收藏" }}
@@ -29,38 +29,38 @@
     <v-container>
       <v-card>
         <v-card-title>
-          <span style="margin: 5px">{{ post_data.floor }} 楼 </span>
-          <span style="margin: 5px">{{ post_data.author }}</span>
+          <span style="margin: 5px">{{ postData.floor }} 楼 </span>
+          <span style="margin: 5px">{{ postData.author }}</span>
           <v-avatar>
-            <img :src="post_data.avatar" :alt="post_data.author" />
+            <img :src="postData.avatar" :alt="postData.author" />
           </v-avatar>
         </v-card-title>
         <v-card-subtitle
-          ><span>{{ post_data.time }}</span></v-card-subtitle
+          ><span>{{ postData.time }}</span></v-card-subtitle
         >
         <v-card-text>
-          {{ post_data.content }}
+          {{ postData.content }}
         </v-card-text>
       </v-card>
     </v-container>
 
     <!-- 浏览评论 -->
     <v-col
-      v-for="singlecomment_data in comment_data"
-      :key="singlecomment_data.floor"
+      v-for="singleCommentData in commentData"
+      :key="singleCommentData.floor"
     >
       <PostComment
-        :comment_data="singlecomment_data"
-        :post_id="Number(post_id)"
+        :commentData="singleCommentData"
+        :postId="Number(postId)"
         :is_login="Boolean(is_login)"
       />
     </v-col>
 
     <!-- 分页 -->
     <v-pagination
-      v-if="Math.ceil(post_data.total / limit) > 1"
+      v-if="Math.ceil(postData.total / limit) > 1"
       v-model="curPage"
-      :length="Math.ceil(post_data.total / limit)"
+      :length="Math.ceil(postData.total / limit)"
       total-visible="7"
       @input="onPageChange(curPage, limit)"
     ></v-pagination>
@@ -72,7 +72,7 @@
         <v-card-subtitle>请文明发言哦~</v-card-subtitle>
         <v-card-text>
           <v-textarea
-            v-model="comment_content"
+            v-model="commentContent"
             outlined
             label="评论"
           ></v-textarea>
@@ -100,9 +100,10 @@
 
     <!-- 富文本 -->
     <WangEditor
-      v-model="comment_content"
+      v-model="commentContent"
       upload_api="/upload/ReplyImage"
     ></WangEditor>
+
     <v-btn
       color="blue"
       class="ma-2 white--text"
@@ -134,20 +135,20 @@ export default {
       limit: 5,
 
       // comment
-      comment_content: "<p>发表你的看法~</p>",
+      commentContent: "<p>发表你的看法~</p>",
       // comment_image_info: [],
 
       // is login?
       is_login: this.$store.getters.roles.length > 0,
 
       // post id (from query)
-      post_id: undefined,
+      postId: undefined,
 
       // post data (from backend)
-      post_data: {},
+      postData: {},
 
       // comment data (from backend)
-      comment_data: {},
+      commentData: {},
     };
   },
   methods: {
@@ -157,15 +158,15 @@ export default {
     },
     refreshList(curPage = this.curPage, limit = this.limit) {
       get_post_info({
-        id: this.post_id,
+        id: this.postId,
         offset: (curPage - 1) * limit,
         limit: limit,
       })
         .then((res) => {
-          this.post_data = res.post_data;
-          this.post_data.floor = 1;
-          this.comment_data = res.comment_data;
-          this.comment_data.forEach(
+          this.postData = res.data.postData;
+          this.postData.floor = 1;
+          this.commentData = res.data.commentData;
+          this.commentData.forEach(
             (c, i) => (c.floor = i + (this.curPage - 1) * this.limit + 2)
           );
         })
@@ -174,17 +175,17 @@ export default {
 
     // comment
     reply_on_post() {
-      if (this.comment_content == "") {
+      if (this.commentContent == "") {
         this.$message.error("评论内容还为空哦");
         return;
       }
 
       // let fd = new FormData();
-      // fd.append("content", this.comment_content);
+      // fd.append("content", this.commentContent);
       // this.comment_image_info.forEach((f) => fd.append("image", f));
-      // fd.append("post_id", this.post_id);
+      // fd.append("postId", this.postId);
 
-      reply_on_post({ content: this.comment_content, post_id: this.post_id })
+      reply_on_post({ content: this.commentContent, postId: this.postId })
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
@@ -195,13 +196,13 @@ export default {
 
     // collect
     collect() {
-      collect_post(this.post_id).then(() => {
-        this.post_data.is_collected = !this.post_data.is_collected;
+      collect_post(this.postId).then(() => {
+        this.postData.isCollected = !this.postData.isCollected;
       });
     },
   },
   mounted() {
-    this.post_id = this.$route.params.post_id;
+    this.postId = this.$route.params.postId;
     this.refreshList();
   },
 };

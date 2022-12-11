@@ -16,19 +16,19 @@ export function collect_post(id) {
   });
 }
 
-export function delete_reply(reply_id) {
+export function delete_reply(replyId) {
   return request({
     url: "/reply",
     method: "delete",
-    data: { reply_id: reply_id },
+    data: { replyId: replyId },
   });
 }
 
-export function delete_comment(comment_id) {
+export function delete_comment(commentId) {
   return request({
     url: "/comment",
     method: "delete",
-    data: { comment_id:comment_id},
+    data: { commentId:commentId},
   });
 }
 
