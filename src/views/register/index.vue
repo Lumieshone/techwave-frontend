@@ -61,7 +61,7 @@
               :append-icon="show_password2 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show_password2 ? 'text' : 'password'"
               @click:append="show_password2 = !show_password2"
-              v-model="repeat_password"
+              v-model="repeatPassword"
               :error-messages="errors"
               label="Repeat Password"
               required
@@ -120,10 +120,10 @@ export default {
   data() {
     return {
       // info
-      mail: "1@qq.com",
+      email: "1@qq.com",
       username: "opopop",
       password: "12345678",
-      repeat_password: "12345678",
+      repeatPassword: "12345678",
 
       // loading logo
       loading: false,
@@ -137,7 +137,7 @@ export default {
     handleRegister() {
       this.loading = true;
       register({
-        mail: this.mail,
+        email: this.email,
         password: this.password,
         username: this.username,
       })
@@ -156,7 +156,7 @@ export default {
       this.mail = "";
       this.username = "";
       this.password = "";
-      this.repeat_password = "";
+      this.repeatPassword = "";
       this.$refs.observer.reset();
     },
   },

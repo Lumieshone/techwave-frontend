@@ -99,8 +99,8 @@ export default {
   data() {
     return {
       // info
-      email: "user_mail@qq.com",
-      password: "111111",
+      email: "test@163.com",
+      password: "test",
 
       // loading logo
       loading: false,
