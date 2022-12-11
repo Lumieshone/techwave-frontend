@@ -66,7 +66,7 @@
     ></v-pagination>
 
     <!-- comment on post -->
-    <v-col>
+    <!-- <v-col>
       <v-card>
         <v-card-title>发表你的看法..</v-card-title>
         <v-card-subtitle>请文明发言哦~</v-card-subtitle>
@@ -96,12 +96,28 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-col>
+    </v-col> -->
+
+    <!-- 富文本 -->
+    <WangEditor
+      v-model="comment_content"
+      upload_api="/upload/ReplyImage"
+    ></WangEditor>
+    <v-btn
+      color="blue"
+      class="ma-2 white--text"
+      small
+      @click="reply_on_post"
+      :disabled="!is_login"
+    >
+      {{ is_login ? "评论" : "请先登录再发表评论" }}
+    </v-btn>
   </v-container>
 </template>
 
 <script>
 import PostComment from "@/views/home/post/components/comment.vue";
+import WangEditor from "@/components/wang-editor.vue";
 import { get_post_info, collect_post, reply_on_post } from "@/api/post";
 
 export default {
@@ -109,6 +125,7 @@ export default {
   name: "Post",
   components: {
     PostComment,
+    WangEditor,
   },
   data() {
     return {
@@ -117,8 +134,8 @@ export default {
       limit: 5,
 
       // comment
-      comment_content: "",
-      comment_image_info: [],
+      comment_content: "<p>发表你的看法~</p>",
+      // comment_image_info: [],
 
       // is login?
       is_login: this.$store.getters.roles.length > 0,
@@ -162,12 +179,12 @@ export default {
         return;
       }
 
-      let fd = new FormData();
-      fd.append("content", this.comment_content);
-      this.comment_image_info.forEach((f) => fd.append("image", f));
-      fd.append("post_id", this.post_id);
+      // let fd = new FormData();
+      // fd.append("content", this.comment_content);
+      // this.comment_image_info.forEach((f) => fd.append("image", f));
+      // fd.append("post_id", this.post_id);
 
-      reply_on_post(fd)
+      reply_on_post({ content: this.comment_content, post_id: this.post_id })
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
