@@ -5,7 +5,7 @@
         ref="form"
         v-model="valid"
         lazy-validation
-        :readonly="is_readonly"
+        :readonly="isReadonly"
         class="pa-8 pt-6"
     >
       <v-text-field
@@ -24,7 +24,7 @@
           outlined
           maxlength="10"
           :counter="10"
-          :filled="is_filled"
+          :filled="isFilled"
           prepend-icon="mdi-account-circle-outline"
           :rules="nameRules"
           label="昵称"
@@ -37,7 +37,7 @@
           maxlength="11"
           dense
           outlined
-          :filled="is_filled"
+          :filled="isFilled"
           prepend-icon="mdi-cellphone"
           :rules="phoneRules"
           label="联系方式"
@@ -49,7 +49,7 @@
           prepend-icon="mdi-gender-transgender"
           dense
           outlined
-          :filled="is_filled"
+          :filled="isFilled"
           :items="genderList"
           :rules="[v => !!v || '请选择性别']"
           item-text="name"
@@ -63,7 +63,7 @@
           :rows="3"
           outlined
           no-resize
-          :filled="is_filled"
+          :filled="isFilled"
           :rules="introRules"
           prepend-icon="mdi-face-man-shimmer"
           :counter="100"
@@ -75,15 +75,15 @@
         <v-btn
             color="#6A5ACD"
             class="ma-4 white--text"
-            :disabled="is_disabled"
-            @click="change_info"
+            :disabled="isDisabled"
+            @click="changeInfo"
         >编辑
         </v-btn>
         <v-btn
             color="#6A5ACD"
-            :disabled="!valid || !is_disabled"
+            :disabled="!valid || !isDisabled"
             class="ma-4 white--text"
-            @click="submit_change"
+            @click="submitChange"
         >保存
         </v-btn>
       </v-row>
@@ -99,9 +99,9 @@ export default {
   data() {
     return {
       title: "个人信息",
-      is_readonly: true,
-      is_filled: true,
-      is_disabled:false,
+      isReadonly: true,
+      isFilled: true,
+      isDisabled:false,
       valid: true,
       avatar: require("@/assets/avatar.jpg"),
       username: 'wlf',
@@ -127,16 +127,16 @@ export default {
     }
   },
   methods:{
-    change_info(){
-      this.is_readonly = !this.is_readonly
-      this.is_filled = !this.is_filled
-      this.is_disabled = !this.is_disabled
+    changeInfo(){
+      this.isReadonly = !this.isReadonly
+      this.isFilled = !this.isFilled
+      this.isDisabled = !this.isDisabled
     },
-    submit_change(){
+    submitChange(){
       if(this.$refs.form.validate()){
-        this.is_disabled = !this.is_disabled
-        this.is_readonly = !this.is_readonly
-        this.is_filled = !this.is_filled
+        this.isDisabled = !this.isDisabled
+        this.isReadonly = !this.isReadonly
+        this.isFilled = !this.isFilled
         let form = {
           nickname:this.nickname,
           phone:this.phoneNum,

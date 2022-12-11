@@ -13,16 +13,16 @@
                 label
                 text-color="#6A5ACD"
             >
-              <strong>{{section_data.title}}</strong>
+              <strong>{{ sectionData.title }}</strong>
             </v-chip>
-            <span class="section_intro">{{section_data.intro}}</span>
+            <span class="section_intro">{{ sectionData.intro }}</span>
             <template v-slot:actions>
               <v-btn
                   color="#6A5ACD"
                   text
                   v-on:click="collect"
               >
-                <v-icon :color="section_data.is_collected?'orange':'grey'">mdi-star</v-icon>
+                <v-icon :color="sectionData.isCollected?'orange':'grey'">mdi-star</v-icon>
                 收藏
               </v-btn>
               <v-btn
@@ -47,13 +47,13 @@
               show-arrows
           >
             <v-tabs-slider color="#6A5ACD"></v-tabs-slider>
-            <v-tab @change="refresh_list">
+            <v-tab @change="refreshList">
               全部帖子
             </v-tab>
             <v-tab
-                v-for="subsection in section_data.subsections"
+                v-for="subsection in sectionData.subsections"
                 :key="subsection.id"
-                @change="get_post_by_subsection(subsection.id)"
+                @change="getPostBySubsection(subsection.id)"
             >
               {{subsection.name}}
             </v-tab>
@@ -71,8 +71,8 @@
             <v-list-item-group
                 active-class="deep-purple--text"
             >
-              <template v-for="(item, index) in section_data.posts">
-                <v-list-item :key="item.id" @click="step_to_post(item.id)">
+              <template v-for="(item, index) in sectionData.posts">
+                <v-list-item :key="item.id" @click="stepToPost(item.id)">
                   <template>
                     <v-list-item-avatar>
                       <v-chip
@@ -96,7 +96,7 @@
                   </template>
                 </v-list-item>
                 <v-divider
-                    v-if="index < section_data.posts.length - 1"
+                    v-if="index < sectionData.posts.length - 1"
                     :key="index"
                 ></v-divider>
               </template>
@@ -106,19 +106,19 @@
             <v-col cols="8">
               <v-pagination
                   color="#6A5ACD"
-                  v-if="Math.ceil(section_data.total / limit) > 1"
-                  v-model="cur_page"
-                  :length="Math.ceil(section_data.total/ limit)"
+                  v-if="Math.ceil(sectionData.total / limit) > 1"
+                  v-model="curPage"
+                  :length="Math.ceil(sectionData.total/ limit)"
                   :total-visible="12"
-                  @input="on_page_change(cur_page, limit)"
+                  @input="onPageChange(curPage, limit)"
               ></v-pagination>
             </v-col>
             <v-col cols="4">
                 <v-row no-gutters>
                     <span class="lead">跳转至第</span>
-                    <v-text-field class="shrink" solo dense v-model="which_page" ></v-text-field>
+                    <v-text-field class="shrink" solo dense v-model="whichPage" ></v-text-field>
                     <span class="lead">页</span>
-                    <v-btn class="goBtn" small fab @click="jump_page()">GO</v-btn>
+                    <v-btn class="goBtn" small fab @click="jumpPage()">GO</v-btn>
                 </v-row>
             </v-col>
           </v-row>
@@ -126,60 +126,59 @@
       </v-col>
     </v-row>
     <PostDialog
-        :subsection_list="this.subsection_list"
-        :section_id="this.section_id"
-        :section_name="this.section_name"
-        :show_post_dialog="this.show_post_dialog"
-        @callBack="call_back"
+        :subsectionList="this.subsectionList"
+        :sectionId="this.sectionId"
+        :sectionName="this.sectionName"
+        :showPostDialog="this.showPostDialog"
+        @callBack="callBack"
     >
     </PostDialog>
   </v-container>
 </template>
 
 <script>
-import {collect_section, filter_post_by_subsection, get_section_info} from "@/api/section";
+import {collect_section, get_posts_by_subsection, get_section_info} from "@/api/section";
 import PostDialog from "@/views/home/section/components/PostDialog";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Section",
   data(){
     return {
-      user_id: this.$store.getters.user_id,
-      cur_page: 1,
-      if_filter: false,
-      show_post_dialog: false,
+      curPage: 1,
+      ifFilter: false,
+      showPostDialog: false,
       limit: 10,
-      subsection_id: 0,
-      subsection_list: [],
-      item_length: 20,
-      which_page: 1,
+      subsectionId: 0,
+      subsectionList: [],
+      itemLength: 20,
+      whichPage: 1,
       // ability to collect(is login?)
-      able_to_collect: this.$store.getters.roles.length > 0,
-      section_id: undefined,
-      section_name: '',
-      section_data: {},
+      ableToCollect: this.$store.getters.roles.length > 0,
+      sectionId: undefined,
+      sectionName: '',
+      sectionData: {},
     }
   },
   components:{
     PostDialog
   },
   methods:{
-    call_back(flag){
-      this.show_post_dialog = flag
+    callBack(flag){
+      this.showPostDialog = flag
     },
     collect() {
-      this.section_data.is_collected = !this.section_data.is_collected;
-      collect_section(this.section_id)
+      this.sectionData.isCollected = !this.sectionData.isCollected;
+      collect_section(this.sectionId)
           .then(res => {
             console.log(res.message)
             if(res.code === 20000){
-              if(this.section_data.is_collected)
+              if(this.sectionData.isCollected)
                 this.$message.success("收藏版块成功！")
               else
                 this.$message.success("取消收藏成功！")
             }
             else{
-              if(this.section_data.is_collected)
+              if(this.sectionData.isCollected)
                 this.$message.error("收藏版块失败！")
               else
                 this.$message.success("取消收藏失败！")
@@ -188,60 +187,60 @@ export default {
           .catch((err) => console.log("error: " + err));
     },
     post(){
-      this.show_post_dialog = true;
+      this.showPostDialog = true;
     },
-    step_to_post(post_id){
-      this.$router.push({path: '/post/'+ post_id, params:{id:post_id}})
+    stepToPost(postId){
+      this.$router.push({path: '/post/'+ postId, params:{id:postId}})
     },
-    jump_page() {
-      this.cur_page = Number(this.which_page);
+    jumpPage() {
+      this.curPage = Number(this.whichPage);
     },
-    on_page_change(cur_page, limit) {
-      if(this.subsection_id === 0)
-        get_section_info(this.section_id,cur_page,limit)
+    onPageChange(curPage, limit) {
+      if(this.subsectionId === 0)
+        get_section_info(this.sectionId,curPage,limit)
             .then(res => {
-              this.section_data = res.section_data;
+              this.sectionData = res.sectionData;
             })
             .catch((err) => console.log("error: " + err));
       else{
-        filter_post_by_subsection(this.section_id,this.subsection_id,cur_page,limit)
+        get_posts_by_subsection(this.sectionId,this.subsectionId,curPage,limit)
             .then((res) => {
               console.log(res.total)
-              this.section_data.total = res.total;
-              this.section_data.posts = res.posts_data;
+              this.sectionData.total = res.total;
+              this.sectionData.posts = res.posts;
             })
             .catch((err) => console.log("error: " + err));
       }
     },
-    refresh_list() {
-      this.subsection_id = 0;
-      this.cur_page = 1;
-        get_section_info(this.section_id,1,10)
+    refreshList() {
+      this.subsectionId = 0;
+      this.curPage = 1;
+        get_section_info(this.sectionId,1,10)
             .then(res => {
-              this.section_data = res.section_data;
+              this.sectionData = res.sectionData;
             })
             .catch((err) => console.log("error: " + err));
     },
-    get_post_by_subsection(id){
-      this.cur_page = 1;
-      this.subsection_id = id;
-      filter_post_by_subsection(this.section_id,this.subsection_id,1,10)
+    getPostBySubsection(id){
+      this.curPage = 1;
+      this.subsectionId = id;
+      get_posts_by_subsection(this.sectionId,this.subsectionId,1,10)
           .then((res) => {
             console.log(res.total)
-            this.section_data.total = res.total;
-            this.section_data.posts = res.posts_data;
+            this.sectionData.total = res.total;
+            this.sectionData.posts = res.posts;
           })
           .catch((err) => console.log("error: " + err));
     }
   },
   mounted() {
-    this.section_id = this.$route.params.section_id;
-    get_section_info(this.section_id,1,10)
+    this.sectionId = this.$route.params.sectionId;
+    get_section_info(this.sectionId,1,10)
         .then((res) => {
-          this.section_data = res.section_data;
-          this.subsection_list = res.section_data.subsections;
-          this.section_name = res.section_data.title;
-          console.log(this.subsection_list)
+          this.sectionData = res.sectionData;
+          this.subsectionList = res.sectionData.subsections;
+          this.sectionName = res.sectionData.title;
+          console.log(this.subsectionList)
         })
         .catch((err) => console.log("error: " + err));
   },

@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-      v-model="this.show_dialog"
+      v-model="this.showDialog"
       persistent
       width="45%"
   >
@@ -16,7 +16,7 @@
           <strong>发布帖子</strong>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="close_post_dialog">
+        <v-btn icon @click="closePostDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -34,13 +34,13 @@
             outlined
             prepend-icon="mdi-form-select"
             label="发帖分区"
-            :value="this.section_name"
+            :value="this.sectionName"
         ></v-text-field>
         <v-text-field
             v-model="form.title"
             color="#483D8B"
             maxlength="30"
-            :rules="title_rules"
+            :rules="titleRules"
             filled
             dense
             outlined
@@ -71,7 +71,7 @@
             outlined
             prepend-icon="mdi-draw-pen"
             :counter="400"
-            :rules="content_rules"
+            :rules="contentRules"
             color="#483D8B"
             label="帖子内容"
             required
@@ -111,14 +111,14 @@
           <v-btn
               color="#6A5ACD"
               class="ma-3 white--text"
-              @click="close_post_dialog"
+              @click="closePostDialog"
           >返回
           </v-btn>
           <v-btn
               color="#6A5ACD"
               :disabled="!valid"
               class="ma-3 white--text"
-              @click="publish_post"
+              @click="publishPost"
           >发布
           </v-btn>
         </v-row>
@@ -132,21 +132,21 @@ import {publish_post} from "@/api/section";
 export default {
   name: "PostDialog",
   props:{
-    show_post_dialog: Boolean,
-    subsection_list: undefined,
-    section_id: undefined,
-    section_name: String,
+    showPostDialog: Boolean,
+    subsectionList: undefined,
+    sectionId: undefined,
+    sectionName: String,
   },
   data(){
     return{
-      show_dialog: this.show_post_dialog,
+      showDialog: this.showPostDialog,
       files: [],
-      subsections: this.subsection_list,
-      title_rules: [
+      subsections: this.subsectionList,
+      titleRules: [
         v => !!v || '请输入标题',
         v => (v && v.length <= 30) || '标题长度不应超过30个字符',
       ],
-      content_rules: [
+      contentRules: [
         v => !!v || '请输入帖子内容',
         v => (v && v.length <= 400) || '帖子内容不应超过400个字符',
       ],
@@ -159,26 +159,26 @@ export default {
     }
   },
   methods:{
-    clear_dialog(){
+    clearDialog(){
       this.form.title = ''
       this.form.subsection = ''
       this.form.content = ''
       this.files = []
       this.$refs.form.resetValidation()
     },
-    close_post_dialog(){
+    closePostDialog(){
       this.$emit("callBack",false)
-      this.clear_dialog()
+      this.clearDialog()
     },
-    publish_post(){
+    publishPost(){
       console.log(this.$refs.form.validate())
       if(this.$refs.form.validate()){
         let fd = new FormData();
-        fd.append('section_id',this.section_id)
+        fd.append('sectionId',this.sectionId)
         fd.append('title',this.form.title);
         fd.append('subsection',this.form.subsection);
         fd.append('content',this.form.content);
-        fd.append('picture_list',this.files);
+        fd.append('pictureList',this.files);
         for (let [a, b] of fd.entries()) {
           console.log(a, b)
         }
@@ -192,15 +192,15 @@ export default {
             })
             .catch((err) => console.log("error: " + err))
         this.$emit("callBack",false)
-        this.clear_dialog()
+        this.clearDialog()
       }
     }
   },
   watch: {
-    show_post_dialog(val) {
-      this.show_dialog = val
+    showPostDialog(val) {
+      this.showDialog = val
     },
-    subsection_list(val){
+    subsectionList(val){
       this.subsections = val
     }
   }

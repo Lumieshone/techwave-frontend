@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {delete_folder} from "@/api/account";
+import {delete_my_post} from "@/api/account";
 
 export default {
   name: "DeletePost",
@@ -64,7 +64,7 @@ export default {
       this.$emit("close",false)
     },
     confirmDelete(){
-      delete_folder(this.postId)
+      delete_my_post(this.postId)
           .then((res) => {
             if(res.code === 20000){
               this.$message.success("删除成功！")

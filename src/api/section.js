@@ -1,24 +1,24 @@
 import request from "@/utils/request";
 
-export function get_section_info(section_id,cur_page,limit) {
+export function get_section_info(sectionId,curPage,limit) {
     return request({
         url: "/section/get_section_data",
         method: "get",
         params: {
-            section_id,
-            cur_page,
+            sectionId,
+            curPage,
             limit
         },
     });
 }
-export function filter_post_by_subsection(section_id, subsection_id, cur_page, limit) {
+export function get_posts_by_subsection(sectionId, subsectionId, curPage, limit) {
     return request({
         url: "/section/get_posts_by_subsection",
         method: "get",
         params: {
-            section_id,
-            subsection_id,
-            cur_page,
+            sectionId,
+            subsectionId,
+            curPage,
             limit
         },
     });
@@ -33,12 +33,12 @@ export function publish_post(fd) {
         data: fd
     });
 }
-export function collect_section(section_id) {
+export function collect_section(sectionId) {
     return request({
         url: "/section/collect_section",
         method: "post",
         data: {
-            section_id: section_id
+            sectionId: sectionId
         },
     });
 }

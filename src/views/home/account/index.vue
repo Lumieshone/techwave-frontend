@@ -18,14 +18,14 @@
             <v-list>
               <v-list-item class="ml-4">
                 <v-list-item-avatar size="56">
-                  <v-img :src="user_avatar"></v-img>
+                  <v-img :src="userAvatar"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title class="text-h6">
                     {{ nickname }}
                   </v-list-item-title>
-                  <v-list-item-subtitle>{{ user_email }}</v-list-item-subtitle>
-                  <v-list-item-subtitle class="pt-1" @click="change_avatar" id="change_avatar">
+                  <v-list-item-subtitle>{{ userEmail }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="pt-1" @click="changeAvatar" id="change_avatar">
                     <v-icon
                         dark
                         small
@@ -83,7 +83,7 @@
                     ref="uploadRef"
                     field="Avatar"
                     v-model="show"
-                    @crop-success="crop_success"
+                    @crop-success="cropSuccess"
                     :width="300"
                     :height="300"
                     img-format="jpg"
@@ -111,8 +111,8 @@ export default {
       show:false,
       size:2.5,
       nickname:'莴苣某人',
-      user_email:'2053382@tongji.edu.cn',
-      user_avatar:require("@/assets/avatar.jpg"),
+      userEmail:'2053382@tongji.edu.cn',
+      userAvatar:require("@/assets/avatar.jpg"),
       items: [
         { title: '个人信息', icon: 'mdi-account-box', router: '/account/info'},
         { title: '我的收藏', icon: 'mdi-star', router: '/account/collect'},
@@ -130,11 +130,11 @@ export default {
     "my-upload": myUpload
   },
   methods:{
-    change_avatar(){
+    changeAvatar(){
       this.show = !this.show
     },
-    crop_success(imgDataUrl){
-      this.user_avatar = imgDataUrl
+    cropSuccess(imgDataUrl){
+      this.userAvatar = imgDataUrl
       let bytes = window.atob(imgDataUrl.split(',')[1]);
       let array = [];
       for(let i = 0; i < bytes.length; i++){
@@ -162,8 +162,8 @@ export default {
           if(res.code === 20000){
             console.log("获取用户信息成功")
             this.nickname = res.nickname
-            this.user_email = res.email
-            this.user_avatar = res.avatar
+            this.userEmail = res.email
+            this.userAvatar = res.avatar
           }
           else{
             this.$message.error("用户信息获取失败！")

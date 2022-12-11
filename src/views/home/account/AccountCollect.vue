@@ -145,7 +145,6 @@ export default {
       valid: true,
       isEdit:false,
       curPage: 1,
-      if_filter: false,
       show_post_dialog: false,
       limit: 8,
       whichPage: 1,

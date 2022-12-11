@@ -8,10 +8,10 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                section_data: {
+                sectionData: {
                     title: "原神",
                     // collect
-                    is_collected: false,
+                    isCollected: false,
                     intro: "虚空鼓动，劫火高扬",
                     total: 250,
                     subsections: [
@@ -146,7 +146,7 @@ module.exports = [
             };
         },
     },
-    // filter_post_by_subsection
+    // get_posts_by_subsection
     {
         url: baseURL + "/section/get_posts_by_subsection.*",
         type: "get",
@@ -154,7 +154,7 @@ module.exports = [
             return {
                 code: 20000,
                 total: 230,
-                posts_data: [
+                posts: [
                     {
                         id: 1,
                         reply: 2,

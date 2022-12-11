@@ -83,13 +83,13 @@ export const constantRoutes = [
         component: () => import("@/views/home/forum/index"),
       },
       {
-        path: "/section/:section_id/",
+        path: "/section/:sectionId/",
         meta: { title: "版块" },
 
         component: () => import("@/views/home/section/index"),
       },
       {
-        path: "/post/:post_id/",
+        path: "/post/:postId/",
         meta: { title: "帖子" },
 
         component: () => import("@/views/home/post/index"),
@@ -157,7 +157,7 @@ export const constantRoutes = [
         component: () => import("@/views/home/sale/index"),
       },
       {
-        path: "/transaction/:transaction_id",
+        path: "/transaction/:transactionId",
         meta: { title: "交易帖子" },
 
         component: () => import("@/views/home/transaction/index"),
