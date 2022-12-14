@@ -9,12 +9,12 @@
         </v-avatar>
       </v-card-title>
       <v-card-subtitle
-        ><span>{{ commentData.time }}</span></v-card-subtitle
+        ><span>{{ commentData.updateTime }}</span></v-card-subtitle
       >
       <v-card-text>
         <span>{{ commentData.content }}</span>
         <PostReply
-          :replyData="commentData.replyData"
+          :replyData="commentData.replyVOList"
           :is_login="Boolean(is_login)"
         ></PostReply>
       </v-card-text>
@@ -44,10 +44,10 @@
     <!-- reply -->
     <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>回复给 {{ replyTo_commentId }} 楼</v-card-title>
+        <v-card-title>回复给 {{ commentData.floor }} 楼</v-card-title>
         <v-card-text>
           <v-textarea
-            v-model="reply_content"
+            v-model="replyContent"
             outlined
             label="输入你的评论（请文明发言~）"
           ></v-textarea>
@@ -70,7 +70,7 @@
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
       <v-card>
-        <v-card-title>确认删除 {{ delete_commentId }} 楼？</v-card-title>
+        <v-card-title>确认删除 {{  commentData.floor  }} 楼？</v-card-title>
         <v-card-actions>
           <v-btn
             color="blue"
@@ -106,9 +106,9 @@ export default {
       floor: Number,
       avatar: String,
       author: String,
-      time: Date,
+      updateTime: Date,
       content: undefined,
-      replyData: undefined,
+      replyVOList: undefined,
       ableToDelete: Boolean,
     },
     postId: Number,
@@ -121,8 +121,8 @@ export default {
     return {
       // reply to some commentId
       show_reply_dialog: false,
-      replyTo_commentId: undefined,
-      reply_content: undefined,
+      replyToCommentId: undefined,
+      replyContent: undefined,
 
       // delete my commentId
       show_delete_dialog: false,
@@ -133,23 +133,23 @@ export default {
     // reply
     open_reply_dialog(commentId) {
       this.show_reply_dialog = true;
-      this.replyTo_commentId = commentId;
-      this.reply_content = "";
+      this.replyToCommentId = commentId;
+      this.replyContent = "";
     },
     close_reply_dialog() {
       this.show_reply_dialog = false;
-      this.replyTo_commentId = undefined;
-      this.reply_content = "";
+      this.replyToCommentId = undefined;
+      this.replyContent = "";
     },
     reply() {
-      if (this.reply_content == "") {
+      if (this.replyContent == "") {
         this.$message.error("评论内容还为空哦");
         return;
       }
 
       reply_on_comment({
-        content: this.reply_content,
-        commentId: this.replyTo_commentId,
+        content: this.replyContent,
+        commentId: this.replyToCommentId,
       })
         .then((res) => {
           if (res.code === 20000) this.$message.success("回复成功！");

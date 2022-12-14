@@ -19,7 +19,7 @@
         </v-avatar>
         <span style="margin: 10px">
           {{ transactionInfo.author }} {{ transactionInfo.time }}
-          {{ transactionInfo.campusZone }} 校区</span
+          {{ transactionInfo.campus }} 校区</span
         >
         <v-btn
           v-on:click="collect"
@@ -36,7 +36,7 @@
         浏览{{ transactionInfo.viewCount }}
       </v-card-subtitle>
       <v-card-text>
-        <p>{{ transactionInfo.description }}</p>
+        <p>{{ transactionInfo.summary }}</p>
         <v-row>
           <v-col
             v-for="imageUrl in transactionInfo.imagesUrl"
@@ -81,7 +81,7 @@
       <v-card>
         <v-card-title>联系方式</v-card-title>
         <v-card-text
-          >{{ contactInfo.method }} ： {{ contactInfo.number }}
+          >{{ contactInfo.contactType }} ： {{ contactInfo.contactNumber }}
         </v-card-text>
         <v-card-actions>
           <v-btn

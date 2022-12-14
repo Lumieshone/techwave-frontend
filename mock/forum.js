@@ -2,67 +2,67 @@ let baseURL = process.env.VUE_APP_BASE_API;
 
 let sectionsInfo = [
   {
-    id: 1,
+    sectionId: 1,
     name: "Apple",
     avatar:
       "http://www.wallcoo.com/photograph/fruit_apple/images/fruit_apple_apple-tree_wallpaper_Vol_014_SN004.JPG",
-    intro: "nbnbnbnbnb",
+    summary: "nbnbnbnbnb",
   },
   {
-    id: 2,
+    sectionId: 2,
     name: "Huawei",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbasdsdnbnb",
+    summary: "nbnbnbasdsdnbnb",
   },
   {
-    id: 3,
+    sectionId: 3,
     name: "XiaoMi",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbasdsdnbnb",
+    summary: "nbnbnbasdsdnbnb",
   },
   {
-    id: 4,
+    sectionId: 4,
     name: "OnePlus",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbasdsdnbnb",
+    summary: "nbnbnbasdsdnbnb",
   },
   {
-    id: 5,
+    sectionId: 5,
     name: "Realme",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbasdsdnbnb",
+    summary: "nbnbnbasdsdnbnb",
   },
   {
-    id: 6,
+    sectionId: 6,
     name: "Lenovo",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbasdsdnbnb",
+    summary: "nbnbnbasdsdnbnb",
   },
   {
-    id: 7,
+    sectionId: 7,
     name: "Dell",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "nbnbnbassdsddsdnbnb",
+    summary: "nbnbnbassdsddsdnbnb",
   },
   {
-    id: 8,
+    sectionId: 8,
     name: "Honor",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "dsdsdsdsdsdsdsd",
+    summary: "dsdsdsdsdsdsdsd",
   },
   {
-    id: 9,
+    sectionId: 9,
     name: "Tesla",
     avatar:
       "https://dss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/-1077697442_1813604402_367_252.jpg",
-    intro: "45678767878976",
+    summary: "45678767878976",
   },
 ];
 
@@ -74,9 +74,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        data: {
-          sectionsInfo: sectionsInfo.slice(0, 2),
-        },
+        data: [
+          ...sectionsInfo.slice(0, 2)
+        ],
       };
     },
   },
@@ -86,9 +86,9 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        data: {
-          sectionsInfo: sectionsInfo,
-        },
+        data: [
+            ...sectionsInfo,
+        ],
       };
     },
   },
@@ -99,11 +99,11 @@ module.exports = [
       const { search_content } = config.query;
       return {
         code: 20000,
-        data: {
-          sectionsInfo: sectionsInfo.filter((s) =>
+        data: [
+          ...sectionsInfo.filter((s) =>
             s.name.includes(search_content)
           ),
-        },
+        ],
       };
     },
   },

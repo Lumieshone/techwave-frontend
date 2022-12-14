@@ -153,7 +153,7 @@ export default {
         });
     },
     clear() {
-      this.mail = "";
+      this.email = "";
       this.username = "";
       this.password = "";
       this.repeatPassword = "";

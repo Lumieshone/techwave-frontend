@@ -45,8 +45,10 @@
                 rules="required"
               >
                 <v-select
-                  v-model="transactionInfo.campusZone"
+                  v-model="transactionInfo.campus"
                   :items="campusZones"
+                  item-value="value"
+                  item-text="text"
                   :error-messages="errors"
                   label="Campus Zone"
                 ></v-select> </validation-provider
@@ -91,10 +93,10 @@
               >
                 <v-select
                   :error-messages="errors"
-                  v-model="transactionInfo.tagId"
+                  v-model="transactionInfo.selectTagId"
                   :items="tags"
-                  item-text="name"
-                  item-value="id"
+                  item-text="tagName"
+                  item-value="tagId"
                   label="Tag"
                   persistent-hint
                   @change="get_subtags()"
@@ -109,10 +111,10 @@
               >
                 <v-select
                   :error-messages="errors"
-                  v-model="transactionInfo.subtagId"
-                  :items="tags.find((t) => t.id == transactionInfo.tagId).subtags"
-                  item-text="name"
-                  item-value="id"
+                  v-model="transactionInfo.selectSubtagId"
+                  :items="subtags"
+                  item-text="subtagName"
+                  item-value="subtagId"
                   label="Sub Tag"
                   persistent-hint
                 ></v-select>
@@ -128,7 +130,7 @@
                 rules="required"
               >
                 <v-textarea
-                  v-model="transactionInfo.description"
+                  v-model="transactionInfo.summary"
                   :error-messages="errors"
                   label="Description"
                   required
@@ -192,16 +194,38 @@ export default {
     return {
       tags: [],
 
-      campusZones: ["嘉定", "四平", "彰武", "沪西"],
+      // filter by campus
+      campusZones: [
+        {
+          text: "全部",
+          value: "",
+        },
+        {
+          text: "四平",
+          value: "四平",
+        },
+        {
+          text: "嘉定",
+          value: "嘉定"
+        },
+        {
+          text: "彰武",
+          value: "彰武"
+        },
+        {
+          text: "沪西",
+          value: "沪西"
+        },],
+
       contactTypes: ["微信", "QQ", "手机", "领英", "邮箱"],
       transactionInfo: {
         title: "iphone 18",
         price: 1234,
         image: [],
-        tagId: undefined,
-        subtagId: undefined,
-        description: "十分帝豪啊",
-        campusZone: "嘉定",
+        selectTagId: undefined,
+        selectSubtagId: undefined,
+        summary: "十分帝豪啊",
+        campus: "嘉定",
         contactType: "微信",
         contactNumber: "1234",
       },
@@ -224,10 +248,10 @@ export default {
           fd.append("type", this.topic == 0 ? "sell" : "seek");
           fd.append("title", this.transactionInfo.title);
           fd.append("price", this.transactionInfo.price);
-          fd.append("tagId", this.transactionInfo.tagId);
-          fd.append("subtagId", this.transactionInfo.subtagId);
-          fd.append("content", this.transactionInfo.description);
-          fd.append("campusZone", this.transactionInfo.campusZone);
+          fd.append("tagId", this.transactionInfo.selectTagId);
+          fd.append("subtagId", this.transactionInfo.selectSubtagId);
+          fd.append("content", this.transactionInfo.summary);
+          fd.append("campusZone", this.transactionInfo.campus);
           fd.append("contactType", this.transactionInfo.contactType);
           fd.append("contactNumber", this.transactionInfo.contactNumber);
           this.transactionInfo.image.forEach((f) => fd.append("image", f));
@@ -240,10 +264,19 @@ export default {
         });
     },
   },
+  computed: {
+    subtags: function () {
+      if (this.transactionInfo.selectTagId == undefined) {
+        return [];
+      } else {
+        return this.tags.find((t) => t.tagId == this.transactionInfo.selectTagId).subtagList;
+      }
+    },
+  },
   mounted() {
     get_all_first_tags()
       .then((res) => {
-        this.tags = res.data.tags;
+        this.tags = res.data;
       })
       .error(() => {
         this.$message.error("获取tag失败...");

@@ -4,7 +4,7 @@ module.exports = [
   // collect
   // add or cancel collection
   {
-    url: baseURL + "/collect_transaction",
+    url: baseURL + "/transaction/collect_transaction",
     type: "post",
     response: (config) => {
       // eslint-disable-next-line no-unused-vars
@@ -17,7 +17,7 @@ module.exports = [
   },
   // get transaction info
   {
-    url: baseURL + "/transaction_data.*",
+    url: baseURL + "/transaction/transaction_data.*",
     type: "get",
     response: (config) => {
       // eslint-disable-next-line no-unused-vars
@@ -27,8 +27,8 @@ module.exports = [
         code: 20000,
         data: {
           contactInfo: {
-            method: "微信",
-            number: "13432",
+            contactType: "微信",
+            contactNumber: "13432",
           },
           transactionInfo: {
             type: "出售", // 或求购
@@ -37,14 +37,14 @@ module.exports = [
             avatar:
               "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
             time: new Date(),
-            campusZone: "嘉定",
+            campus: "嘉定",
             collectNumber: 12,
             tagId: 1,
             viewCount: 122,
             tagName: "苹果",
             subtagId: 2,
             subtagName: "iPhone",
-            description:
+            summary:
               "ejhsbfjahsjajeh你说得对，但是原神前面忘了中间忘了后面忘了 集美们真的很好咱就是说赶快冲了就是说",
             imagesUrl: [
               "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_imgs/IMG_5475.jpg",

@@ -73,23 +73,23 @@ module.exports = [
           commentId: 1,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "baokker",
-          time: new Date(),
+          authorName: "baokker",
+          updateTime: new Date(),
           content: "apple n据，是谁在心虚. ",
           ableToDelete: false,
-          replyData: [
+          replyVOList: [
             {
               replyId: 1,
-              time: new Date(),
-              author: "ysj",
+              updateTime: new Date(),
+              authorName: "ysj",
               replyTo: "mb",
               content: "woww it' s a little bit ee",
               ableToDelete: false,
             },
             {
               replyId: 2,
-              time: new Date(),
-              author: "mb",
+              updateTime: new Date(),
+              authorName: "mb",
               replyTo: "ysj",
               content: "woww it' s a ssss bit ee",
               ableToDelete: false,
@@ -100,32 +100,32 @@ module.exports = [
           commentId: 2,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "ph",
-          time: new Date(),
+          authorName: "ph",
+          updateTime: new Date(),
           content: "iphone nb",
           ableToDelete: true,
           // reply
-          replyData: [
+          replyVOList: [
             {
               replyId: 3,
-              time: new Date(),
-              author: "ysj",
+              updateTime: new Date(),
+              authorName: "ysj",
               replyTo: "mb",
               content: "woww it' s a little bit ee",
               ableToDelete: false,
             },
             {
               replyId: 4,
-              time: new Date(),
-              author: "msdb",
+              updateTime: new Date(),
+              authorName: "msdb",
               replyTo: "yssdj",
               content: "woww it' s a ssss bit ee",
               ableToDelete: false,
             },
             {
               replyId: 5,
-              time: new Date(),
-              author: "fbc",
+              updateTime: new Date(),
+              authorName: "fbc",
               replyTo: "",
               content: "jialguajian",
               ableToDelete: true,
@@ -136,46 +136,46 @@ module.exports = [
           commentId: 3,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "baokker",
-          time: new Date(),
+          authorName: "baokker",
+          updateTime: new Date(),
           content:
             "apple nb,\n但是3l3l3l3l3的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
           ableToDelete: false,
-          replyData: [],
+          replyVOList: [],
         },
         {
           commentId: 4,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "ph",
-          time: new Date(),
+          authorName: "ph",
+          updateTime: new Date(),
           content: "iphodadsdsdsa4l4l4l4lne nb",
           ableToDelete: true,
           // reply
-          replyData: [],
+          replyVOList: [],
         },
         {
           commentId: 6,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "baokker",
-          time: new Date(),
+          authorName: "baokker",
+          updateTime: new Date(),
           content:
             "apple nb,\n但是说到原神5l5l5l5l5l《原神》为我们的女儿我们唯一也是正确的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
           ableToDelete: false,
-          replyData: [
+          replyVOList: [
             {
               replyId: 1,
-              time: new Date(),
-              author: "ysj",
+              updateTime: new Date(),
+              authorName: "ysj",
               replyTo: "mb",
               content: "woww it' s a little bit ee",
               ableToDelete: false,
             },
             {
               replyId: 2,
-              time: new Date(),
-              author: "mb",
+              updateTime: new Date(),
+              authorName: "mb",
               replyTo: "ysj",
               content: "woww it' s a ssss bit ee",
               ableToDelete: false,
@@ -186,32 +186,32 @@ module.exports = [
           commentId: 7,
           avatar:
             "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-          author: "ph",
-          time: new Date(),
+          authorName: "ph",
+          updateTime: new Date(),
           content: "ipho6666666666ne nb",
           ableToDelete: true,
           // reply
-          replyData: [
+          replyVOList: [
             {
               replyId: 3,
-              time: new Date(),
-              author: "ysj",
+              updateTime: new Date(),
+              authorName: "ysj",
               replyTo: "mb",
               content: "woww it' s a little bit ee",
               ableToDelete: false,
             },
             {
               replyId: 4,
-              time: new Date(),
-              author: "msdb",
+              updateTime: new Date(),
+              authorName: "msdb",
               replyTo: "yssdj",
               content: "woww it' s a ssss bit ee",
               ableToDelete: false,
             },
             {
               replyId: 5,
-              time: new Date(),
-              author: "fbc",
+              updateTime: new Date(),
+              authorName: "fbc",
               replyTo: "",
               content: "jialguajian",
               ableToDelete: true,
@@ -224,29 +224,26 @@ module.exports = [
       offset = Number(offset);
       limit = Number(limit);
 
-      let postData = {
-        title: "an Apple a day keeps op away",
-        sectionId: 1,
-        sectionName: "Apple",
-        subsectionId: 2,
-        subsectionName: "iPhone",
-        isCollected: false,
-        avatar:
-          "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
-        author: "baokker",
-        time: new Date(),
-        browseNumber: 120,
-        content:
-          "apple nb,\n但是说到原神《原神》为我们的女儿我们唯一也是正确的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
-        total: fullCommentData.length + 1,
-      };
-
       return {
         code: 20000,
         // collect
         data: {
-          postData: postData,
-          commentData: fullCommentData.slice(offset, offset + limit),
+          title: "an Apple a day keeps op away",
+          sectionId: 1,
+          sectionName: "Apple",
+          subsectionId: 2,
+          subsectionName: "iPhone",
+          isCollected: false,
+          avatar:
+              "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
+          authorName: "baokker",
+          updateTime: new Date(),
+          browseNumber: 120,
+          content:
+              "apple nb,\n但是说到原神《原神》为我们的女儿我们唯一也是正确的能做的事。保护可莉！！！举报 八，我绝不后退. 删评证据，是谁在心虚. ",
+          total: fullCommentData.length + 1,
+
+          commentVOList: fullCommentData.slice(offset, offset + limit),
         },
       };
     },

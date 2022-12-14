@@ -7,38 +7,38 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
-        data: {
-          tags: [
+        data:
+           [
             {
-              id: 1,
-              name: "Apple",
-              subtags: [
+              tagId: 1,
+              tagName: "Apple",
+              subtagList: [
                 {
-                  id: 1,
-                  name: "iPhone",
+                  subtagId: 1,
+                  subtagName: "iPhone",
                 },
                 {
-                  id: 2,
-                  name: "iPad",
+                  subtagId: 2,
+                  subtagName: "iPad",
                 },
               ],
             },
             {
-              id: 2,
-              name: "Huawei",
-              subtags: [
+              tagId: 2,
+              tagName: "Huawei",
+              subtagList: [
                 {
-                  id: 1,
-                  name: "matex",
+                  subtagId: 1,
+                  subtagName: "matex",
                 },
                 {
-                  id: 2,
-                  name: "matebook",
+                  subtagId: 2,
+                  subtagName: "matebook",
                 },
               ],
             },
           ],
-        },
+
       };
     },
   },
@@ -57,7 +57,7 @@ module.exports = [
     url: baseURL + "/transaction/sale_info.*",
     type: "get",
     response: (config) => {
-      let { searchContent, tagId, subtagId, campusZone, offset, limit, type } =
+      let { searchContent, tagId, subtagId, campus, offset, limit, type } =
         config.query;
       // console.log(typeof limit); // string!!!!!!!!
 
@@ -68,328 +68,361 @@ module.exports = [
 
       let sellData = [
         {
-          transactionId: 1,
+          id: 1,
           title: "iphone 14急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
         },
         {
-          transactionId: 2,
+          id: 2,
           title: "iphone 13急出",
           price: 99299,
-          imageUrl:
+          coverImage:
             "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
-          campusZone: "嘉定",
-          description: "集美们快充呀苹果爸爸就上了就是说",
-
+          campus: "嘉定",
+          summary: "集美们快充呀苹果爸爸就上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:2,
+
         },
         {
-          transactionId: 3,
+          id: 3,
           title: "iphone 15急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://pic1.zhimg.com/80/v2-695b6d3d8b4e07d9f2b3dd1026ad4f08_1440w.webp",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+          tagId: 2,
 
-          tagId: 1,
-          subtagId: 1,
+          subtagId:1,
+
+
         },
         {
-          transactionId: 4,
+          id: 4,
           title: "iphone 11急出",
           price: 996599,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+          tagId: 2,
 
-          tagId: 1,
-          subtagId: 1,
+          subtagId:2,
+
         },
         {
-          transactionId: 5,
+          id: 5,
           title: "iphne 14急出",
           price: 999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
         },
         {
-          transactionId: 6,
+          id: 6,
           title: "iphone 14急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 7,
+          id: 7,
           title: "华为笔记本急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "彰武",
-          description:
+          campus: "彰武",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
 
           tagId: 2,
           subtagId: 2,
         },
         {
-          transactionId: 8,
+          id: 8,
           title: "华为手机急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-          tagId: 2,
-          subtagId: 1,
+          tagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 9,
+          id: 9,
           title: "ph4急出",
           price: 999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+          tagId: 2,
 
-          tag: "Apple",
-          subtag: "iPhone",
+          subtagId:2,
+
         },
         {
-          transactionId: 10,
+          id: 10,
           title: "iphone 14急出",
           price: 97899,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+          tagId: 1,
 
-          tag: "Apple",
-          subtag: "iPhone",
+          subtagId:2,
         },
         {
-          transactionId: 11,
+          id: 11,
           title: "华为笔记本12 13 14急出",
           price: 456,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tagId: 2,
-          subtagId: 2,
+
+          subtagId:1,
         },
         {
-          transactionId: 12,
+          id: 12,
           title: "华为Mate50急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+          tagId: 1,
 
-          tagId: 2,
-          subtagId: 1,
+          subtagId:1,
         },
         {
-          transactionId: 13,
+          id: 13,
           title: "iphone 16急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
         },
       ];
       let seekData = [
         {
-          transactionId: 1,
+          id: 1,
           title: "iphone 14好想要啊啊啊啊",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
         },
         {
-          transactionId: 2,
+          id: 2,
           title: "iphone 13想要",
           price: 99299,
-          imageUrl:
+          coverImage:
             "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
-          campusZone: "嘉定",
-          description: "集美们快充呀苹果爸爸就上了就是说",
-
+          campus: "嘉定",
+          summary: "集美们快充呀苹果爸爸就上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
+
         },
         {
-          transactionId: 3,
+          id: 3,
           title: "iphone 1想要出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://pic1.zhimg.com/80/v2-695b6d3d8b4e07d9f2b3dd1026ad4f08_1440w.webp",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 4,
+          id: 4,
           title: "iphone 11想要",
           price: 996599,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
         },
         {
-          transactionId: 5,
+          id: 5,
           title: "iphne 14想要",
           price: 999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 6,
+          id: 6,
           title: "huawei 14想要要",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-          tagId: 2,
-          subtagId: 1,
+          tagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 7,
+          id: 7,
           title: "matebook想要要",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "彰武",
-          description:
+          campus: "彰武",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-          tagId: 2,
-          subtagId: 2,
+          tagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 8,
+          id: 8,
           title: "iphone 4急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "四平",
-          description:
+          campus: "四平",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 9,
+          id: 9,
           title: "ph4急出",
           price: 999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 10,
+          id: 10,
           title: "iphone 14急出",
           price: 97899,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:1,
+
         },
         {
-          transactionId: 11,
+          id: 11,
           title: "huawei12 13 14急出",
           price: 456,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 2,
-          subtagId: 1,
+
+          subtagId:1,
         },
         {
-          transactionId: 12,
+          id: 12,
           title: "华为Mate50急出",
           price: 9999,
-          imageUrl:
+          coverImage:
             "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
-            "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
-          tagId: 2,
-          subtagId: 1,
-        },
-        {
-          transactionId: 13,
-          title: "iphone 16急出",
-          price: 9999,
-          imageUrl:
-            "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campusZone: "嘉定",
-          description:
+          campus: "嘉定",
+          summary:
             "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
           tagId: 1,
-          subtagId: 1,
+
+          subtagId:2,
+        },
+        {
+          id: 13,
+          title: "iphone 16急出",
+          price: 9999,
+          coverImage:
+            "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
+          campus: "嘉定",
+          summary:
+            "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说",
+
+          tagId: 1,
+
+          subtagId:1,
+
+
         },
       ];
 
@@ -403,29 +436,32 @@ module.exports = [
       if (searchContent != "") {
         filterData = filterData.filter((t) => t.title.includes(searchContent));
       }
-
-      console.log(filterData);
-
-      if (campusZone != "全部") {
-        filterData = filterData.filter((t) => t.campusZone == campusZone);
+      console.log("00")
+      console.log(filterData)
+      if (campus != "") {
+        filterData = filterData.filter((t) => t.campus == campus);
       }
 
-      console.log(filterData);
-      console.log(tagId);
+      console.log("11")
+      console.log(filterData)
+
       if (!isNaN(tagId)) {
         filterData = filterData.filter((t) => t.tagId == tagId);
       }
-      console.log(filterData);
+      console.log("22")
+      console.log(filterData)
 
       if (!isNaN(subtagId)) {
         filterData = filterData.filter((t) => t.subtagId == subtagId);
       }
+      console.log("33")
+      console.log(filterData)
 
       return {
         code: 20000,
         data: {
           total: filterData.length,
-          transactionsData: filterData.slice(offset, offset + limit),
+          transactionPageVOList: filterData.slice(offset, offset + limit),
         },
       };
     },

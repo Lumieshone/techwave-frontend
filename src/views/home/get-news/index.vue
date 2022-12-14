@@ -29,7 +29,7 @@
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#f5e8cb" label small>
-                        {{ item.reply }}
+                        {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -37,7 +37,7 @@
                         v-text="item.title"
                       ></v-list-item-title>
                       <v-list-item-subtitle
-                        v-text="item.subtitle"
+                        v-text="item.summary"
                       ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
@@ -47,7 +47,7 @@
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.time"
+                        v-text="item.updateTime"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                   </template>
@@ -74,7 +74,7 @@
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#f5e8cb" label small>
-                        {{ item.reply }}
+                        {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -82,7 +82,7 @@
                         v-text="item.title"
                       ></v-list-item-title>
                       <v-list-item-subtitle
-                        v-text="item.subtitle"
+                        v-text="item.summary"
                       ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
@@ -92,7 +92,7 @@
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.time"
+                        v-text="item.updateTime"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                   </template>

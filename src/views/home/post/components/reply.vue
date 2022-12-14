@@ -2,7 +2,7 @@
   <v-container>
     <v-col v-for="singlereplyData in replyData" :key="singlereplyData.replyId">
       <v-card>
-        <v-card-title>{{ singlereplyData.author }}</v-card-title>
+        <v-card-title>{{ singlereplyData.authorName }}</v-card-title>
         <v-card-subtitle v-show="singlereplyData.replyTo"
           ><span
             >回复给 {{ singlereplyData.replyTo }}
@@ -17,7 +17,7 @@
             small
             :disabled="!is_login"
             v-on:click="
-              open_reply_dialog(singlereplyData.author, singlereplyData.replyId)
+              open_reply_dialog(singlereplyData.authorName, singlereplyData.replyId)
             "
           >
             <v-icon>mdi-comment</v-icon>
@@ -39,7 +39,7 @@
     <!-- reply -->
     <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>回复给 {{ replyTo_user_name }}</v-card-title>
+        <v-card-title>回复给 {{ replyToUserName }}</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="reply_content"
@@ -99,7 +99,7 @@ export default {
     replyData: {
       replyId: Number,
       time: Date,
-      author: String,
+      authorName: String,
       replyTo: String,
       content: String,
       ableToDelete: Boolean,
@@ -110,7 +110,7 @@ export default {
       // reply
       show_reply_dialog: false,
       replyId: undefined,
-      replyTo_user_name: "",
+      replyToUserName: "",
       reply_content: undefined,
 
       // delete
@@ -125,13 +125,13 @@ export default {
     open_reply_dialog(author, replyId) {
       this.show_reply_dialog = true;
       this.replyId = replyId;
-      this.replyTo_user_name = author;
+      this.replyToUserName = author;
       this.reply_content = "";
     },
     close_reply_dialog() {
       this.show_reply_dialog = false;
       this.replyId = undefined;
-      this.replyTo_user_name = "";
+      this.replyToUserName = "";
       this.reply_content = "";
     },
     reply() {

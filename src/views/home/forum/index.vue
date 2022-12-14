@@ -14,9 +14,9 @@
           <v-col
             cols="3"
             v-for="collectSectionInfo in collectSectionsInfo"
-            :key="collectSectionInfo.id"
+            :key="collectSectionInfo.sectionId"
           >
-            <v-card :to="`/section/${collectSectionInfo.id}`">
+            <v-card :to="`/section/${collectSectionInfo.sectionId}`">
               <v-card-title>
                 <v-avatar size="50"
                   ><img
@@ -25,7 +25,7 @@
                 /></v-avatar>
                 {{ collectSectionInfo.name }}
               </v-card-title>
-              <v-card-text v-text="collectSectionInfo.intro"></v-card-text>
+              <v-card-text v-text="collectSectionInfo.summary"></v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -51,16 +51,16 @@
           <v-col
             cols="3"
             v-for="sectionInfo in sectionsInfo"
-            :key="sectionInfo.id"
+            :key="sectionInfo.sectionId"
           >
-            <v-card :to="`/section/${sectionInfo.id}`">
+            <v-card :to="`/section/${sectionInfo.sectionId}`">
               <v-card-title>
                 <v-avatar size="50"
                   ><img :src="sectionInfo.avatar" :alt="sectionInfo.name"
                 /></v-avatar>
                 {{ sectionInfo.name }}
               </v-card-title>
-              <v-card-text v-text="sectionInfo.intro"></v-card-text>
+              <v-card-text v-text="sectionInfo.summary"></v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -101,7 +101,7 @@ export default {
     search() {
       this.searchLoading = true;
       get_search_sections(this.searchContent).then((res) => {
-        this.sectionsInfo = res.data.sectionsInfo;
+        this.sectionsInfo = res.data;
       });
       this.searchLoading = false;
     },
@@ -109,11 +109,11 @@ export default {
   mounted() {
     if (this.is_login) {
       get_collect_sections().then((res) => {
-        this.collectSectionsInfo = res.data.sectionsInfo;
+        this.collectSectionsInfo = res.data;
       });
     }
     get_hot_sections().then((res) => {
-      this.sectionsInfo = res.data.sectionsInfo;
+      this.sectionsInfo = res.data;
     });
   },
 };
