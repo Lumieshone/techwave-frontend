@@ -8,13 +8,16 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                username: 'wlf',
-                nickname: 'wlf2323',
-                email:'2053382@tongji.edu.cn',
-                gender:'男',
-                phone:'19890604918',
-                intro:'你说的对，但我玩原神一天可以赚150原石',
-                avatar:"https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg"
+                data:{
+                    username: 'wlf',
+                    nickname: 'wlf2323',
+                    email:'2053382@tongji.edu.cn',
+                    gender:'男',
+                    phoneNumber:'19890604918',
+                    summary:'你说的对，但我玩原神一天可以赚150原石',
+                    avatar:"https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/cdn_for_blog/blog_default_imgs/defaultImages.jpg",
+                    isStudent:true
+                }
             };
         },
     },
@@ -47,7 +50,9 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                result: 1,
+                data:{
+                    result: 1
+                },
                 message:"okk"
             };
         },
@@ -59,7 +64,9 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                result: 1,
+                data:{
+                    result: 1
+                },
                 message:"okk"
             };
         },
@@ -71,44 +78,46 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                folders:[
-                    {
-                        id:0,
-                        name:'默认收藏夹'
-                    },
-                    {
-                        id:1,
-                        name:'苹果'
-                    },
-                    {
-                        id:2,
-                        name:'华为'
-                    },
-                    {
-                        id:3,
-                        name:'小米'
-                    },
-                    {
-                        id:4,
-                        name:'一加'
-                    },
-                    {
-                        id:5,
-                        name:'戴尔'
-                    },
-                    {
-                        id:6,
-                        name:'戴尔'
-                    },
-                    {
-                        id:7,
-                        name:'戴尔'
-                    },
-                    {
-                        id:8,
-                        name:'戴尔'
-                    }
-                ]
+                data:{
+                    folders:[
+                        {
+                            id:0,
+                            folderName:'默认收藏夹'
+                        },
+                        {
+                            id:1,
+                            folderName:'苹果'
+                        },
+                        {
+                            id:2,
+                            folderName:'华为'
+                        },
+                        {
+                            id:3,
+                            folderName:'小米'
+                        },
+                        {
+                            id:4,
+                            folderName:'一加'
+                        },
+                        {
+                            id:5,
+                            folderName:'戴尔'
+                        },
+                        {
+                            id:6,
+                            folderName:'戴尔'
+                        },
+                        {
+                            id:7,
+                            folderName:'戴尔'
+                        },
+                        {
+                            id:8,
+                            folderName:'戴尔'
+                        }
+                    ]
+                }
             };
         },
     },
@@ -119,65 +128,67 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                total:15,
-                collects:[
-                    {
-                        id: 1,
-                        poster: "米哈游nmsl",
-                        time: '16:12',
-                        section:'原神',
-                        title: '公子和宵宫是不是真的有一腿？',
-                    },
-                    {
-                        id: 2,
-                        poster: "信女愿顿顿吃素换小保底不歪",
-                        time: '17:35',
-                        section: `原神`,
-                        title: '公子池逆天概率',
-                    },
-                    {
-                        id: 3,
-                        poster: "胡孝子",
-                        time: '11-28',
-                        section: `原神`,
-                        title: '0命雷神就别劝新人抽了',
-                    },
-                    {
-                        id: 4,
-                        poster: "海豹1号",
-                        time: '11-23',
-                        section: `原神`,
-                        title: 'xdm在蒙德教堂抽卡真的会有奇迹',
-                    },
-                    {
-                        id: 5,
-                        poster: "纳西妲今天吃什么",
-                        time: '10-05',
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 6,
-                        poster: "纳西妲今天吃什么",
-                        time: '10-05',
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 7,
-                        poster: "纳西妲今天吃什么",
-                        time: '10-05',
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 8,
-                        poster: "纳西妲今天吃什么",
-                        time: '10-05',
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                ]
+                data:{
+                    total:15,
+                    folderPostDTOList:[
+                        {
+                            postId: 1,
+                            posterName: "米哈游nmsl",
+                            time: '16:12',
+                            sectionName:'原神',
+                            title: '公子和宵宫是不是真的有一腿？',
+                        },
+                        {
+                            postId: 2,
+                            posterName: "信女愿顿顿吃素换小保底不歪",
+                            time: '17:35',
+                            sectionName: `原神`,
+                            title: '公子池逆天概率',
+                        },
+                        {
+                            postId: 3,
+                            posterName: "胡孝子",
+                            time: '11-28',
+                            sectionName: `原神`,
+                            title: '0命雷神就别劝新人抽了',
+                        },
+                        {
+                            postId: 4,
+                            posterName: "海豹1号",
+                            time: '11-23',
+                            sectionName: `原神`,
+                            title: 'xdm在蒙德教堂抽卡真的会有奇迹',
+                        },
+                        {
+                            postId: 5,
+                            posterName: "纳西妲今天吃什么",
+                            time: '10-05',
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 6,
+                            posterName: "纳西妲今天吃什么",
+                            time: '10-05',
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 7,
+                            posterName: "纳西妲今天吃什么",
+                            time: '10-05',
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 8,
+                            posterName: "纳西妲今天吃什么",
+                            time: '10-05',
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                    ]
+                }
             };
         },
     },
@@ -232,65 +243,67 @@ module.exports = [
         response: () => {
             return {
                 code: 20000,
-                total:30,
-                posts:[
-                    {
-                        id: 1,
-                        time: '16:12',
-                        reply:10,
-                        section:'原神',
-                        title: '公子和宵宫是不是真的有一腿？',
-                    },
-                    {
-                        id: 2,
-                        time: '17:35',
-                        reply:10,
-                        section: `原神`,
-                        title: '公子池逆天概率',
-                    },
-                    {
-                        id: 3,
-                        time: '11-28',
-                        reply:10,
-                        section: `原神`,
-                        title: '0命雷神就别劝新人抽了',
-                    },
-                    {
-                        id: 4,
-                        time: '11-23',
-                        reply:10,
-                        section: `原神`,
-                        title: 'xdm在蒙德教堂抽卡真的会有奇迹',
-                    },
-                    {
-                        id: 5,
-                        time: '10-05',
-                        reply:10,
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 6,
-                        time: '10-05',
-                        reply:10,
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 7,
-                        time: '10-05',
-                        reply:10,
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    },
-                    {
-                        id: 8,
-                        time: '10-05',
-                        reply:10,
-                        section: `原神`,
-                        title: '草神武装也就那样',
-                    }
-                ]
+                data:{
+                    total:30,
+                    myPosts:[
+                        {
+                            postId: 1,
+                            updateTime: '16:12',
+                            commentCount:10,
+                            sectionName:'原神',
+                            title: '公子和宵宫是不是真的有一腿？',
+                        },
+                        {
+                            postId: 2,
+                            updateTime: '17:35',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '公子池逆天概率',
+                        },
+                        {
+                            postId: 3,
+                            updateTime: '11-28',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '0命雷神就别劝新人抽了',
+                        },
+                        {
+                            postId: 4,
+                            updateTime: '11-23',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: 'xdm在蒙德教堂抽卡真的会有奇迹',
+                        },
+                        {
+                            postId: 5,
+                            updateTime: '10-05',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 6,
+                            updateTime: '10-05',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 7,
+                            updateTime: '10-05',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        },
+                        {
+                            postId: 8,
+                            updateTime: '10-05',
+                            commentCount:10,
+                            sectionName: `原神`,
+                            title: '草神武装也就那样',
+                        }
+                    ]
+                }
             };
         },
     },

@@ -133,7 +133,7 @@ export default {
             .then((res) => {
               console.log(res.message)
               if(res.code === 20000){
-                if(res.result === 1){
+                if(res.data.result === 1){
                   this.$message.success("修改密码成功！")
                   this.$emit("callBack",false)
                   this.clearDialog()

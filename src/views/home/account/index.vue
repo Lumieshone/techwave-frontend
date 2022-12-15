@@ -161,9 +161,9 @@ export default {
         .then(res => {
           if(res.code === 20000){
             console.log("获取用户信息成功")
-            this.nickname = res.nickname
-            this.userEmail = res.email
-            this.userAvatar = res.avatar
+            this.nickname = res.data.nickname
+            this.userEmail = res.data.email
+            this.userAvatar = res.data.avatar
           }
           else{
             this.$message.error("用户信息获取失败！")

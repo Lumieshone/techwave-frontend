@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-export function get_section_info(sectionId,curPage,limit) {
+export function get_section_data(sectionId,curPage,limit) {
     return request({
         url: "/section/get_section_data",
         method: "get",

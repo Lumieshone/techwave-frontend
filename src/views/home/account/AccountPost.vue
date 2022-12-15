@@ -12,27 +12,27 @@
           >
             <v-list-item-group>
               <template v-for="(item, index) in posts">
-                <v-list-item :key="item.id">
+                <v-list-item :key="item.postId">
                     <v-list-item-avatar>
                       <v-chip
                           color="#E6E6FA"
                           label
                           small
                       >
-                        {{item.reply}}
+                        {{item.commentCount}}
                       </v-chip>
                     </v-list-item-avatar>
-                    <v-list-item-content @click="stepToPost(item.id)">
+                    <v-list-item-content @click="stepToPost(item.postId)">
                       <template >
                       <v-list-item-title v-text="item.title"></v-list-item-title>
-                      <v-list-item-subtitle v-text="item.section"></v-list-item-subtitle>
+                      <v-list-item-subtitle v-text="item.sectionName"></v-list-item-subtitle>
                       </template>
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-list-item-action-text v-text="item.time"></v-list-item-action-text>
+                        <v-list-item-action-text v-text="item.updateTime"></v-list-item-action-text>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-btn icon @click="deletePost(item.id)">
+                      <v-btn icon @click="deletePost(item.postId)">
                         <v-icon>mdi-delete-outline</v-icon>
                       </v-btn>
                     </v-list-item-action>
@@ -111,8 +111,8 @@ export default {
       setTimeout(200)
       window.location.reload();
     },
-    stepToPost(post_id){
-      this.$router.push({path: '/post/'+ post_id, params:{id:post_id}})
+    stepToPost(postId){
+      this.$router.push({path: '/post/'+ postId, params:{id:postId}})
     },
     jumpPage() {
       this.curPage = Number(this.whichPage);
@@ -120,9 +120,9 @@ export default {
     onPageChange(curPage, limit) {
       get_my_post(curPage,limit)
           .then((res) => {
-            console.log(res.total)
-            this.total = res.total;
-            this.posts = res.posts;
+            console.log(res.data.total)
+            this.total = res.data.total;
+            this.posts = res.data.myPosts;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -130,7 +130,7 @@ export default {
       this.curPage = 1;
       get_my_post(1,this.limit)
           .then(res => {
-            this.posts = res.posts;
+            this.posts = res.data.myPosts;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -143,9 +143,9 @@ export default {
   mounted() {
     get_my_post(1,this.limit)
         .then((res) => {
-          console.log(res.total)
-          this.total = res.total;
-          this.posts = res.posts;
+          console.log(res.data.total)
+          this.total = res.data.total;
+          this.posts = res.data.myPosts;
         })
         .catch((err) => console.log("error: " + err))
   },

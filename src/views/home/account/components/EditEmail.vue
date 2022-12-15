@@ -105,7 +105,7 @@ export default {
           .then((res) => {
             console.log(res.message)
             if(res.code === 20000){
-              if(res.result === 1){
+              if(res.data.result === 1){
                 this.$message.success("修改邮箱成功！")
                 this.$emit("callBack",this.email)
                 this.$emit("close",false)

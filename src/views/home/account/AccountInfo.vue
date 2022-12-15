@@ -139,9 +139,9 @@ export default {
         this.isFilled = !this.isFilled
         let form = {
           nickname:this.nickname,
-          phone:this.phoneNum,
+          phone:this.phoneNumber,
           gender:this.gender,
-          intro:this.intro
+          intro:this.summary
         }
         edit_info(form).then((res) => {
           console.log(res.message)
@@ -158,11 +158,11 @@ export default {
         .then(res => {
           if(res.code === 20000){
             console.log("获取用户信息成功")
-            this.nickname = res.nickname
-            this.username = res.username
-            this.phoneNum = res.phone
-            this.gender = res.gender
-            this.intro = res.intro
+            this.nickname = res.data.nickname
+            this.username = res.data.username
+            this.phoneNum = res.data.phoneNumber
+            this.gender = res.data.gender
+            this.intro = res.data.summary
           }
           else{
             this.$message.error("用户信息获取失败！")

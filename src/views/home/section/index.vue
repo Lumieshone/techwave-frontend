@@ -13,9 +13,9 @@
                 label
                 text-color="#6A5ACD"
             >
-              <strong>{{ sectionData.title }}</strong>
+              <strong>{{ sectionData.sectionName }}</strong>
             </v-chip>
-            <span class="section_intro">{{ sectionData.intro }}</span>
+            <span class="section_intro">{{ sectionData.sectionSummary }}</span>
             <template v-slot:actions>
               <v-btn
                   color="#6A5ACD"
@@ -51,7 +51,7 @@
               全部帖子
             </v-tab>
             <v-tab
-                v-for="subsection in sectionData.subsections"
+                v-for="subsection in sectionData.subSectionList"
                 :key="subsection.id"
                 @change="getPostBySubsection(subsection.id)"
             >
@@ -71,7 +71,7 @@
             <v-list-item-group
                 active-class="deep-purple--text"
             >
-              <template v-for="(item, index) in sectionData.posts">
+              <template v-for="(item, index) in sectionData.postVOList">
                 <v-list-item :key="item.id" @click="stepToPost(item.id)">
                   <template>
                     <v-list-item-avatar>
@@ -80,23 +80,23 @@
                           label
                           small
                       >
-                        {{item.reply}}
+                        {{item.commentCounts}}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title v-text="item.title"></v-list-item-title>
-                      <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+                      <v-list-item-subtitle v-text="item.summary"></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-list-item-action-text v-text="item.poster"></v-list-item-action-text>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-list-item-action-text v-text="item.time"></v-list-item-action-text>
+                      <v-list-item-action-text v-text="item.updateTime"></v-list-item-action-text>
                     </v-list-item-action>
                   </template>
                 </v-list-item>
                 <v-divider
-                    v-if="index < sectionData.posts.length - 1"
+                    v-if="index < sectionData.postVOList.length - 1"
                     :key="index"
                 ></v-divider>
               </template>
@@ -106,9 +106,9 @@
             <v-col cols="8">
               <v-pagination
                   color="#6A5ACD"
-                  v-if="Math.ceil(sectionData.total / limit) > 1"
+                  v-if="Math.ceil(sectionData.postCounts / limit) > 1"
                   v-model="curPage"
-                  :length="Math.ceil(sectionData.total/ limit)"
+                  :length="Math.ceil(sectionData.postCounts/ limit)"
                   :total-visible="12"
                   @input="onPageChange(curPage, limit)"
               ></v-pagination>
@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import {collect_section, get_posts_by_subsection, get_section_info} from "@/api/section";
+import {collect_section, get_posts_by_subsection, get_section_data} from "@/api/section";
 import PostDialog from "@/views/home/section/components/PostDialog";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -197,17 +197,17 @@ export default {
     },
     onPageChange(curPage, limit) {
       if(this.subsectionId === 0)
-        get_section_info(this.sectionId,curPage,limit)
+        get_section_data(this.sectionId,curPage,limit)
             .then(res => {
-              this.sectionData = res.sectionData;
+              this.sectionData = res.data;
             })
             .catch((err) => console.log("error: " + err));
       else{
         get_posts_by_subsection(this.sectionId,this.subsectionId,curPage,limit)
             .then((res) => {
-              console.log(res.total)
-              this.sectionData.total = res.total;
-              this.sectionData.posts = res.posts;
+              console.log(res.data.total)
+              this.sectionData.postCounts = res.data.total;
+              this.sectionData.postVOList = res.data.postDataVOList;
             })
             .catch((err) => console.log("error: " + err));
       }
@@ -215,9 +215,9 @@ export default {
     refreshList() {
       this.subsectionId = 0;
       this.curPage = 1;
-        get_section_info(this.sectionId,1,10)
+        get_section_data(this.sectionId,1,10)
             .then(res => {
-              this.sectionData = res.sectionData;
+              this.sectionData = res.data;
             })
             .catch((err) => console.log("error: " + err));
     },
@@ -226,20 +226,20 @@ export default {
       this.subsectionId = id;
       get_posts_by_subsection(this.sectionId,this.subsectionId,1,10)
           .then((res) => {
-            console.log(res.total)
-            this.sectionData.total = res.total;
-            this.sectionData.posts = res.posts;
+            console.log(res.data.total)
+            this.sectionData.postCounts = res.data.total;
+            this.sectionData.postVOList = res.data.postDataVOList;
           })
           .catch((err) => console.log("error: " + err));
     }
   },
   mounted() {
     this.sectionId = this.$route.params.sectionId;
-    get_section_info(this.sectionId,1,10)
+    get_section_data(this.sectionId,1,10)
         .then((res) => {
-          this.sectionData = res.sectionData;
-          this.subsectionList = res.sectionData.subsections;
-          this.sectionName = res.sectionData.title;
+          this.sectionData = res.data;
+          this.subsectionList = res.data.subSectionList;
+          this.sectionName = res.data.sectionName;
           console.log(this.subsectionList)
         })
         .catch((err) => console.log("error: " + err));

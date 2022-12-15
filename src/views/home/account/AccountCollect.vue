@@ -14,11 +14,11 @@
                 <v-tab
                     v-for="(folder,index) in folders"
                     :key="folder.id"
-                    @change="getCollects(folder.id,folder.name)"
+                    @change="getCollects(folder.id,folder.folderName)"
                 >
                   <v-icon v-if="index === 0" class="mr-1">mdi-folder-home-outline</v-icon>
                   <v-icon v-else class="mr-1">mdi-folder-outline</v-icon>
-                  {{folder.name}}
+                  {{folder.folderName}}
                 </v-tab>
               </v-tabs>
             </v-col>
@@ -69,14 +69,14 @@
                     active-class="deep-purple--text"
                 >
                   <template v-for="(item, index) in collects">
-                    <v-list-item :key="item.id" @click="stepToPost(item.id)">
+                    <v-list-item :key="item.postId" @click="stepToPost(item.postId)">
                       <template>
                         <v-list-item-content>
                           <v-list-item-title v-text="item.title"></v-list-item-title>
-                          <v-list-item-subtitle v-text="item.poster"></v-list-item-subtitle>
+                          <v-list-item-subtitle v-text="item.posterName"></v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-list-item-action-text v-text="item.section"></v-list-item-action-text>
+                          <v-list-item-action-text v-text="item.sectionName"></v-list-item-action-text>
                         </v-list-item-action>
                         <v-list-item-action>
                           <v-list-item-action-text v-text="item.time"></v-list-item-action-text>
@@ -166,8 +166,8 @@ export default {
     closeConfirm(flag){
       this.showConfirm = flag
     },
-    stepToPost(post_id){
-      this.$router.push({path: '/post/'+ post_id, params:{id:post_id}})
+    stepToPost(postId){
+      this.$router.push({path: '/post/'+ postId, params:{id:postId}})
     },
     jumpPage() {
       this.curPage = Number(this.whichPage);
@@ -175,9 +175,9 @@ export default {
     onPageChange(curPage, limit) {
         get_collect_info(this.folderId,curPage,limit)
             .then((res) => {
-              console.log(res.total)
-              this.total = res.total;
-              this.collects = res.collects;
+              console.log(res.data.total)
+              this.total = res.data.total;
+              this.collects = res.data.folderPostDTOList;
             })
             .catch((err) => console.log("error: " + err));
       },
@@ -187,7 +187,7 @@ export default {
       this.curPage = 1;
       get_collect_info(this.folderId,1,this.limit)
           .then(res => {
-            this.collects = res.collects;
+            this.collects = res.data.folderPostDTOList;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -197,9 +197,9 @@ export default {
       this.folderName = name;
       get_collect_info(id,1,this.limit)
           .then((res) => {
-            console.log(res.total)
-            this.total = res.total;
-            this.collects = res.collects;
+            console.log(res.data.total)
+            this.total = res.data.total;
+            this.collects = res.data.folderPostDTOList;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -233,14 +233,14 @@ export default {
   mounted() {
     get_folders()
         .then((res) => {
-          this.folders = res.folders;
+          this.folders = res.data.folders;
         })
         .catch((err) => console.log("error: " + err));
     get_collect_info(0,1,this.limit)
         .then((res) => {
-          console.log(res.total)
-          this.total = res.total;
-          this.collects = res.collects;
+          console.log(res.data.total)
+          this.total = res.data.total;
+          this.collects = res.data.folderPostDTOList;
         })
         .catch((err) => console.log("error: " + err))
   },
