@@ -5,11 +5,16 @@
       <v-card-subtitle>
         <router-link to="/register">注册</router-link>
         <span style="margin: 10px">|</span>
-        <v-dialog v-model="show_find_password_dialog" transition="dialog-bottom-transition">
+        <v-dialog
+          v-model="show_find_password_dialog"
+          transition="dialog-bottom-transition"
+        >
           <template v-slot:activator="{ on, attrs }">
             <span v-bind="attrs" v-on="on">找回密码</span>
           </template>
-          <FindPassword @close_find_password_dialog="show_find_password_dialog = false" />
+          <FindPassword
+            @close_find_password_dialog="show_find_password_dialog = false"
+          />
         </v-dialog>
       </v-card-subtitle>
       <v-card-text>
@@ -21,7 +26,7 @@
               rules="required|email"
             >
               <v-text-field
-                v-model="mail"
+                v-model="email"
                 :error-messages="errors"
                 label="Mail"
                 required
@@ -94,8 +99,8 @@ export default {
   data() {
     return {
       // info
-      mail: "user_mail@qq.com",
-      password: "111111",
+      email: "test@163.com",
+      password: "test",
 
       // loading logo
       loading: false,
@@ -122,7 +127,7 @@ export default {
     handleLogin() {
       this.loading = true;
       this.$store
-        .dispatch("user/login", { mail: this.mail, password: this.password })
+        .dispatch("user/login", { email: this.email, password: this.password })
         .then(() => {
           this.loading = false;
           this.$message.success("登录成功！已为你自动跳转");
@@ -135,13 +140,13 @@ export default {
         });
     },
     clear() {
-      this.mail = "";
+      this.email = "";
       this.password = "";
       this.$refs.observer.reset();
     },
-    close_find_password_dialog(){
+    close_find_password_dialog() {
       this.find_password_dialog = false;
-    }
+    },
   },
 };
 </script>

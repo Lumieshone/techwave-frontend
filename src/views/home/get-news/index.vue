@@ -22,14 +22,14 @@
             <v-list-item-group active-class="brown--text">
               <template>
                 <v-list-item
-                  v-for="item in news_info"
+                  v-for="item in newsInfo"
                   :key="item.id"
                   @click="step_to_post(item.id)"
                 >
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#f5e8cb" label small>
-                        {{ item.reply }}
+                        {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -37,7 +37,7 @@
                         v-text="item.title"
                       ></v-list-item-title>
                       <v-list-item-subtitle
-                        v-text="item.subtitle"
+                        v-text="item.summary"
                       ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
@@ -47,7 +47,7 @@
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.time"
+                        v-text="item.updateTime"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                   </template>
@@ -67,14 +67,14 @@
             <v-list-item-group active-class="brown--text">
               <template>
                 <v-list-item
-                  v-for="item in posts_info"
+                  v-for="item in postsInfo"
                   :key="item.id"
                   @click="step_to_post(item.id)"
                 >
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#f5e8cb" label small>
-                        {{ item.reply }}
+                        {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -82,7 +82,7 @@
                         v-text="item.title"
                       ></v-list-item-title>
                       <v-list-item-subtitle
-                        v-text="item.subtitle"
+                        v-text="item.summary"
                       ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
@@ -92,7 +92,7 @@
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.time"
+                        v-text="item.updateTime"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                   </template>
@@ -122,8 +122,8 @@ export default {
       ],
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
 
-      posts_info: [],
-      news_info: [],
+      postsInfo: [],
+      newsInfo: [],
     };
   },
   methods: {
@@ -134,12 +134,12 @@ export default {
   mounted() {
     get_hot_posts()
       .then((res) => {
-        this.posts_info = res.posts_info;
+        this.postsInfo = res.data.postsInfo;
       })
       .catch((err) => console.log("error: " + err));
     get_news()
       .then((res) => {
-        this.news_info = res.news_info;
+        this.newsInfo = res.data.newsInfo;
       })
       .catch((err) => console.log("error: " + err));
   },

@@ -7,48 +7,50 @@
     <v-row>
       <v-col cols="5">
         <v-text-field
-          v-model="search_content"
-          label="输入搜索关键词~"
-          outlined
-          dense
-          clearable
-          :append-icon="search_loading ? 'mdi-loading' : 'mdi-magnify'"
-          @click:append="search()"
+            v-model="searchContent"
+            label="输入搜索关键词~"
+            outlined
+            dense
+            clearable
+            :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
+            @click:append="search()"
         ></v-text-field>
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="tag_id"
-          :items="tags"
-          item-text="name"
-          item-value="id"
-          dense
-          label="一级tag"
-          persistent-hint
-          @change="filter_by_tag()"
+            v-model="selectTagId"
+            :items="tags"
+            item-text="tagName"
+            item-value="tagId"
+            dense
+            label="一级tag"
+            persistent-hint
+            @change="filter_by_tag()"
         ></v-select>
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="subtag_id"
-          :items="subtags"
-          item-text="name"
-          item-value="id"
-          dense
-          label="二级tag"
-          persistent-hint
-          @change="filter_by_subtag()"
+            v-model="selectSubtagId"
+            :items="subtags"
+            item-text="subtagName"
+            item-value="subtagId"
+            dense
+            label="二级tag"
+            persistent-hint
+            @change="filter_by_subtag()"
         ></v-select>
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="campus_zone_filter"
-          :items="campus_zones"
-          dense
-          disable-lookup
-          label="校区"
-          persistent-hint
-          @change="search()"
+            v-model="campusZoneFilter"
+            :items="campusZones"
+            item-text="text"
+            item-value="value"
+            dense
+            disable-lookup
+            label="校区"
+            persistent-hint
+            @change="search()"
         ></v-select>
       </v-col>
     </v-row>
@@ -63,27 +65,27 @@
 
     <v-row>
       <v-col
-        cols="4"
-        v-for="transaction_data in transactions_data"
-        :key="transaction_data.transaction_id"
+          cols="4"
+          v-for="transactionData in transactionsData"
+          :key="transactionData.id"
       >
         <v-card
-          height="360px"
-          :to="`/transaction/${transaction_data.transaction_id}`"
+            height="360px"
+            :to="`/transaction/${transactionData.id}`"
         >
-          <v-img :src="transaction_data.image_url" height="200px"> </v-img>
-          <v-card-title v-text="transaction_data.title"></v-card-title>
+          <v-img :src="transactionData.coverImage" height="200px"></v-img>
+          <v-card-title v-text="transactionData.title"></v-card-title>
           <v-card-subtitle>
-            <span>{{ transaction_data.campus_zone }} 校区</span>
+            <span>{{ transactionData.campus }} 校区</span>
             <span style="margin: 10px">|</span>
-            <span>价格: {{ transaction_data.price }}</span>
+            <span>价格: {{ transactionData.price }}</span>
           </v-card-subtitle>
           <v-card-text>
             <span>{{
-              transaction_data.description.length > 40
-                ? transaction_data.description.slice(0, 40) + ".."
-                : transaction_data.description
-            }}</span>
+                transactionData.summary.length > 40
+                    ? transactionData.summary.slice(0, 40) + ".."
+                    : transactionData.summary
+              }}</span>
           </v-card-text>
         </v-card>
       </v-col>
@@ -91,46 +93,50 @@
 
     <!-- 分页 -->
     <v-pagination
-      style="margin-top: 10px"
-      v-if="Math.ceil(total / limit) > 1"
-      v-model="curPage"
-      :length="Math.ceil(total / limit)"
-      total-visible="7"
-      @input="onPageChange(curPage, limit)"
+        style="margin-top: 10px"
+        v-if="Math.ceil(total / limit) > 1"
+        v-model="curPage"
+        :length="Math.ceil(total / limit)"
+        total-visible="7"
+        @input="onPageChange(curPage, limit)"
     ></v-pagination>
 
     <!-- 发布交易帖子 -->
     <v-dialog
-      v-model="show_publish_dialog"
-      transition="dialog-bottom-transition"
-      max-width="60%"
+        v-model="show_publish_dialog"
+        transition="dialog-bottom-transition"
+        max-width="60%"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn top absolute right v-bind="attrs" v-on="on"
-          >发布{{ topic == "seek" ? "求购" : "出售" }}帖子</v-btn
+        >发布{{ topic == "seek" ? "求购" : "出售" }}帖子
+        </v-btn
         >
       </template>
       <PublishTransaction
-        @close_publish_dialog="show_publish_dialog = false"
-        :topic="topic"
+          @close_publish_dialog="show_publish_dialog = false"
+          :topic="topic"
       />
     </v-dialog>
 
     <!-- 提示需要完成注册 -->
     <v-row justify="center">
       <v-card max-width="50%" v-show="!have_permission">
-        <v-card-title> 阿欧..你还没有登录/完成学生认证.. </v-card-title>
+        <v-card-title> 阿欧..你还没有登录/完成学生认证..</v-card-title>
         <v-card-text
-          >为保护同学们的个人隐私，进入此页面需要先完成认证哦~</v-card-text
+        >为保护同学们的个人隐私，进入此页面需要先完成认证哦~
+        </v-card-text
         >
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            style="margin-right: 10px"
-            outlined
-            :to="`/login?redirect=/sale`"
-            >登录</v-btn
-          ><v-btn outlined to="/account/certify">前往学生认证</v-btn>
+              style="margin-right: 10px"
+              outlined
+              :to="`/login?redirect=/sale`"
+          >登录
+          </v-btn
+          >
+          <v-btn outlined to="/account/certify">前往学生认证</v-btn>
         </v-card-actions>
       </v-card>
     </v-row>
@@ -138,7 +144,7 @@
 </template>
 
 <script>
-import { get_sale_info, get_all_first_tags } from "@/api/sale";
+import {get_sale_info, get_all_first_tags} from "@/api/sale";
 
 import PublishTransaction from "@/views/home/sale/components/publish-transaction.vue";
 
@@ -158,39 +164,57 @@ export default {
       total: undefined,
 
       // transaction data
-      transactions_data: [],
+      transactionsData: [],
 
       // filter by campus
-      campus_zones: ["全部", "四平", "嘉定", "彰武", "沪西"],
-      campus_zone_filter: "全部",
+      campusZones: [
+        {
+          text: "全部",
+          value: "",
+        },
+        {
+          text: "四平",
+          value: "四平",
+        },
+        {
+          text: "嘉定",
+          value: "嘉定"
+        },
+        {
+          text: "彰武",
+          value: "彰武"
+        },
+        {
+          text: "沪西",
+          value: "沪西"
+        },],
+
+      campusZoneFilter: "",
 
       // filter by tags
       tags: undefined,
-      tag_id: undefined,
-      subtag_id: undefined,
-
-      current_tag: undefined,
+      selectTagId: undefined,
+      selectSubtagId: undefined,
 
       // search
-      search_content: "",
-      search_loading: false,
+      searchContent: "",
+      searchLoading: false,
 
       // publish dialog
       show_publish_dialog: false,
 
       // if have permission
       have_permission:
-        this.$store.getters.roles.length > 0 &&
-        this.$store.getters.is_authenticated,
+          this.$store.getters.roles.length > 0 &&
+          this.$store.getters.isAuthenticated,
     };
   },
   computed: {
     subtags: function () {
-      if (this.tag_id == undefined) {
+      if (this.selectTagId == undefined) {
         return [];
       } else {
-        let filter_tags = this.tags.filter((t) => t.id == this.tag_id);
-        return filter_tags[0].subtags;
+        return this.tags.find((t) => t.tagId == this.selectTagId).subtagList;
       }
     },
   },
@@ -211,73 +235,73 @@ export default {
 
     refreshList(curPage = this.curPage, limit = this.limit) {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campus: this.campusZoneFilter,
+        tagId: this.selectTagId,
+        subtagId: this.selectSubtagId,
         offset: (curPage - 1) * limit,
         limit: limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
-        .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
-        })
-        .catch((err) => console.log("error: " + err));
+          .then((res) => {
+            this.transactionsData = res.data.transactionPageVOList;
+            this.total = res.data.total;
+          })
+          .catch((err) => console.log("error: " + err));
     },
 
     // search
     search() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campus: this.campusZoneFilter,
+        tagId: this.selectTagId,
+        subtagId: this.selectSubtagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
-        .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
-          this.curPage = 1;
-        })
-        .catch((err) => console.log("error: " + err));
+          .then((res) => {
+            this.transactionsData = res.data.transactionPageVOList;
+            this.total = res.data.total;
+            this.curPage = 1;
+          })
+          .catch((err) => console.log("error: " + err));
     },
 
     filter_by_tag() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
+        searchContent: this.searchContent,
+        campus: this.campusZoneFilter,
+        tagId: this.selectTagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
-        .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
-          this.curPage = 1;
-        })
-        .catch((err) => console.log("error: " + err));
+          .then((res) => {
+            this.transactionsData = res.data.transactionPageVOList;
+            this.total = res.data.total;
+            this.curPage = 1;
+          })
+          .catch((err) => console.log("error: " + err));
     },
 
     filter_by_subtag() {
       get_sale_info({
-        search_content: this.search_content,
-        campus_zone: this.campus_zone_filter,
-        tag_id: this.tag_id,
-        subtag_id: this.subtag_id,
+        searchContent: this.searchContent,
+        campus: this.campusZoneFilter,
+        tagId: this.selectTagId,
+        subtagId: this.selectSubtagId,
         offset: 0,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
-        .then((res) => {
-          this.transactions_data = res.transactions_data;
-          this.total = res.total;
-          this.curPage = 1;
-        })
-        .catch((err) => console.log("error: " + err));
+          .then((res) => {
+            this.transactionsData = res.data.transactionPageVOList;
+            this.total = res.data.total;
+            this.curPage = 1;
+          })
+          .catch((err) => console.log("error: " + err));
     },
   },
 
@@ -285,12 +309,12 @@ export default {
     if (this.have_permission) {
       this.refreshList();
       get_all_first_tags()
-        .then((res) => {
-          this.tags = res.tags;
-        })
-        .error(() => {
-          this.$message.error("获取一级tag失败...");
-        });
+          .then((res) => {
+            this.tags = res.data;
+          })
+          .error(() => {
+            this.$message.error("获取一级tag失败...");
+          });
     }
   },
 };

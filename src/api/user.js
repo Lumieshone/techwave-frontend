@@ -46,3 +46,19 @@ export function find_password(data) {
     data,
   });
 }
+
+export function change_password(email) {
+  return request({
+    url: "/user/send-email-code",
+    method: "post",
+    params: { email: email },
+  });
+}
+
+export function verify_and_modify_pwd(data) {
+  return request({
+    url: "/user/forget-pwd",
+    method: "post",
+    data,
+  });
+}

@@ -121,7 +121,7 @@ export default {
   name: "FindPassword",
   data() {
     return {
-      mail: "1@qq.com",
+      email: "1@qq.com",
       old_password: "12345678",
       new_password: "123456789",
       repeat_password: "123456789",
@@ -145,7 +145,7 @@ export default {
         .validate()
         .then(() => {
           find_password({
-            mail: this.mail,
+            email: this.email,
             old_password: this.old_password,
             new_password: this.new_password,
           }).then(() => {

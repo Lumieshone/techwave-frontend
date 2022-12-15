@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function get_sale_info(params) {
   return request({
-    url: "/sale_info",
+    url: "/transaction/sale_info",
     method: "get",
     params,
   });
@@ -10,7 +10,7 @@ export function get_sale_info(params) {
 
 export function publish_transaction(data) {
   return request({
-    url: "/transaction",
+    url: "/transaction/publish",
     method: "post",
     data,
     headers: {
@@ -21,15 +21,7 @@ export function publish_transaction(data) {
 
 export function get_all_first_tags() {
   return request({
-    url: "/tag",
+    url: "/transaction/tag",
     method: "get",
-  });
-}
-
-export function get_subtags(tag_id) {
-  return request({
-    url: "/subtag",
-    method: "get",
-    params: { id: tag_id },
   });
 }

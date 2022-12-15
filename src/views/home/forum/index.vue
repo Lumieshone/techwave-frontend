@@ -13,19 +13,19 @@
         <v-row>
           <v-col
             cols="3"
-            v-for="collect_section_info in collect_sections_info"
-            :key="collect_section_info.id"
+            v-for="collectSectionInfo in collectSectionsInfo"
+            :key="collectSectionInfo.sectionId"
           >
-            <v-card :to="`/section/${collect_section_info.id}`">
+            <v-card :to="`/section/${collectSectionInfo.sectionId}`">
               <v-card-title>
                 <v-avatar size="50"
                   ><img
-                    :src="collect_section_info.avatar"
-                    :alt="collect_section_info.name"
+                    :src="collectSectionInfo.avatar"
+                    :alt="collectSectionInfo.name"
                 /></v-avatar>
-                {{ collect_section_info.name }}
+                {{ collectSectionInfo.name }}
               </v-card-title>
-              <v-card-text v-text="collect_section_info.intro"></v-card-text>
+              <v-card-text v-text="collectSectionInfo.summary"></v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -37,12 +37,12 @@
       <v-card-text>
         <v-col cols="10" class="mx-auto">
           <v-text-field
-            v-model="search_content"
+            v-model="searchContent"
             label="输入搜索关键词~"
             outlined
             dense
             clearable
-            :append-icon="search_loading ? 'mdi-loading' : 'mdi-magnify'"
+            :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
             @click:append="search()"
           ></v-text-field>
         </v-col>
@@ -50,17 +50,17 @@
         <v-row>
           <v-col
             cols="3"
-            v-for="section_info in sections_info"
-            :key="section_info.id"
+            v-for="sectionInfo in sectionsInfo"
+            :key="sectionInfo.sectionId"
           >
-            <v-card :to="`/section/${section_info.id}`">
+            <v-card :to="`/section/${sectionInfo.sectionId}`">
               <v-card-title>
                 <v-avatar size="50"
-                  ><img :src="section_info.avatar" :alt="section_info.name"
+                  ><img :src="sectionInfo.avatar" :alt="sectionInfo.name"
                 /></v-avatar>
-                {{ section_info.name }}
+                {{ sectionInfo.name }}
               </v-card-title>
-              <v-card-text v-text="section_info.intro"></v-card-text>
+              <v-card-text v-text="sectionInfo.summary"></v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -83,37 +83,37 @@ export default {
   data() {
     return {
       // search
-      search_content: "",
-      search_loading: false,
+      searchContent: "",
+      searchLoading: false,
 
       // info
       is_login: this.$store.getters.roles.length > 0,
       avatar: this.$store.getters.avatar,
 
       // collect sections
-      collect_sections_info: [],
+      collectSectionsInfo: [],
 
       // sections(hot sections as default)
-      sections_info: [],
+      sectionsInfo: [],
     };
   },
   methods: {
     search() {
-      this.search_loading = true;
-      get_search_sections(this.search_content).then((res) => {
-        this.sections_info = res.sections_info;
+      this.searchLoading = true;
+      get_search_sections(this.searchContent).then((res) => {
+        this.sectionsInfo = res.data;
       });
-      this.search_loading = false;
+      this.searchLoading = false;
     },
   },
   mounted() {
     if (this.is_login) {
       get_collect_sections().then((res) => {
-        this.collect_sections_info = res.collect_sections_info;
+        this.collectSectionsInfo = res.data;
       });
     }
     get_hot_sections().then((res) => {
-      this.sections_info = res.sections_info;
+      this.sectionsInfo = res.data;
     });
   },
 };

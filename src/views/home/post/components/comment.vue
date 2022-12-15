@@ -2,19 +2,19 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <span style="margin: 5px">{{ comment_data.floor }} 楼 </span>
-        <span style="margin: 5px">{{ comment_data.author }}</span>
+        <span style="margin: 5px">{{ commentData.floor }} 楼 </span>
+        <span style="margin: 5px">{{ commentData.author }}</span>
         <v-avatar>
-          <img :src="comment_data.avatar" :alt="comment_data.author" />
+          <img :src="commentData.avatar" :alt="commentData.author" />
         </v-avatar>
       </v-card-title>
       <v-card-subtitle
-        ><span>{{ comment_data.time }}</span></v-card-subtitle
+        ><span>{{ commentData.updateTime }}</span></v-card-subtitle
       >
       <v-card-text>
-        <span>{{ comment_data.content }}</span>
+        <span>{{ commentData.content }}</span>
         <PostReply
-          :reply_data="comment_data.reply_data"
+          :replyData="commentData.replyVOList"
           :is_login="Boolean(is_login)"
         ></PostReply>
       </v-card-text>
@@ -24,7 +24,7 @@
           fab
           small
           :disabled="!is_login"
-          v-on:click="open_reply_dialog(comment_data.comment_id)"
+          v-on:click="open_reply_dialog(commentData.commentId)"
         >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
@@ -32,8 +32,9 @@
           color="primary"
           fab
           small
-          v-show="comment_data.able_to_delete"
-          v-on:click="open_delete_dialog(comment_data.comment_id)"
+          :disabled="!is_login"
+          v-show="is_login && commentData.ableToDelete"
+          v-on:click="open_delete_dialog(commentData.commentId)"
         >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
@@ -43,10 +44,10 @@
     <!-- reply -->
     <v-dialog v-model="show_reply_dialog">
       <v-card>
-        <v-card-title>回复给 {{ reply_to_comment_id }} 楼</v-card-title>
+        <v-card-title>回复给 {{ commentData.floor }} 楼</v-card-title>
         <v-card-text>
           <v-textarea
-            v-model="reply_content"
+            v-model="replyContent"
             outlined
             label="输入你的评论（请文明发言~）"
           ></v-textarea>
@@ -69,7 +70,7 @@
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
       <v-card>
-        <v-card-title>确认删除 {{ delete_comment_id }} 楼？</v-card-title>
+        <v-card-title>确认删除 {{  commentData.floor  }} 楼？</v-card-title>
         <v-card-actions>
           <v-btn
             color="blue"
@@ -100,17 +101,17 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostComment",
   props: {
-    comment_data: {
-      comment_id: Number,
+    commentData: {
+      commentId: Number,
       floor: Number,
       avatar: String,
       author: String,
-      time: Date,
+      updateTime: Date,
       content: undefined,
-      reply_data: undefined,
-      able_to_delete: Boolean,
+      replyVOList: undefined,
+      ableToDelete: Boolean,
     },
-    post_id: Number,
+    postId: Number,
     is_login: Boolean,
   },
   components: {
@@ -118,37 +119,37 @@ export default {
   },
   data() {
     return {
-      // reply to some comment_id
+      // reply to some commentId
       show_reply_dialog: false,
-      reply_to_comment_id: undefined,
-      reply_content: undefined,
+      replyToCommentId: undefined,
+      replyContent: undefined,
 
-      // delete my comment_id
+      // delete my commentId
       show_delete_dialog: false,
-      delete_comment_id: undefined,
+      delete_commentId: undefined,
     };
   },
   methods: {
     // reply
-    open_reply_dialog(comment_id) {
+    open_reply_dialog(commentId) {
       this.show_reply_dialog = true;
-      this.reply_to_comment_id = comment_id;
-      this.reply_content = "";
+      this.replyToCommentId = commentId;
+      this.replyContent = "";
     },
     close_reply_dialog() {
       this.show_reply_dialog = false;
-      this.reply_to_comment_id = undefined;
-      this.reply_content = "";
+      this.replyToCommentId = undefined;
+      this.replyContent = "";
     },
     reply() {
-      if (this.reply_content == "") {
+      if (this.replyContent == "") {
         this.$message.error("评论内容还为空哦");
         return;
       }
 
       reply_on_comment({
-        content: this.reply_content,
-        comment_id: this.reply_to_comment_id,
+        content: this.replyContent,
+        commentId: this.replyToCommentId,
       })
         .then((res) => {
           if (res.code === 20000) this.$message.success("回复成功！");
@@ -159,16 +160,16 @@ export default {
     },
 
     // delete
-    open_delete_dialog(comment_id) {
+    open_delete_dialog(commentId) {
       this.show_delete_dialog = true;
-      this.delete_comment_id = comment_id;
+      this.delete_commentId = commentId;
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
-      this.delete_comment_id = undefined;
+      this.delete_commentId = undefined;
     },
     delete_comment() {
-      delete_comment(this.delete_comment_id).then((res) => {
+      delete_comment(this.delete_commentId).then((res) => {
         if (res.code === 20000) this.$message.success("删除成功！");
         else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
