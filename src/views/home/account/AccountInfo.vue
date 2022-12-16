@@ -139,9 +139,9 @@ export default {
         this.isFilled = !this.isFilled
         let form = {
           nickname:this.nickname,
-          phone:this.phoneNumber,
+          phone:this.phoneNum,
           gender:this.gender,
-          intro:this.summary
+          intro:this.intro
         }
         edit_info(form).then((res) => {
           console.log(res.message)

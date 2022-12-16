@@ -10,7 +10,7 @@ export function collect_transaction(id) {
 
 export function get_transaction_info(id) {
   return request({
-    url: "/transaction/transaction_data.*",
+    url: "/transaction/post",
     method: "get",
     params: {
       id,

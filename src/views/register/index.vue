@@ -15,7 +15,7 @@
             rules="required|email"
           >
             <v-text-field
-              v-model="mail"
+              v-model="email"
               :error-messages="errors"
               label="Mail"
               required

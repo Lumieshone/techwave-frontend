@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function get_post_info(params) {
     return request({
-        url: "/post_data",
+        url: "/post/post_data",
         method: "get",
         params,
     });
@@ -10,7 +10,7 @@ export function get_post_info(params) {
 
 export function collect_post(id, folderId) {
     return request({
-        url: "/collect_post",
+        url: "/post/collect_post",
         method: "post",
         data: {id: id, folderId: folderId},
     });
@@ -18,7 +18,7 @@ export function collect_post(id, folderId) {
 
 export function delete_reply(replyId) {
     return request({
-        url: "/reply",
+        url: "/post/reply",
         method: "delete",
         data: {replyId: replyId},
     });
@@ -26,7 +26,7 @@ export function delete_reply(replyId) {
 
 export function delete_comment(commentId) {
     return request({
-        url: "/comment",
+        url: "/post/comment",
         method: "delete",
         data: {commentId: commentId},
     });
@@ -34,7 +34,7 @@ export function delete_comment(commentId) {
 
 export function reply_on_post(data) {
     return request({
-        url: "/reply_on_post",
+        url: "/post/reply_on_post",
         method: "post",
         data,
         headers: {
@@ -45,7 +45,7 @@ export function reply_on_post(data) {
 
 export function reply_on_comment(data) {
     return request({
-        url: "/reply_on_comment",
+        url: "/post/reply_on_comment",
         method: "post",
         data,
     });
@@ -53,7 +53,7 @@ export function reply_on_comment(data) {
 
 export function reply_on_reply(data) {
     return request({
-        url: "/reply_on_reply",
+        url: "/post/reply_on_reply",
         method: "post",
         data,
     });

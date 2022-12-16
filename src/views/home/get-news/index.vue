@@ -134,12 +134,12 @@ export default {
   mounted() {
     get_hot_posts()
       .then((res) => {
-        this.postsInfo = res.data.postsInfo;
+        this.postsInfo = res.data;
       })
       .catch((err) => console.log("error: " + err));
     get_news()
       .then((res) => {
-        this.newsInfo = res.data.newsInfo;
+        this.newsInfo = res.data;
       })
       .catch((err) => console.log("error: " + err));
   },

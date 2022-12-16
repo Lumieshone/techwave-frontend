@@ -15,10 +15,10 @@
       >
       <v-card-subtitle>
         <v-avatar>
-          <img :src="transactionInfo.avatar" :alt="transactionInfo.author" />
+          <img :src="transactionInfo.avatar" :alt="transactionInfo.authorName" />
         </v-avatar>
         <span style="margin: 10px">
-          {{ transactionInfo.author }} {{ transactionInfo.time }}
+          {{ transactionInfo.authorName }} {{ transactionInfo.publishTime }}
           {{ transactionInfo.campus }} 校区</span
         >
         <v-btn
@@ -33,13 +33,14 @@
             transactionInfo.type == "出售" ? transactionInfo.collectNumber : ""
           }}
         </v-btn>
-        浏览{{ transactionInfo.viewCount }}
+        浏览{{ transactionInfo.viewCounts }}
       </v-card-subtitle>
       <v-card-text>
-        <p>{{ transactionInfo.summary }}</p>
+        <p>Price: {{transactionInfo.price}}</p>
+        <p>{{ transactionInfo.content }}</p>
         <v-row>
           <v-col
-            v-for="imageUrl in transactionInfo.imagesUrl"
+            v-for="imageUrl in transactionInfo.imagesList"
             :key="imageUrl"
             class="d-flex child-flex"
             cols="4"
@@ -160,10 +161,11 @@ export default {
   mounted() {
     this.transactionId = this.$route.params.transactionId;
     if (this.able_to_see_transaction) {
-      get_transaction_info(this.postId)
+      get_transaction_info(this.transactionId)
         .then((res) => {
-          this.transactionInfo = res.data.transactionInfo;
-          this.contactInfo = res.data.contactInfo;
+          this.transactionInfo = res.data;
+          this.contactInfo.contactNumber = res.data.contactNumber;
+          this.contactInfo.contactType = res.data.contactType;
         })
         .catch((err) => console.log("error: " + err));
     }
