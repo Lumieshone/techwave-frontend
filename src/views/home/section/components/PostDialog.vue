@@ -135,6 +135,8 @@
 <script>
 // rich text editor
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import { getToken } from "@/utils/auth";
+
 // eslint-disable-next-line no-unused-vars
 import { IEditorConfig } from "@wangeditor/editor";
 
@@ -176,6 +178,22 @@ export default {
       toolbarConfig: {},
       editorConfig: {
         placeholder: "请输入内容...",
+        MENU_CONF: {
+          uploadImage: {
+            server: this.$baseURL + "/post/upload_picture",
+            fieldName: "image",
+            headers: {
+              "JK-Token": "Bearer " + getToken(),
+            },
+            withCredentials: true,
+            // 自定义插入图片
+            customInsert(res, insertFn) {
+              console.log(res);
+              // 从 res 中找到 url alt href ，然后插入图片
+              insertFn(res.data.url, "", "");
+            },
+          },
+        },
       },
       mode: "default", // or 'simple'
     };

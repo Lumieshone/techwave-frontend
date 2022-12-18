@@ -3,7 +3,7 @@ let baseURL = process.env.VUE_APP_BASE_API;
 module.exports = [
   // delete reply
   {
-    url: baseURL + "/reply",
+    url: baseURL + "/post/reply",
     type: "delete",
     response: () => {
       return {
@@ -13,7 +13,7 @@ module.exports = [
   },
   // delete comment
   {
-    url: baseURL + "/comment",
+    url: baseURL + "/post/comment",
     type: "delete",
     response: () => {
       return {
@@ -23,7 +23,7 @@ module.exports = [
   },
   // reply on post
   {
-    url: baseURL + "/reply_on_post",
+    url: baseURL + "/post/reply_on_post",
     type: "post",
     response: () => {
       return {
@@ -32,7 +32,7 @@ module.exports = [
     },
   },
   {
-    url: baseURL + "/reply_on_comment",
+    url: baseURL + "/post/reply_on_comment",
     type: "post",
     response: () => {
       return {
@@ -41,7 +41,7 @@ module.exports = [
     },
   },
   {
-    url: baseURL + "/reply_on_reply",
+    url: baseURL + "/post/reply_on_reply",
     type: "post",
     response: () => {
       return {
@@ -52,7 +52,7 @@ module.exports = [
   // collect post
   // add or cancel collection
   {
-    url: baseURL + "/collect_post",
+    url: baseURL + "/post/collect_post",
     type: "post",
     response: (config) => {
       // eslint-disable-next-line no-unused-vars
@@ -65,7 +65,7 @@ module.exports = [
   },
   // get post info
   {
-    url: baseURL + "/post_data.*",
+    url: baseURL + "/post/post_data.*",
     type: "get",
     response: (config) => {
       let fullCommentData = [

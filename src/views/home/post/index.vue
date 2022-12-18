@@ -64,7 +64,7 @@
           </v-avatar>
         </v-card-title>
         <v-card-subtitle
-          ><span>{{ postData.time }}</span></v-card-subtitle
+          ><span>{{ postData.updateTime }}</span></v-card-subtitle
         >
         <v-card-text>
           <div v-html="postData.content"></div>
@@ -158,9 +158,11 @@
 </template>
 
 <script>
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import { getToken } from "@/utils/auth";
+
 // eslint-disable-next-line no-unused-vars
 import { IEditorConfig } from "@wangeditor/editor";
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 
 import PostComment from "@/views/home/post/components/comment.vue";
 import { get_post_info, collect_post, reply_on_post } from "@/api/post";
@@ -206,6 +208,22 @@ export default {
       toolbarConfig: {},
       editorConfig: {
         placeholder: "请输入内容...",
+        MENU_CONF: {
+          uploadImage: {
+            server: this.$baseURL + "/post/upload_picture",
+            fieldName: "image",
+            headers: {
+              "JK-Token": "Bearer " + getToken(),
+            },
+            withCredentials: true,
+            // 自定义插入图片
+            customInsert(res, insertFn) {
+              console.log(res);
+              // 从 res 中找到 url alt href ，然后插入图片
+              insertFn(res.data.url, "", "");
+            },
+          },
+        },
       },
       mode: "default", // or 'simple'
     };
@@ -292,7 +310,7 @@ export default {
   mounted() {
     this.postId = this.$route.params.postId;
     get_folders().then((res) => {
-      this.folders = res.data;
+      this.folders = res.data.folders;
     });
     this.refreshList();
   },

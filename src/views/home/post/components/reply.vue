@@ -6,7 +6,7 @@
         <v-card-subtitle v-show="singlereplyData.replyTo"
           ><span
             >回复给 {{ singlereplyData.replyTo }}
-            {{ singlereplyData.time }}</span
+            {{ singlereplyData.updateTime }}</span
           ></v-card-subtitle
         >
         <v-card-text>{{ singlereplyData.content }}</v-card-text>
@@ -98,7 +98,7 @@ export default {
     is_login: Boolean,
     replyData: {
       replyId: Number,
-      time: Date,
+      updateTime: Date,
       authorName: String,
       replyTo: String,
       content: String,
@@ -156,13 +156,14 @@ export default {
     open_delete_dialog(replyId) {
       this.show_delete_dialog = true;
       this.delete_replyId = replyId;
+      console.log(this.delete_replyId)
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
       this.delete_replyId = undefined;
     },
     delete_reply() {
-      delete_reply(this.replyId).then((res) => {
+      delete_reply(this.delete_replyId).then((res) => {
         if (res.code === 20000) this.$message.success("删除成功！");
         else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });

@@ -100,7 +100,7 @@ export default {
     return {
       // info
       email: "test@163.com",
-      password: "test",
+      password: "12345678",
 
       // loading logo
       loading: false,
