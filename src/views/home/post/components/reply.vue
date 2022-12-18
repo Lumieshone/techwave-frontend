@@ -141,7 +141,7 @@ export default {
       }
 
       reply_on_reply({
-        replyContent: this.reply_content,
+        content: this.reply_content,
         replyId: this.replyId,
       })
         .then((res) => {

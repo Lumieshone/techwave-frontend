@@ -4,20 +4,41 @@
     <v-card-text>
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="handleFindPassword">
+          <v-row>
+            <v-col cols="10">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Mail"
+                rules="required|email"
+              >
+                <v-text-field
+                  v-model="email"
+                  :error-messages="errors"
+                  label="Mail"
+                  required
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="2">
+              <v-btn @click="send_email_code()">发送验证码</v-btn>
+            </v-col>
+          </v-row>
+
           <validation-provider
             v-slot="{ errors }"
-            name="Mail"
-            rules="required|email"
+            name="VerifyCode"
+            rules="required"
           >
             <v-text-field
-              v-model="mail"
+              v-model="verify_code"
               :error-messages="errors"
-              label="Mail"
+              label="VerifyCode"
               required
             ></v-text-field>
           </validation-provider>
 
-          <validation-provider
+          <!-- <validation-provider
             v-slot="{ errors }"
             name="Old Password"
             rules="required|min:8|max:20"
@@ -31,7 +52,7 @@
               label="Old Password"
               required
             ></v-text-field>
-          </validation-provider>
+          </validation-provider> -->
 
           <validation-provider
             v-slot="{ errors }"
@@ -40,9 +61,9 @@
             rules="required|min:8|max:20|"
           >
             <v-text-field
-              :append-icon="show_password2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show_password2 ? 'text' : 'password'"
-              @click:append="show_password2 = !show_password2"
+              :append-icon="show_password1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show_password1 ? 'text' : 'password'"
+              @click:append="show_password1 = !show_password1"
               v-model="new_password"
               :error-messages="errors"
               label="New Password"
@@ -56,9 +77,9 @@
             rules="required|confirmed:new_password"
           >
             <v-text-field
-              :append-icon="show_password3 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show_password3 ? 'text' : 'password'"
-              @click:append="show_password3 = !show_password3"
+              :append-icon="show_password2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show_password2 ? 'text' : 'password'"
+              @click:append="show_password2 = !show_password2"
               v-model="repeat_password"
               :error-messages="errors"
               label="Repeat Password"
@@ -83,8 +104,7 @@
 </template>
 
 <script>
-import { find_password } from "@/api/user";
-
+import { send_email_code, verify_and_modify_pwd } from "@/api/user";
 import { required, max, min, email, confirmed } from "vee-validate/dist/rules";
 import {
   extend,
@@ -122,13 +142,12 @@ export default {
   data() {
     return {
       email: "1@qq.com",
-      old_password: "12345678",
+      verify_code: 12345678,
       new_password: "123456789",
       repeat_password: "123456789",
 
       show_password1: true,
       show_password2: true,
-      show_password3: true,
     };
   },
   components: {
@@ -140,14 +159,24 @@ export default {
       this.$emit("close_find_password_dialog");
     },
 
+    send_email_code() {
+      send_email_code(this.email)
+        .then(() => {
+          this.$message("发送成功！");
+        })
+        .error(() => {
+          this.$message("额，好像哪里出现了问题..");
+        });
+    },
+
     handleFindPassword() {
       this.$refs.observer
         .validate()
         .then(() => {
-          find_password({
+          verify_and_modify_pwd({
             email: this.email,
-            old_password: this.old_password,
-            new_password: this.new_password,
+            verifyCode: this.verify_code,
+            newPassword: this.new_password,
           }).then(() => {
             this.$message.success("修改密码成功！");
           });

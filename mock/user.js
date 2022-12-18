@@ -163,7 +163,7 @@ module.exports = [
     },
 
     {
-        url: baseURL + "/user/forget-pwd/",
+        url: baseURL + "/user/forget-pwd",
         type: "post",
         response: () => {
             return {

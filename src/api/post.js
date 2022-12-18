@@ -37,9 +37,9 @@ export function reply_on_post(data) {
         url: "/post/reply_on_post",
         method: "post",
         data,
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
+        // headers: {
+        //     "Content-Type": "multipart/form-data",
+        // },
     });
 }
 

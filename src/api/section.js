@@ -23,14 +23,14 @@ export function get_posts_by_subsection(sectionId, subsectionId, curPage, limit)
         },
     });
 }
-export function publish_post(fd) {
+export function publish_post(data) {
     return request({
         url: "/section/publish_post",
         method: "post",
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: fd
+        // headers: {
+        //     'Content-Type': 'multipart/form-data'
+        // },
+        data
     });
 }
 export function collect_section(sectionId) {

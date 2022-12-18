@@ -8,7 +8,7 @@
     />
     <Editor
       style="height: 500px; overflow-y: hidden"
-      v-model="html"
+      v-model="content"
       :defaultConfig="editorConfig"
       :mode="mode"
       @onCreated="onCreated"
@@ -25,17 +25,10 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 export default Vue.extend({
   name: "WangEditor",
   components: { Editor, Toolbar },
-  props: {
-    value: {
-      type: String,
-      default: "",
-    },
-    upload_api: String,
-  },
   data() {
     return {
       editor: null,
-      html: "<p>hello</p>",
+      content: "<p>hello</p>",
       toolbarConfig: {},
       editorConfig: {
         placeholder: "请输入内容...",
@@ -58,11 +51,8 @@ export default Vue.extend({
     },
   },
   mounted() {
-    // 模拟 ajax 请求，异步渲染编辑器
-    setTimeout(() => {
-      this.html = "<p>模拟 Ajax 异步设置内容 HTML</p>";
-    }, 1500);
   },
+
   beforeDestroy() {
     const editor = this.editor;
     if (editor == null) return;

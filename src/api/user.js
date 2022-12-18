@@ -47,10 +47,10 @@ export function find_password(data) {
   });
 }
 
-export function change_password(email) {
+export function send_email_code(email) {
   return request({
     url: "/user/send-email-code",
-    method: "post",
+    method: "get",
     params: { email: email },
   });
 }

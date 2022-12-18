@@ -12,7 +12,7 @@
         ><span>{{ commentData.updateTime }}</span></v-card-subtitle
       >
       <v-card-text>
-        <span>{{ commentData.content }}</span>
+        <div v-html="commentData.content"></div>
         <PostReply
           :replyData="commentData.replyVOList"
           :is_login="Boolean(is_login)"
@@ -70,7 +70,7 @@
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
       <v-card>
-        <v-card-title>确认删除 {{  commentData.floor  }} 楼？</v-card-title>
+        <v-card-title>确认删除 {{ commentData.floor }} 楼？</v-card-title>
         <v-card-actions>
           <v-btn
             color="blue"
