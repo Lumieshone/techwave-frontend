@@ -119,3 +119,10 @@ export function delete_my_post(postId) {
         }
     });
 }
+export function publish_certify(fd) {
+    return request({
+        url: "/user/account/apply_to_student",
+        method: "post",
+        data: fd
+    });
+}

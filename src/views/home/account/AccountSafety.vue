@@ -1,5 +1,5 @@
 <template>
-  <v-card height="200%" class="mx-4 my-6">
+  <v-card height="580" class="mx-4 my-6">
     <v-card-title v-text="title"></v-card-title>
     <v-row class="ml-5 mt-3 mr-n16">
       <v-col cols="8">
@@ -61,6 +61,7 @@
 <script>
 import EditEmail from "@/views/home/account/components/EditEmail";
 import EditPassword from "@/views/home/account/components/EditPassword";
+import {get_user_info} from "@/api/account";
 export default {
   name: "AccountSafety",
   data(){
@@ -91,6 +92,19 @@ export default {
     changeEmail(){
       this.dialogVisible_2 = !this.dialogVisible_2
     }
+  },
+  mounted() {
+    get_user_info()
+        .then(res => {
+          if(res.code === 20000){
+            console.log("获取邮箱成功")
+            this.email = res.data.email
+          }
+          else{
+            this.$message.error("用户邮箱获取失败！")
+          }
+        })
+        .catch((err) => console.log("error: " + err));
   }
 }
 </script>

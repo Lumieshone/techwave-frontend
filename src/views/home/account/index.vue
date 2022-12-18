@@ -62,7 +62,7 @@
 
             <template v-slot:append>
               <div class="pa-5">
-                <v-btn block light>
+                <v-btn block light @click="logout">
                   <span id="logout">
                   登出
                   </span>
@@ -154,7 +154,18 @@ export default {
         else
           this.$message.error("修改头像失败~");
       }).catch((err) => console.log("error: " + err))
-    }
+    },
+    logout() {
+      this.$store
+          .dispatch("user/logout")
+          .then(() => {
+            console.log("logout completed");
+            window.location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    },
   },
   mounted() {
     get_user_info()

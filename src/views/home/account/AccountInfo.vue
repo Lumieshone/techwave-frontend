@@ -1,5 +1,5 @@
 <template>
-  <v-card height="100%" class="mx-4 my-5">
+  <v-card height="580" class="mx-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-form
         ref="form"
@@ -29,7 +29,6 @@
           :rules="nameRules"
           label="昵称"
           v-model="nickname"
-          required
       ></v-text-field>
       <v-text-field
           v-model="phoneNum"
@@ -41,7 +40,6 @@
           prepend-icon="mdi-cellphone"
           :rules="phoneRules"
           label="联系方式"
-          required
       ></v-text-field>
       <v-select
           v-model="gender"
@@ -51,11 +49,9 @@
           outlined
           :filled="isFilled"
           :items="genderList"
-          :rules="[v => !!v || '请选择性别']"
           item-text="name"
           item-value="id"
           label="性别"
-          required
       ></v-select>
       <v-textarea
           v-model="intro"
@@ -69,7 +65,6 @@
           :counter="100"
           color="#483D8B"
           label="自我介绍"
-          required
       ></v-textarea>
       <v-row justify="end">
         <v-btn
@@ -113,16 +108,13 @@ export default {
           "游戏发生在一个被称作「提瓦特」的幻想世界，" +
           "在这里，被神选中的人将被授予「神之眼」，导引元素之力。后边忘了",
       nameRules: [
-        v => !!v || '请输入昵称',
-        v => (v && v.length <= 10) || '昵称长度不应超过10个字符',
+        v => v.length <= 10 || '昵称长度不应超过10个字符',
       ],
       phoneRules: [
-        v => !!v || '请输入电话号码',
-        v => (v && v.length >= 11) || '电话号码长度为11位',
+        v => v.length >= 11 || '电话号码长度为11位',
       ],
       introRules: [
-        v => !!v || '请输入个人简介',
-        v => (v && v.length <= 100) || '自我介绍不应超过100个字符',
+        v => v.length <= 100 || '自我介绍不应超过100个字符',
       ],
     }
   },
