@@ -15,7 +15,7 @@
             }.jpg`)})`"
           >
             <!-- <img src=https://source.unsplash.com/random > -->
-            <div class="text-h3 carousel__title">{{ slide }}</div>
+            <div class="text-h3 carousel__title" style="text-stroke:black">{{ slide }}</div>
           </div>
         </v-row>
       </v-carousel-item>
@@ -124,7 +124,7 @@ export default {
         "与校内的同道中人讨论电子产品",
         "与同学做交易，更加信得过",
         "学号认证，你我更加安全",
-        "欢迎来到济客空间",
+        "济客空间，欢迎你的到来",
       ],
 
       postsInfo: [],
