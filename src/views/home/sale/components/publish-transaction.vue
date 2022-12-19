@@ -99,7 +99,6 @@
                   item-value="tagId"
                   label="Tag"
                   persistent-hint
-                  @change="get_subtags()"
                 ></v-select>
               </validation-provider>
             </v-col>
