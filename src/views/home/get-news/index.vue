@@ -7,11 +7,17 @@
       show-arrows-on-hover
     >
       <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet :color="colors[i]" height="100%">
-          <v-row class="fill-height" align="center" justify="center">
-            <div class="text-h2">{{ slide }} Slide</div>
-          </v-row>
-        </v-sheet>
+        <v-row class="fill-height" align="center" justify="center">
+          <div
+            class="carousel"
+            :style="`backgroundImage:url(${require(`@/assets/homepage_bg/pic${
+              i + 1
+            }.jpg`)})`"
+          >
+            <!-- <img src=https://source.unsplash.com/random > -->
+            <div class="text-h3 carousel__title">{{ slide }}</div>
+          </div>
+        </v-row>
       </v-carousel-item>
     </v-carousel>
     <h1>热门新闻</h1>
@@ -113,14 +119,13 @@ export default {
   name: "GetNews",
   data() {
     return {
-      colors: [
-        "indigo",
-        "warning",
-        "pink darken-2",
-        "red lighten-1",
-        "deep-purple accent-4",
+      slides: [
+        "发现最新的电子产品资讯",
+        "与校内的同道中人讨论电子产品",
+        "与同学做交易，更加信得过",
+        "学号认证，你我更加安全",
+        "欢迎来到济客空间",
       ],
-      slides: ["First", "Second", "Third", "Fourth", "Fifth"],
 
       postsInfo: [],
       newsInfo: [],
@@ -145,3 +150,24 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.carousel {
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel__title {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+</style>
