@@ -20,7 +20,7 @@
         </v-row>
       </v-carousel-item>
     </v-carousel>
-    <h1>热门新闻</h1>
+    <h2 style="margin-top:20px;margin-bottom:20px">热门新闻</h2>
     <v-row align="center" justify="center">
       <v-col md="12">
         <v-card>
@@ -65,7 +65,7 @@
       </v-col>
     </v-row>
 
-    <h1>热门帖子</h1>
+    <h2 style="margin-top:20px;margin-bottom:20px">热门帖子</h2>
     <v-row align="center" justify="center">
       <v-col md="12">
         <v-card>

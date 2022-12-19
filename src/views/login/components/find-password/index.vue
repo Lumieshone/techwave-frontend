@@ -146,8 +146,8 @@ export default {
       new_password: "123456789",
       repeat_password: "123456789",
 
-      show_password1: true,
-      show_password2: true,
+      show_password1: false,
+      show_password2: false,
     };
   },
   components: {

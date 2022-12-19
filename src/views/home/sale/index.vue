@@ -219,7 +219,7 @@ export default {
       campusZoneFilter: "",
 
       // filter by tags
-      tags: undefined,
+      tags: [],
       selectTagId: undefined,
       selectSubtagId: undefined,
 
@@ -341,6 +341,7 @@ export default {
       get_all_first_tags()
         .then((res) => {
           this.tags = res.data;
+          console.log("tags", this.tags);
         })
         .error(() => {
           this.$message.error("获取一级tag失败...");
