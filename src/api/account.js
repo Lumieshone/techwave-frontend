@@ -102,7 +102,7 @@ export function get_my_post(curPage,limit) {
     return request({
         url: "/user/account/get_my_post",
         method: "get",
-        data: {
+        params: {
             type:'post',
             curPage:curPage,
             limit:limit
