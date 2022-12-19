@@ -63,8 +63,6 @@
       </v-tab-item>
     </v-tabs-items> -->
 
-    {{transactionsData}}
-
     <v-row>
       <v-col
         cols="4"
@@ -179,7 +177,6 @@ export default {
         //   summary:
         //     "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
         //   tagId: 1,
-
         //   subtagId: 1,
         // },
         // {
@@ -191,7 +188,6 @@ export default {
         //   campus: "嘉定",
         //   summary: "集美们快充呀苹果爸爸就上了就是说",
         //   tagId: 1,
-
         //   subtagId: 2,
         // },
       ],
@@ -270,7 +266,7 @@ export default {
         campus: this.campusZoneFilter,
         tagId: this.selectTagId,
         subtagId: this.selectSubtagId,
-        offset: (curPage - 1) * limit,
+        offset: curPage,
         limit: limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
@@ -289,7 +285,7 @@ export default {
         campus: this.campusZoneFilter,
         tagId: this.selectTagId,
         subtagId: this.selectSubtagId,
-        offset: 0,
+        offset: 1,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
@@ -306,7 +302,7 @@ export default {
         searchContent: this.searchContent,
         campus: this.campusZoneFilter,
         tagId: this.selectTagId,
-        offset: 0,
+        offset: 1,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })
@@ -325,7 +321,7 @@ export default {
         campus: this.campusZoneFilter,
         tagId: this.selectTagId,
         subtagId: this.selectSubtagId,
-        offset: 0,
+        offset: 1,
         limit: this.limit,
         type: this.topic == 0 ? "sell" : "seek",
       })

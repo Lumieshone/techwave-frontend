@@ -8,11 +8,11 @@ export function get_post_info(params) {
   });
 }
 
-export function collect_post(id, folderId) {
+export function collect_post(data) {
   return request({
     url: "/post/collect_post",
     method: "post",
-    data: { id: id, folderId: folderId },
+    data,
   });
 }
 

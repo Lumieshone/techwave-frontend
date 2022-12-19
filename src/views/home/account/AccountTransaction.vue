@@ -1,13 +1,286 @@
 <template>
-  <p>我的交易</p>
+  <v-container>
+    <v-card height="580" class="ma-4">
+      <v-card-title> 我的交易 </v-card-title>
+      <v-tabs v-model="tab" color="#6A5ACD">
+        <v-tab
+          v-for="theme in themes"
+          :key="theme.name"
+          center-active
+          @click="change_v_tab()"
+        >
+          {{ theme.chinese }}
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item key="sell">
+          <v-list tile dense height="270%">
+            <v-list-item-group active-class="deep-purple--text">
+              <template v-for="transactionData in transactionsData">
+                <v-list-item :key="transactionData.id">
+                  <v-list-item-content
+                    @click="stepToTransaction(transactionData.id)"
+                  >
+                    <v-list-item-title
+                      v-text="transactionData.title"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle>
+                      <span>{{ transactionData.campus }} 校区</span>
+                      <span>价格: {{ transactionData.price }}</span>
+                      <br />
+                      <span>{{
+                        transactionData.summary.length > 15
+                          ? transactionData.summary.slice(0, 15) + ".."
+                          : transactionData.summary
+                      }}</span>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      @click.native="open_delete_dialog(transactionData.id)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-divider :key="transactionData.id" />
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </v-tab-item>
+        <v-tab-item key="seek">
+          <v-list tile dense height="270%">
+            <v-list-item-group active-class="deep-purple--text">
+              <template v-for="transactionData in transactionsData">
+                <v-list-item :key="transactionData.id">
+                  <v-list-item-content
+                    @click="stepToTransaction(transactionData.id)"
+                  >
+                    <v-list-item-title
+                      v-text="transactionData.title"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle>
+                      <span>{{ transactionData.campus }} 校区</span>
+                      <span>价格: {{ transactionData.price }}</span>
+                      <br />
+                      <span>{{
+                        transactionData.summary.length > 15
+                          ? transactionData.summary.slice(0, 15) + ".."
+                          : transactionData.summary
+                      }}</span>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      @click.native="open_delete_dialog(transactionData.id)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-divider :key="transactionData.id" />
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </v-tab-item>
+        <v-tab-item key="collect">
+          <v-list tile dense height="270%">
+            <v-list-item-group active-class="deep-purple--text">
+              <template v-for="transactionData in transactionsData">
+                <v-list-item :key="transactionData.id">
+                  <v-list-item-content
+                    @click="stepToTransaction(transactionData.id)"
+                  >
+                    <v-list-item-title
+                      v-text="transactionData.title"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle>
+                      <span>{{ transactionData.campus }} 校区</span>
+                      <span>价格: {{ transactionData.price }}</span>
+                      <br />
+                      <span>{{
+                        transactionData.summary.length > 15
+                          ? transactionData.summary.slice(0, 15) + ".."
+                          : transactionData.summary
+                      }}</span>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn @click.native="collect(transactionData.id)">
+                      <v-icon color="orange">mdi-star </v-icon></v-btn
+                    >
+                  </v-list-item-action>
+                </v-list-item>
+                <v-divider :key="transactionData.id" />
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card>
+    <!-- delete -->
+    <v-dialog v-model="show_delete_dialog">
+      <v-card>
+        <v-card-title>确认删除？</v-card-title>
+        <v-card-actions>
+          <v-btn
+            color="blue"
+            class="ma-2 white--text"
+            small
+            @click="close_delete_dialog"
+            >取消
+          </v-btn>
+          <v-btn
+            color="blue"
+            class="ma-2 white--text"
+            small
+            @click="delete_transaction()"
+          >
+            删除
+          </v-btn></v-card-actions
+        >
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
+import {
+  get_my_collect_transaction,
+  get_my_sell_transaction,
+  get_my_seek_transaction,
+  delete_my_sell_transaction,
+  delete_my_seek_transaction,
+} from "@/api/account";
+import { collect_transaction } from "@/api/transaction";
+
 export default {
-  name: "AccountTransaction"
-}
+  name: "AccountTransaction",
+  data() {
+    return {
+      // if have permission
+      have_permission:
+        this.$store.getters.roles.length > 0 &&
+        this.$store.getters.isAuthenticated,
+      // tab
+      tab: "sell",
+      themes: [
+        {
+          name: "sell",
+          chinese: "我的出售",
+        },
+        {
+          name: "seek",
+          chinese: "我的求购",
+        },
+        { name: "collect", chinese: "我收藏的" },
+      ],
+      transactionsData: [
+        {
+          id: 1,
+          title: "iphone 14急出",
+          price: 9999,
+          coverImage:
+            "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
+          campus: "嘉定",
+          summary:
+            "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
+        },
+        {
+          id: 2,
+          title: "iphone 13急出",
+          price: 99299,
+          coverImage:
+            "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
+          campus: "嘉定",
+          summary: "集美们快充呀苹果爸爸就上了就是说",
+        },
+      ],
+
+      // pagination
+      curPage: 1,
+      limit: 9,
+      total: undefined,
+
+      // delete
+      show_delete_dialog: false,
+      delete_id: undefined,
+    };
+  },
+  methods: {
+    change_v_tab() {
+      if (this.tab == 0) {
+        get_my_sell_transaction({
+          offset: this.offset,
+          limit: this.limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      } else if (this.tab == 1) {
+        get_my_seek_transaction({
+          offset: this.offset,
+          limit: this.limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      } else if (this.tab == 2) {
+        get_my_collect_transaction({
+          offset: this.offset,
+          limit: this.limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      }
+    },
+    // collect
+    collect(id) {
+      collect_transaction(id);
+    },
+    // delete
+    open_delete_dialog(id) {
+      this.show_delete_dialog = true;
+      this.delete_id = id;
+    },
+    close_delete_dialog() {
+      this.show_delete_dialog = false;
+      this.delete_id = undefined;
+    },
+    delete_transaction() {
+      console.log("tab", this.tab);
+      if (this.tab == 0) {
+        delete_my_sell_transaction({ transactionId: this.delete_id })
+          .then(() => {
+            this.$message.success("删除成功！");
+          })
+          .catch(() => {
+            this.$message.error("额，好像网络出了点问题..");
+          });
+      } else if (this.tab == 1) {
+        delete_my_seek_transaction({ transactionId: this.delete_id })
+          .then(() => {
+            this.$message.success("删除成功！");
+          })
+          .catch(() => {
+            this.$message.error("额，好像网络出了点问题..");
+          });
+      }
+    },
+    stepToTransaction(id) {
+      this.$router.push({ path: "/transaction/" + id });
+    },
+  },
+  mounted() {
+    if (this.have_permission) {
+      this.refreshList();
+    } else {
+      this.$message.error("额，你似乎还未完成认证...");
+    }
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

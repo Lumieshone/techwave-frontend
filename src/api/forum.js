@@ -14,10 +14,10 @@ export function get_hot_sections() {
   });
 }
 
-export function get_search_sections(search_content) {
+export function get_search_sections(searchContent) {
   return request({
     url: "/homepage/search_section",
     method: "get",
-    params: { search_content: search_content },
+    params: { searchContent: searchContent },
   });
 }

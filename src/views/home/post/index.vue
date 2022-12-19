@@ -281,6 +281,18 @@ export default {
 
     // collect
     open_collect_dialog() {
+      if (this.postData.isCollected == true) {
+        collect_post({ id: this.postId })
+          .then(() => {
+            this.postData.isCollected = !this.postData.isCollected;
+            this.$message.success("取消收藏成功！");
+          })
+          .error(() => {
+            this.$message.error("额，似乎取消收藏出现了问题..");
+          });
+          return;
+      }
+
       this.show_collect_dialog = true;
     },
 
@@ -289,12 +301,10 @@ export default {
     },
 
     collect() {
-      collect_post(this.postId, this.folderId)
+      collect_post({ id: this.postId, folderId: this.folderId })
         .then(() => {
           this.postData.isCollected = !this.postData.isCollected;
-          this.$message.success(
-            this.postData.isCollected ? "收藏成功" : "取消收藏成功！"
-          );
+          this.$message.success("收藏成功");
           this.show_collect_dialog = false;
         })
         .error(() => {
