@@ -176,3 +176,54 @@ export function get_my_comment_and_reply(params) {
     params: params,
   });
 }
+
+export function get_user_sections() {
+  return request({
+    url: "/user/account/get_user_sections",
+    method: "get",
+    params: {},
+  });
+}
+
+export function create_section(fd) {
+  return request({
+    url: "/user/account/create_section",
+    method: "post",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: fd,
+  });
+}
+
+export function add_subsection(id,name) {
+  return request({
+    url: "/user/account/add_subsection",
+    method: "post",
+    data: {
+      id:id,
+      name:name
+    },
+  });
+}
+
+export function delete_subsection(id) {
+  return request({
+    url: "/user/account/delete_subsection",
+    method: "delete",
+    data: {
+      id: id,
+    },
+  });
+}
+
+export function rename_subsection(id,name) {
+  return request({
+    url: "/user/account/rename_subsection",
+    method: "post",
+    data: {
+      id:id,
+      name:name
+    },
+  });
+}

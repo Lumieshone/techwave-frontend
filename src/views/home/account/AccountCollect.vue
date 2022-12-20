@@ -183,7 +183,7 @@ export default {
           .catch((err) => console.log("error: " + err));
     },
     refreshList() {
-      this.folderId = 0;
+      this.folderId = this.folders[0].id;
       this.folderName = '默认收藏夹';
       this.curPage = 1;
       get_collect_info(this.folderId, 1, this.limit)
@@ -196,7 +196,7 @@ export default {
       this.curPage = 1;
       this.folderId = id;
       this.folderName = name;
-      get_collect_info(id, 1, this.limit)
+      get_collect_info(this.folderId, 1, this.limit)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
@@ -233,6 +233,7 @@ export default {
     get_folders()
         .then((res) => {
           this.folders = res.data.folders;
+          this.folderId = res.data.folders[0].id
         })
         .catch((err) => console.log("error: " + err));
     get_collect_info(0, 1, this.limit)

@@ -96,9 +96,9 @@ export default {
   data(){
     return{
       showDialog: this.dialogVisible,
-      showPassword_1:true,
-      showPassword_2:true,
-      showPassword_3:true,
+      showPassword_1:false,
+      showPassword_2:false,
+      showPassword_3:false,
       oldRules: [
         v => !!v || '请输入旧密码',
       ],
@@ -121,6 +121,9 @@ export default {
       this.oldPassword = ''
       this.newPassword = ''
       this.password = ''
+      this.showPassword_1 = false
+      this.showPassword_2 = false
+      this.showPassword_3 = false
       this.$refs.form.resetValidation()
     },
     closeDialog(){

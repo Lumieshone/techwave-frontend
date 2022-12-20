@@ -78,7 +78,7 @@ export default {
   data(){
     return{
       showDialog: this.dialogVisible,
-      showPassword:true,
+      showPassword:false,
       passwordRules: [
         v => !!v || '请输入密码',
       ],
@@ -94,6 +94,7 @@ export default {
   methods:{
     clearDialog(){
       this.password = ''
+      this.showPassword = false
       this.$refs.form.resetValidation()
     },
     closeDialog(){
@@ -103,22 +104,23 @@ export default {
     submit(){
       edit_email(this.password,this.email)
           .then((res) => {
-            console.log(res.message)
+            console.log(res.data)
             if(res.code === 20000){
-              if(res.data.result === 1){
+              if(res.data.result){
                 this.$message.success("修改邮箱成功！")
                 this.$emit("callBack",this.email)
                 this.$emit("close",false)
+                this.clearDialog()
+                // window.location.reload();
               }
               else{
                 this.$message.error("密码输入错误！");
               }
             }
             else
-              this.$message.error("修改邮箱失败~");
+              this.$message.error(res.msg);
           })
           .catch((err) => console.log("error: " + err))
-      this.clearDialog()
     }
   },
   watch: {

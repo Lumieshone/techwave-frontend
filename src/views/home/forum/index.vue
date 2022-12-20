@@ -32,7 +32,7 @@
       </v-card-text>
     </v-card>
     <v-divider></v-divider>
-    <v-card>
+    <v-card min-height="500">
       <v-card-title>推荐版块</v-card-title>
       <v-card-text>
         <v-col cols="10" class="mx-auto">

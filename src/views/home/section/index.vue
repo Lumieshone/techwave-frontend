@@ -223,11 +223,17 @@ export default {
     getPostBySubsection(id){
       this.curPage = 1;
       this.subsectionId = id;
-      get_posts_by_subsection(this.sectionId,this.subsectionId,1,10)
+      console.log(id)
+      get_posts_by_subsection(this.sectionId,id,1,10)
           .then((res) => {
-            console.log(res.data.total)
-            this.sectionData.postCounts = res.data.total;
-            this.sectionData.postVOList = res.data.postDataVOList;
+            if(res.code === 20000){
+              console.log(res.data.total)
+              this.sectionData.postCounts = res.data.total;
+              this.sectionData.postVOList = res.data.postDataVOList;
+            }
+            else{
+              console.log(res.msg)
+            }
           })
           .catch((err) => console.log("error: " + err));
     }

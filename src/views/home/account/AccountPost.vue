@@ -3,69 +3,68 @@
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-col>
-        <v-card>
-          <v-list
-              tile
-              dense
-              min-height="400"
-              max-height="1000"
-          >
-            <v-list-item-group>
-              <template v-for="(item, index) in posts">
-                <v-list-item :key="item.postId">
-                    <v-list-item-avatar>
-                      <v-chip
-                          color="#E6E6FA"
-                          label
-                          small
-                      >
-                        {{item.commentCount}}
-                      </v-chip>
-                    </v-list-item-avatar>
-                    <v-list-item-content @click="stepToPost(item.postId)">
-                      <template >
-                      <v-list-item-title v-text="item.title"></v-list-item-title>
-                      <v-list-item-subtitle v-text="item.sectionName"></v-list-item-subtitle>
-                      </template>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                        <v-list-item-action-text v-text="item.updateTime"></v-list-item-action-text>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-btn icon @click="deletePost(item.postId)">
-                        <v-icon>mdi-delete-outline</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                </v-list-item>
-                <v-divider
-                    :key="index"
-                ></v-divider>
-              </template>
-            </v-list-item-group>
-          </v-list>
-          <v-row>
-            <v-col cols="8">
-              <v-pagination
-                  circle
-                  class="left"
-                  color="#6A5ACD"
-                  v-if="Math.ceil(total / limit) > 1"
-                  v-model="curPage"
-                  :length="Math.ceil(total/ limit)"
-                  :total-visible="10"
-                  @input="onPageChange(curPage, limit)"
-              ></v-pagination>
-            </v-col>
-            <v-col cols="4">
-              <v-row no-gutters>
-                <span class="lead">跳转至第</span>
-                <v-text-field class="shrink" solo dense v-model="whichPage" ></v-text-field>
-                <span class="lead">页</span>
-                <v-btn class="goBtn" small fab @click="jumpPage()">GO</v-btn>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-card>
+        <v-list
+            tile
+            dense
+            min-height="470"
+            max-height="1000"
+        >
+          <v-divider></v-divider>
+          <v-list-item-group>
+            <template v-for="(item, index) in posts">
+              <v-list-item :key="item.postId">
+                  <v-list-item-avatar>
+                    <v-chip
+                        color="#E6E6FA"
+                        label
+                        small
+                    >
+                      {{item.commentCount}}
+                    </v-chip>
+                  </v-list-item-avatar>
+                  <v-list-item-content @click="stepToPost(item.postId)">
+                    <template >
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                    <v-list-item-subtitle v-text="item.sectionName"></v-list-item-subtitle>
+                    </template>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                      <v-list-item-action-text v-text="item.updateTime"></v-list-item-action-text>
+                  </v-list-item-action>
+                  <v-list-item-action>
+                    <v-btn icon @click="deletePost(item.postId)">
+                      <v-icon>mdi-delete-outline</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+              </v-list-item>
+              <v-divider
+                  :key="index"
+              ></v-divider>
+            </template>
+          </v-list-item-group>
+        </v-list>
+        <v-row>
+          <v-col cols="8">
+            <v-pagination
+                circle
+                class="left"
+                color="#6A5ACD"
+                v-if="Math.ceil(total / limit) > 1"
+                v-model="curPage"
+                :length="Math.ceil(total/ limit)"
+                :total-visible="10"
+                @input="onPageChange(curPage, limit)"
+            ></v-pagination>
+          </v-col>
+          <v-col cols="4">
+            <v-row no-gutters>
+              <span class="lead">跳转至第</span>
+              <v-text-field class="shrink" solo dense v-model="whichPage" ></v-text-field>
+              <span class="lead">页</span>
+              <v-btn class="goBtn" small fab @click="jumpPage()">GO</v-btn>
+            </v-row>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <DeletePost
@@ -103,12 +102,10 @@ export default {
   methods:{
     submit(flag){
       this.dialogVisible = flag
-      setTimeout(200)
       window.location.reload();
     },
     closeConfirm(flag){
       this.showConfirm = flag
-      setTimeout(200)
       window.location.reload();
     },
     stepToPost(postId){

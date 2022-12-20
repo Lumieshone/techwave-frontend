@@ -34,7 +34,7 @@
               :rules="IDRules"
               prepend-icon="mdi-account"
               label="学号"
-              v-model="studentID"
+              v-model="studentId"
           ></v-text-field>
           <v-file-input
               v-if="!isStudent"
@@ -71,10 +71,10 @@ export default {
     return{
       title:"学生认证",
       valid:true,
-      studentID:"2050000",
+      studentId:"2050000",
       IDRules:[v => v.length === 7 || "学号必须是7位！"],
       file: [],
-      isStudent:true,
+      isStudent:false,
       email:"2053382@tongji.edu.cn",
     }
   },
@@ -100,7 +100,10 @@ export default {
         .then(res => {
           if(res.code === 20000){
             console.log("获取用户信息成功")
-            this.isStudent = res.data.isStudent
+            if(res.data.studentId !== null){
+              this.studentId = res.data.studentId
+              this.isStudent = true;
+            }
           }
           else{
             this.$message.error("用户信息获取失败！")

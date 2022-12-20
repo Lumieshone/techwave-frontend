@@ -177,6 +177,7 @@ export default {
             this.userAvatar = res.data.avatar
           }
           else{
+            console.log(res.msg)
             this.$message.error("用户信息获取失败！")
           }
         })
