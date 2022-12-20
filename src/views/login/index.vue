@@ -112,7 +112,7 @@ export default {
       show_find_password_dialog: false,
 
       // show password
-      show_password: true,
+      show_password: false,
     };
   },
   watch: {
