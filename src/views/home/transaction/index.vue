@@ -146,7 +146,9 @@ export default {
 
     // collect
     collect() {
-      collect_transaction(this.transactionId)
+      let fd = new FormData();
+      fd.append("id", this.transactionId);
+      collect_transaction(fd)
         .then(() => {
           this.isCollected = !this.isCollected;
           if (this.isCollected == true) {

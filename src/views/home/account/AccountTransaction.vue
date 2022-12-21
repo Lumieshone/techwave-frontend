@@ -219,11 +219,6 @@ export default {
   methods: {
     change_v_tab() {
       console.log(this.tab);
-      if (!this.have_permission) {
-        this.$message.error("额，你似乎还未完成认证...");
-        // return;
-      }
-
       if (this.tab == 0) {
         this.transactionsData = [];
         get_my_sell_transaction({
@@ -255,7 +250,9 @@ export default {
     },
     // collect
     collect(id) {
-      collect_transaction(id);
+      let fd = new FormData();
+      fd.append("id", id);
+      collect_transaction(fd).then(() => this.refreshList());
     },
     // delete
     open_delete_dialog(id) {
@@ -268,18 +265,22 @@ export default {
     },
     delete_transaction() {
       console.log("tab", this.tab);
+      let fd = new FormData();
+      fd.append("transactionId", this.delete_id);
       if (this.tab == 0) {
-        delete_my_sell_transaction({ transactionId: this.delete_id })
+        delete_my_sell_transaction(fd)
           .then(() => {
             this.$message.success("删除成功！");
+            this.refreshList();
           })
           .catch(() => {
             this.$message.error("额，好像网络出了点问题..");
           });
       } else if (this.tab == 1) {
-        delete_my_seek_transaction({ transactionId: this.delete_id })
+        delete_my_seek_transaction(fd)
           .then(() => {
             this.$message.success("删除成功！");
+            this.refreshList();
           })
           .catch(() => {
             this.$message.error("额，好像网络出了点问题..");
