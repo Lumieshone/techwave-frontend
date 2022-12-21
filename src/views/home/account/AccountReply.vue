@@ -163,7 +163,7 @@ export default {
   mounted() {
     get_my_comment_and_reply({ offset: this.curPage, limit: this.limit }).then(
       (res) => {
-        this.list_data = res.data;
+        this.list_data = res.data.myReply;
         this.total = res.data.total;
       }
     );
