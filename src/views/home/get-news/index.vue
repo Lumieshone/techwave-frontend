@@ -34,7 +34,7 @@
                 >
                   <template>
                     <v-list-item-avatar>
-                      <v-chip color="#f5e8cb" label small>
+                      <v-chip color="#E6E6FA" label small>
                         {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
@@ -79,7 +79,7 @@
                 >
                   <template>
                     <v-list-item-avatar>
-                      <v-chip color="#f5e8cb" label small>
+                      <v-chip color="#E6E6FA" label small>
                         {{ item.commentCounts }}
                       </v-chip>
                     </v-list-item-avatar>
