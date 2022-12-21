@@ -81,6 +81,7 @@
         :commentData="singleCommentVOList"
         :postId="Number(postId)"
         :is_login="Boolean(is_login)"
+        @refresh="refreshList"
       />
     </v-col>
 
@@ -274,6 +275,7 @@ export default {
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
+            this.refreshList();
           } else this.$message.error("阿欧，好像回复出现了一点小问题..");
         })
         .catch((err) => console.log("error: " + err));
@@ -290,7 +292,7 @@ export default {
           .error(() => {
             this.$message.error("额，似乎取消收藏出现了问题..");
           });
-          return;
+        return;
       }
 
       this.show_collect_dialog = true;

@@ -16,6 +16,7 @@
         <PostReply
           :replyData="commentData.replyVOList"
           :is_login="Boolean(is_login)"
+          @refresh="refresh"
         ></PostReply>
       </v-card-text>
       <v-card-actions>
@@ -152,8 +153,10 @@ export default {
         commentId: this.replyToCommentId,
       })
         .then((res) => {
-          if (res.code === 20000) this.$message.success("回复成功！");
-          else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          if (res.code === 20000) {
+            this.$message.success("回复成功！");
+            this.$emit("refresh");
+          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
           this.show_reply_dialog = false;
         })
         .catch((err) => console.log("error: " + err));
@@ -170,10 +173,16 @@ export default {
     },
     delete_comment() {
       delete_comment(this.delete_commentId).then((res) => {
-        if (res.code === 20000) this.$message.success("删除成功！");
-        else this.$message.error("阿欧，好像删除出现了一点小问题..");
+        if (res.code === 20000) {
+          this.$message.success("删除成功！");
+          this.$emit("refresh");
+        } else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
       this.show_delete_dialog = false;
+    },
+    refresh() {
+      console.log('receive message from reply');
+      this.$emit("refresh");
     },
   },
 };

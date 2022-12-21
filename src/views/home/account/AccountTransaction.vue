@@ -219,6 +219,11 @@ export default {
   methods: {
     change_v_tab() {
       console.log(this.tab);
+      if (!this.have_permission) {
+        this.$message.error("额，你似乎还未完成认证...");
+        // return;
+      }
+
       if (this.tab == 0) {
         this.transactionsData = [];
         get_my_sell_transaction({

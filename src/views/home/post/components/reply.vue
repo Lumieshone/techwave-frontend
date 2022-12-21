@@ -17,7 +17,10 @@
             small
             :disabled="!is_login"
             v-on:click="
-              open_reply_dialog(singlereplyData.authorName, singlereplyData.replyId)
+              open_reply_dialog(
+                singlereplyData.authorName,
+                singlereplyData.replyId
+              )
             "
           >
             <v-icon>mdi-comment</v-icon>
@@ -145,8 +148,10 @@ export default {
         replyId: this.replyId,
       })
         .then((res) => {
-          if (res.code === 20000) this.$message.success("回复成功！");
-          else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          if (res.code === 20000) {
+            this.$message.success("回复成功！");
+            this.$emit("refresh");
+          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
           this.show_reply_dialog = false;
         })
         .catch((err) => console.log("error: " + err));
@@ -156,7 +161,7 @@ export default {
     open_delete_dialog(replyId) {
       this.show_delete_dialog = true;
       this.delete_replyId = replyId;
-      console.log(this.delete_replyId)
+      console.log(this.delete_replyId);
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
@@ -164,8 +169,10 @@ export default {
     },
     delete_reply() {
       delete_reply(this.delete_replyId).then((res) => {
-        if (res.code === 20000) this.$message.success("删除成功！");
-        else this.$message.error("阿欧，好像删除出现了一点小问题..");
+        if (res.code === 20000) {
+          this.$message.success("删除成功！");
+          this.$emit("refresh");
+        } else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
       this.show_delete_dialog = false;
     },
