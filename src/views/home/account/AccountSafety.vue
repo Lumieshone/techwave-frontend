@@ -3,7 +3,7 @@
     <v-card-title v-text="title"></v-card-title>
     <v-row class="ml-5 mt-3 mr-n16">
       <v-col cols="8">
-      <v-text-field
+        <v-text-field
           color="#483D8B"
           dense
           readonly
@@ -11,20 +11,17 @@
           prepend-icon="mdi-lock"
           label="密码"
           value="***************"
-      ></v-text-field>
+        ></v-text-field>
       </v-col>
       <v-col cols="4">
-        <v-btn
-            color="#6A5ACD"
-            class="white--text"
-            @click="changePassword"
-        >修改
+        <v-btn color="#6A5ACD" class="white--text" @click="changePassword"
+          >修改
         </v-btn>
       </v-col>
     </v-row>
     <v-row class="ml-5 mr-n16">
       <v-col cols="8">
-      <v-text-field
+        <v-text-field
           color="#483D8B"
           dense
           outlined
@@ -32,27 +29,21 @@
           prepend-icon="mdi-mail"
           label="邮箱"
           v-model="email"
-      ></v-text-field>
+        ></v-text-field>
       </v-col>
       <v-col cols="4">
-        <v-btn
-            color="#6A5ACD"
-            class="white--text"
-            @click="changeEmail"
-        >修改
+        <v-btn color="#6A5ACD" class="white--text" @click="changeEmail"
+          >修改
         </v-btn>
       </v-col>
     </v-row>
-    <EditPassword
-        :dialogVisible="this.dialogVisible_1"
-        @callBack="callBack_1"
-    >
+    <EditPassword :dialogVisible="this.dialogVisible_1" @callBack="callBack_1">
     </EditPassword>
     <EditEmail
-        :dialogVisible="this.dialogVisible_2"
-        :oldEmail="this.email"
-        @close="close"
-        @callBack="callBack_2"
+      :dialogVisible="this.dialogVisible_2"
+      :oldEmail="this.email"
+      @close="close"
+      @callBack="callBack_2"
     >
     </EditEmail>
   </v-card>
@@ -61,54 +52,51 @@
 <script>
 import EditEmail from "@/views/home/account/components/EditEmail";
 import EditPassword from "@/views/home/account/components/EditPassword";
-import {get_user_info} from "@/api/account";
+import { get_user_info } from "@/api/account";
 export default {
   name: "AccountSafety",
-  data(){
-    return{
-      title:"安全设置",
-      email:"2053382@tongji.edu.cn",
-      dialogVisible_1:false,
-      dialogVisible_2:false,
-    }
+  data() {
+    return {
+      title: "安全设置",
+      email: "",
+      dialogVisible_1: false,
+      dialogVisible_2: false,
+    };
   },
-  components:{
+  components: {
     EditEmail,
-    EditPassword
+    EditPassword,
   },
-  methods:{
-    close(flag){
-      this.dialogVisible_2 = flag
+  methods: {
+    close(flag) {
+      this.dialogVisible_2 = flag;
     },
-    callBack_1(flag){
-      this.dialogVisible_1 = flag
+    callBack_1(flag) {
+      this.dialogVisible_1 = flag;
     },
-    callBack_2(flag){
-      this.email = flag
+    callBack_2(flag) {
+      this.email = flag;
     },
-    changePassword(){
-      this.dialogVisible_1 = !this.dialogVisible_1
+    changePassword() {
+      this.dialogVisible_1 = !this.dialogVisible_1;
     },
-    changeEmail(){
-      this.dialogVisible_2 = !this.dialogVisible_2
-    }
+    changeEmail() {
+      this.dialogVisible_2 = !this.dialogVisible_2;
+    },
   },
   mounted() {
     get_user_info()
-        .then(res => {
-          if(res.code === 20000){
-            console.log("获取邮箱成功")
-            this.email = res.data.email
-          }
-          else{
-            this.$message.error("用户邮箱获取失败！")
-          }
-        })
-        .catch((err) => console.log("error: " + err));
-  }
-}
+      .then((res) => {
+        if (res.code === 20000) {
+          console.log("获取邮箱成功");
+          this.email = res.data.email;
+        } else {
+          this.$message.error("用户邮箱获取失败！");
+        }
+      })
+      .catch((err) => console.log("error: " + err));
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

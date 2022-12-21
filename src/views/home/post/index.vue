@@ -128,23 +128,25 @@
     </v-col> -->
 
     <!-- 富文本 -->
-    <template>
-      <div style="border: 1px solid #ccc">
-        <Toolbar
-          style="border-bottom: 1px solid #ccc"
-          :editor="editor"
-          :defaultConfig="toolbarConfig"
-          :mode="mode"
-        />
-        <Editor
-          style="height: 500px; overflow-y: hidden"
-          v-model="commentContent"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="onCreated"
-        />
-      </div>
-    </template>
+    <div v-show="is_login">
+      <template>
+        <div style="border: 1px solid #ccc">
+          <Toolbar
+            style="border-bottom: 1px solid #ccc"
+            :editor="editor"
+            :defaultConfig="toolbarConfig"
+            :mode="mode"
+          />
+          <Editor
+            style="height: 500px; overflow-y: hidden"
+            v-model="commentContent"
+            :defaultConfig="editorConfig"
+            :mode="mode"
+            @onCreated="onCreated"
+          />
+        </div>
+      </template>
+    </div>
 
     <v-btn
       color="blue"

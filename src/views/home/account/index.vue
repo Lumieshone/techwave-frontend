@@ -1,20 +1,37 @@
 <template>
   <v-container>
-    <v-row>
+    <!-- 提示需要登录 -->
+    <v-row justify="center">
+      <v-card
+        max-width="50%"
+        v-show="!is_login"
+        style="
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        "
+      >
+        <v-card-title> 阿欧..你还没有登录..</v-card-title>
+        <v-card-text>进入此页面需要登录哦~ </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            style="margin-right: 10px"
+            outlined
+            :to="`/login?redirect=/account`"
+            >登录
+          </v-btn>
+          <v-btn style="margin-right: 10px" outlined :to="`/register`"
+            >注册
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-row>
+    <v-row v-show="is_login">
       <v-col cols="3" class="pa-0">
-        <v-card
-            height="100%"
-            width="100%"
-            color="#483D8B"
-            tile
-        >
-          <v-navigation-drawer
-              color="#483D8B"
-              width="100%"
-              dark
-              tile
-              permanent
-          >
+        <v-card height="100%" width="100%" color="#483D8B" tile>
+          <v-navigation-drawer color="#483D8B" width="100%" dark tile permanent>
             <v-list>
               <v-list-item class="ml-4">
                 <v-list-item-avatar size="56">
@@ -25,12 +42,12 @@
                     {{ nickname }}
                   </v-list-item-title>
                   <v-list-item-subtitle>{{ userEmail }}</v-list-item-subtitle>
-                  <v-list-item-subtitle class="pt-1" @click="changeAvatar" id="change_avatar">
-                    <v-icon
-                        dark
-                        small
-                        >mdi-pencil
-                    </v-icon>
+                  <v-list-item-subtitle
+                    class="pt-1"
+                    @click="changeAvatar"
+                    id="change_avatar"
+                  >
+                    <v-icon dark small>mdi-pencil </v-icon>
                     修改头像
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -40,10 +57,10 @@
             <v-list>
               <template v-for="(item, index) in items">
                 <v-list-item
-                    :key="item.title"
-                    :to="item.router"
-                    link
-                    class="pl-16"
+                  :key="item.title"
+                  :to="item.router"
+                  link
+                  class="pl-16"
                 >
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -54,8 +71,8 @@
                   </v-list-item-content>
                 </v-list-item>
                 <v-divider
-                    v-if="index < items.length - 1"
-                    :key="index"
+                  v-if="index < items.length - 1"
+                  :key="index"
                 ></v-divider>
               </template>
             </v-list>
@@ -63,9 +80,7 @@
             <template v-slot:append>
               <div class="pa-5">
                 <v-btn block light @click="logout">
-                  <span id="logout">
-                  登出
-                  </span>
+                  <span id="logout"> 登出 </span>
                 </v-btn>
               </div>
             </template>
@@ -76,18 +91,17 @@
         <v-card height="100%" width="100%" color="#483D8B" tile>
           <v-container>
             <v-row>
-              <v-col
-                  cols="12"
-              >
+              <v-col cols="12">
                 <my-upload
-                    ref="uploadRef"
-                    field="Avatar"
-                    v-model="show"
-                    @crop-success="cropSuccess"
-                    :width="300"
-                    :height="300"
-                    img-format="jpg"
-                    :size="size">
+                  ref="uploadRef"
+                  field="Avatar"
+                  v-model="show"
+                  @crop-success="cropSuccess"
+                  :width="300"
+                  :height="300"
+                  img-format="jpg"
+                  :size="size"
+                >
                 </my-upload>
                 <router-view />
               </v-col>
@@ -100,19 +114,24 @@
 </template>
 
 <script>
-import 'babel-polyfill'
-import myUpload from 'vue-image-crop-upload/upload-2.vue'
-import {change_avatar, get_user_info} from "@/api/account";
+import "babel-polyfill";
+import myUpload from "vue-image-crop-upload/upload-2.vue";
+import { change_avatar, get_user_info } from "@/api/account";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Account",
   data() {
     return {
-      show:false,
-      size:2.5,
-      nickname:'莴苣某人',
-      userEmail:'2053382@tongji.edu.cn',
-      userAvatar:require("@/assets/avatar.jpg"),
+      is_login: this.$store.getters.roles.length != 0,
+
+      show: false,
+      size: 2.5,
+      // nickname:'莴苣某人',
+      // userEmail:'2053382@tongji.edu.cn',
+      // userAvatar:require("@/assets/avatar.jpg"),
+      userEmail: "",
+      userAvatar: "",
+      nickname: "",
       items: [
         { title: '个人信息', icon: 'mdi-account-box', router: '/account/info'},
         { title: '我的收藏', icon: 'mdi-star', router: '/account/collect'},
@@ -127,72 +146,75 @@ export default {
   },
   //注册组件
   components: {
-    "my-upload": myUpload
+    "my-upload": myUpload,
   },
-  methods:{
-    changeAvatar(){
-      this.show = !this.show
+  methods: {
+    changeAvatar() {
+      this.show = !this.show;
     },
-    cropSuccess(imgDataUrl){
-      this.userAvatar = imgDataUrl
-      let bytes = window.atob(imgDataUrl.split(',')[1]);
+    cropSuccess(imgDataUrl) {
+      this.userAvatar = imgDataUrl;
+      let bytes = window.atob(imgDataUrl.split(",")[1]);
       let array = [];
-      for(let i = 0; i < bytes.length; i++){
+      for (let i = 0; i < bytes.length; i++) {
         array.push(bytes.charCodeAt(i));
       }
-      let file = new File([new Uint8Array(array)], 'Avatar.jpg',{type: 'image/jpeg'});
+      let file = new File([new Uint8Array(array)], "Avatar.jpg", {
+        type: "image/jpeg",
+      });
       let fd = new FormData();
-      fd.append('Avatar',file);
+      fd.append("Avatar", file);
       for (let [a, b] of fd.entries()) {
-        console.log(a, b)
+        console.log(a, b);
       }
       this.$refs.uploadRef.off();
-      change_avatar(fd).then((res) => {
-        console.log(res.message)
-        if(res.code === 20000)
-          this.$message.success("修改头像成功！")
-        else
-          this.$message.error("修改头像失败~");
-      }).catch((err) => console.log("error: " + err))
+      change_avatar(fd)
+        .then((res) => {
+          console.log(res.message);
+          if (res.code === 20000) this.$message.success("修改头像成功！");
+          else this.$message.error("修改头像失败~");
+        })
+        .catch((err) => console.log("error: " + err));
     },
     logout() {
       this.$store
-          .dispatch("user/logout")
-          .then(() => {
-            console.log("logout completed");
-            window.location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .dispatch("user/logout")
+        .then(() => {
+          console.log("logout completed");
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   mounted() {
-    get_user_info()
-        .then(res => {
-          if(res.code === 20000){
-            console.log("获取用户信息成功")
-            this.nickname = res.data.nickname
-            this.userEmail = res.data.email
-            this.userAvatar = res.data.avatar
-          }
-          else{
-            console.log(res.msg)
-            this.$message.error("用户信息获取失败！")
+    if (this.is_login) {
+      get_user_info()
+        .then((res) => {
+          if (res.code === 20000) {
+            console.log("获取用户信息成功");
+            this.nickname = res.data.nickname;
+            this.userEmail = res.data.email;
+            this.userAvatar = res.data.avatar;
+          } else {
+            console.log(res.msg);
+            this.$message.error("用户信息获取失败！");
           }
         })
         .catch((err) => console.log("error: " + err));
-  }
+    }
+  },
 };
 </script>
 
 <style scoped>
-#logout{
-  color: #483D8B
+#logout {
+  color: #483d8b;
 }
 
-#change_avatar:hover{
+#change_avatar:hover {
   color: white;
-  cursor:pointer
+  cursor: pointer;
 }
 </style>
