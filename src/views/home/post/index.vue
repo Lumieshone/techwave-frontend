@@ -321,9 +321,11 @@ export default {
   },
   mounted() {
     this.postId = this.$route.params.postId;
-    get_folders().then((res) => {
-      this.folders = res.data.folders;
-    });
+    if (this.is_login) {
+      get_folders().then((res) => {
+        this.folders = res.data.folders;
+      });
+    }
     this.refreshList();
   },
 
