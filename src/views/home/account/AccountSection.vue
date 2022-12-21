@@ -18,11 +18,6 @@
             hide-default-footer
             height="460"
         >
-          <EditSection
-              :showEditDialog="this.showEditDialog"
-              :Model="item.subSectionList"
-          >
-          </EditSection>
           <template v-slot:[`item.sectionAvatar`]="{ item }">
            <v-avatar class="my-2"><img
                alt="Avatar"
@@ -67,9 +62,18 @@
     <CreateSection
         :showSectionDialog="this.showSectionDialog"
         @callBack_1="callBack_1"
-        @submit="submit_1"
+        @submit_1="submit_1"
     >
     </CreateSection>
+    <EditSection
+        :showEditDialog="this.showEditDialog"
+        :Intro="item.sectionIntro"
+        :SubsectionList="item.subSectionList"
+        :SectionId="item.sectionId"
+        @callBack_2="callBack_2"
+        @submit_2="submit_2"
+    >
+    </EditSection>
   </v-card>
 </template>
 
@@ -111,7 +115,9 @@ export default {
       this.showSectionDialog = !this.showSectionDialog
     },
     editItem(item){
-console.log(item)
+      console.log(item)
+      this.showEditDialog = !this.showEditDialog
+      this.item = item
     },
     callBack_1(flag){
       this.showSectionDialog  = flag
@@ -125,7 +131,7 @@ console.log(item)
     },
     submit_2(flag){
       this.showEditDialog = flag
-      window.location.reload();
+      // window.location.reload();
     },
     closeConfirm(flag){
       this.showConfirm = flag

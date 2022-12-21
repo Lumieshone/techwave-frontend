@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580" class="ma-4">
+  <v-card height="600" class="ma-4">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-card width="100%">
@@ -65,7 +65,7 @@
         <v-list
             tile
             dense
-            height="270%"
+            height="210%"
         >
           <v-list-item-group
               active-class="deep-purple--text"

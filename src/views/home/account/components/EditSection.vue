@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="this.showDialog" persistent width="40%">
+  <v-dialog v-model="this.showDialog" persistent width="30%">
     <v-card class="mx-auto">
       <v-toolbar color="#483D8B" cards dark flat>
         <v-icon>mdi-application-edit-outline</v-icon>
@@ -12,9 +12,18 @@
         </v-btn>
       </v-toolbar>
       <v-form ref="form" v-model="valid" lazy-validation class="pa-4 pt-6 pb-6">
+        <v-select
+            v-model="select"
+            :items="choices"
+            prepend-icon="mdi-checkbox-marked-outline"
+            color="#483D8B"
+            label="选择要编辑的内容"
+        >
+        </v-select>
         <v-file-input
             v-model="file"
-            label="版块头像"
+            v-if="select===choices[0]"
+            label="上传新头像"
             counter
             dense
             outlined
@@ -26,6 +35,7 @@
         </v-file-input>
         <v-text-field
             v-model="intro"
+            v-if="select===choices[1]"
             maxlength="20"
             dense
             outlined
@@ -33,19 +43,29 @@
             :counter="20"
             :rules="introRules"
             color="#483D8B"
-            label="版块简介"
+            label="编辑版块简介"
             required
         ></v-text-field>
+        <v-select
+            v-if="select===choices[2]"
+            v-model="subSelect"
+            :items="subChoices"
+            prepend-icon="mdi-tag-heart-outline"
+            label="选择对子版块进行的操作"
+            color="#483D8B"
+        >
+        </v-select>
         <v-combobox
             v-model="model"
+            v-if="select===choices[2] && subSelect===subChoices[0]"
             :filter="filter"
             color="#483D8B"
-            prepend-icon="mdi-tag-heart-outline"
+            prepend-icon="mdi-tag-plus-outline"
             :hide-no-data="!search"
             :items="items"
             :search-input.sync="search"
             hide-selected
-            label="初始子版块"
+            label="添加子版块"
             multiple
             small-chips
             solo
@@ -122,6 +142,30 @@
             </v-list-item-action>
           </template>
         </v-combobox>
+        <v-select
+            v-if="select===choices[2] && (subSelect===subChoices[1] || subSelect===subChoices[2])"
+            v-model="subSection"
+            :items="subSections"
+            prepend-icon="mdi-tag-search-outline"
+            label="请选择子版块"
+            color="#483D8B"
+            item-text="name"
+            item-value="id"
+        >
+        </v-select>
+        <v-text-field
+            v-model="subSectionName"
+            v-if="select===choices[2] && subSelect===subChoices[1]"
+            maxlength="20"
+            dense
+            outlined
+            prepend-icon="mdi-draw-pen"
+            :counter="20"
+            :rules="nameRules"
+            color="#483D8B"
+            label="新名字"
+            required
+        ></v-text-field>
         <v-row justify="end">
           <v-btn
               color="#6A5ACD"
@@ -133,8 +177,8 @@
               color="#6A5ACD"
               :disabled="!valid"
               class="ma-3 white--text"
-              @click="createSection"
-          >创建
+              @click="Submit"
+          >提交
           </v-btn>
         </v-row>
       </v-form>
@@ -143,20 +187,39 @@
 </template>
 
 <script>
-import {create_section} from "@/api/account";
+import {
+  add_subsection,
+  change_section_avatar,
+  change_section_intro,
+  delete_subsection,
+  rename_subsection
+} from "@/api/account";
+
 export default {
   name: "EditSection",
   props: {
     showEditDialog: Boolean,
+    SectionId: undefined,
     Intro: String,
-    Model: undefined,
-    File: undefined
+    SubsectionList: undefined,
   },
   data() {
     return {
       showDialog: this.showEditDialog,
-      file: this.File,
+      choices:['头像','简介','子版块'],
+      subChoices:['新建','重命名','删除'],
+      subSections:this.SubsectionList,
+      subSection:'',
+      subSectionName:'',
+      select:'',
+      subSelect:'',
+      file: [],
       intro:this.Intro,
+      id:this.SectionId,
+      nameRules: [
+        (v) => !!v || "请输入新名字",
+        (v) => (v && v.length <= 10) || "内容不应超过10个字符",
+      ],
       introRules: [
         (v) => !!v || "请输入版块简介",
         (v) => (v && v.length <= 20) || "内容不应超过20个字符",
@@ -168,19 +231,11 @@ export default {
       editing: null,
       editingIndex: -1,
       items: [
-        { header: '选择或创建初始子版块' },
-        {
-          text: '手机',
-          color: 'purple',
-        },
-        {
-          text: '电脑',
-          color: 'red',
-        },
+        { header: '创建子版块' }
       ],
       nonce: 1,
       menu: false,
-      model: this.Model,
+      model: [],
       x: 0,
       search: null,
       y: 0,
@@ -188,53 +243,82 @@ export default {
   },
   methods: {
     clearDialog() {
-      this.model = this.Model;
+      this.$refs.form.reset()
+      this.model = [];
       this.intro = this.Intro;
-      this.file = this.File;
+      this.file = [];
       this.nonce= 1;
       this.items=[
-        { header: '选择或创建初始子版块' },
-        {
-          text: '手机',
-          color: 'purple',
-        },
-        {
-          text: '电脑',
-          color: 'red',
-        },
+        { header: '创建子版块' }
       ];
       this.$refs.form.resetValidation();
     },
     closeDialog() {
-      this.$emit("callBack", false);
+      this.$emit("callBack_2", false);
       this.clearDialog();
     },
-    createSection() {
+    Submit() {
       console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
-        let fd = new FormData();
-        fd.append("sectionName", this.title);
-        fd.append("sectionAvatar", this.file);
-        fd.append("sectionIntro", this.intro);
-        let subsections = []
-        console.log(this.model)
-        for (let i = 0; i < this.model.length; i++) {
-          subsections.push(this.model[i].text)
-        }
-        console.log(subsections)
-        fd.append("subsections", subsections);
-        for (let [a, b] of fd.entries()) {
-          console.log(a, b);
-        }
-        create_section(fd)
+        if(this.select===this.choices[0]){
+          let fd = new FormData();
+          fd.append("sectionId", this.id);
+          fd.append("avatar", this.file);
+          change_section_avatar(fd)
             .then((res) => {
               console.log(res.message);
-              if (res.code === 20000) this.$message.success("创建版块成功！");
-              else this.$message.error("创建版块失败~");
+              if (res.code === 20000) this.$message.success("更换头像成功！");
+              else this.$message.error("更换头像失败~");
             })
             .catch((err) => console.log("error: " + err));
-        this.$emit("submit", false);
-        this.clearDialog();
+          this.$emit("submit_2", false);
+        }
+        else if(this.select===this.choices[1]){
+          change_section_intro(this.id,this.intro)
+              .then((res) => {
+                console.log(res.message);
+                if (res.code === 20000) this.$message.success("编辑简介成功！");
+                else this.$message.error("编辑简介失败~");
+              })
+              .catch((err) => console.log("error: " + err));
+          this.$emit("submit_2", false);
+        }
+        else if(this.select===this.choices[2]){
+          if(this.subSelect===this.subChoices[0])
+          {
+            let subsections = []
+            console.log(this.model)
+            for (let i = 0; i < this.model.length; i++) {
+              subsections.push(this.model[i].text)
+            }
+            console.log(subsections)
+            add_subsection(this.id,subsections) .then((res) => {
+              console.log(res.message);
+              if (res.code === 20000) this.$message.success("创建子版块成功！");
+              else this.$message.error("创建子版块失败~");
+            })
+                .catch((err) => console.log("error: " + err));
+            this.$emit("submit_2", false);
+          }
+          else if(this.subSelect===this.subChoices[1]){
+            rename_subsection(this.subSection,this.subSectionName).then((res) => {
+              console.log(res.message);
+              if (res.code === 20000) this.$message.success("重命名成功！");
+              else this.$message.error("重命名失败~");
+            })
+                .catch((err) => console.log("error: " + err));
+            this.$emit("submit_2", false);
+          }
+          else if(this.subSelect===this.subChoices[2]){
+            delete_subsection(this.subSection).then((res) => {
+              console.log(res.message);
+              if (res.code === 20000) this.$message.success("删除成功！");
+              else this.$message.error("删除失败~");
+            })
+                .catch((err) => console.log("error: " + err));
+            this.$emit("submit_2", false);
+          }
+        }
       }
     },
     edit (index, item) {
@@ -281,7 +365,16 @@ export default {
     },
     showEditDialog(val) {
       this.showDialog = val;
-    }
+    },
+    SubsectionList(val) {
+      this.subSections = val;
+    },
+    SectionId(val) {
+      this.id = val;
+    },
+    Intro(val) {
+      this.intro = val;
+    },
   },
 };
 </script>

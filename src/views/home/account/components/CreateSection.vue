@@ -52,7 +52,7 @@
             v-model="model"
             :filter="filter"
             color="#483D8B"
-            prepend-icon="mdi-tag-heart-outline"
+            prepend-icon="mdi-tag-plus-outline"
             :hide-no-data="!search"
             :items="items"
             :search-input.sync="search"

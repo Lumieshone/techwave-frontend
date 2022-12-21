@@ -196,13 +196,35 @@ export function create_section(fd) {
   });
 }
 
-export function add_subsection(id,name) {
+export function change_section_avatar(fd) {
+  return request({
+    url: "/user/account/change_section_avatar",
+    method: "post",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: fd,
+  });
+}
+
+export function change_section_intro(sectionId,sectionIntro) {
+  return request({
+    url: "/user/account/change_section_intro",
+    method: "post",
+    data: {
+      sectionId:sectionId,
+      sectionIntro:sectionIntro
+    },
+  });
+}
+
+export function add_subsection(id,subsections) {
   return request({
     url: "/user/account/add_subsection",
     method: "post",
     data: {
-      id:id,
-      name:name
+      sectionId:id,
+      subsections:subsections
     },
   });
 }
@@ -212,7 +234,7 @@ export function delete_subsection(id) {
     url: "/user/account/delete_subsection",
     method: "delete",
     data: {
-      id: id,
+      subsectionId: id,
     },
   });
 }
@@ -222,7 +244,7 @@ export function rename_subsection(id,name) {
     url: "/user/account/rename_subsection",
     method: "post",
     data: {
-      id:id,
+      subsectionId:id,
       name:name
     },
   });
