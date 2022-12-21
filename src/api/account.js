@@ -151,7 +151,7 @@ export function get_my_collect_transaction(params) {
 
 export function delete_my_sell_transaction(id) {
   return request({
-    url: "/user/account/delete_my_sell_transaction",
+    url: "/user/account/delete_transaction_post",
     method: "post",
     data: {
       id: id,
@@ -161,7 +161,7 @@ export function delete_my_sell_transaction(id) {
 
 export function delete_my_seek_transaction(id) {
   return request({
-    url: "/user/account/delete_my_seek_transaction",
+    url: "/user/account/delete_transaction_post",
     method: "post",
     data: {
       id: id,

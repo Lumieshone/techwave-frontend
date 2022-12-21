@@ -6,7 +6,6 @@
         <v-tab
           v-for="theme in themes"
           :key="theme.name"
-          center-active
           @click="change_v_tab()"
         >
           {{ theme.chinese }}
@@ -118,6 +117,15 @@
           </v-list>
         </v-tab-item>
       </v-tabs-items>
+      <!-- 分页 -->
+      <v-pagination
+        style="margin-top: 10px"
+        v-if="Math.ceil(total / limit) > 1"
+        v-model="curPage"
+        :length="Math.ceil(total / limit)"
+        total-visible="7"
+        @input="onPageChange(curPage, limit)"
+      ></v-pagination>
     </v-card>
     <!-- delete -->
     <v-dialog v-model="show_delete_dialog">
@@ -164,7 +172,7 @@ export default {
         this.$store.getters.roles.length > 0 &&
         this.$store.getters.isAuthenticated,
       // tab
-      tab: "sell",
+      tab: 0,
       themes: [
         {
           name: "sell",
@@ -177,30 +185,30 @@ export default {
         { name: "collect", chinese: "我收藏的" },
       ],
       transactionsData: [
-        {
-          id: 1,
-          title: "iphone 14急出",
-          price: 9999,
-          coverImage:
-            "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
-          campus: "嘉定",
-          summary:
-            "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
-        },
-        {
-          id: 2,
-          title: "iphone 13急出",
-          price: 99299,
-          coverImage:
-            "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
-          campus: "嘉定",
-          summary: "集美们快充呀苹果爸爸就上了就是说",
-        },
+        // {
+        //   id: 1,
+        //   title: "iphone 14急出",
+        //   price: 9999,
+        //   coverImage:
+        //     "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-iPhone-14-Plus-hero-220907-geo_Full-Bleed-Image.jpg.large_2x.jpg",
+        //   campus: "嘉定",
+        //   summary:
+        //     "集美们快充呀苹果爸爸就是我的神哈哈哈哈一整个爱上了就是说凑字数凑字数345tyuhytrcdfyguhiytfguhiYTFyguhiygftguHIgftyguhiygftguhi",
+        // },
+        // {
+        //   id: 2,
+        //   title: "iphone 13急出",
+        //   price: 99299,
+        //   coverImage:
+        //     "https://picx.zhimg.com/v2-141592629306b41bff01a28a18a78acb_1440w.jpg?source=172ae18b",
+        //   campus: "嘉定",
+        //   summary: "集美们快充呀苹果爸爸就上了就是说",
+        // },
       ],
 
       // pagination
       curPage: 1,
-      limit: 9,
+      limit: 6,
       total: undefined,
 
       // delete
@@ -210,25 +218,29 @@ export default {
   },
   methods: {
     change_v_tab() {
+      console.log(this.tab);
       if (this.tab == 0) {
+        this.transactionsData = [];
         get_my_sell_transaction({
-          offset: this.offset,
+          offset: this.curPage,
           limit: this.limit,
         }).then((res) => {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
       } else if (this.tab == 1) {
+        this.transactionsData = [];
         get_my_seek_transaction({
-          offset: this.offset,
+          offset: this.curPage,
           limit: this.limit,
         }).then((res) => {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
       } else if (this.tab == 2) {
+        this.transactionsData = [];
         get_my_collect_transaction({
-          offset: this.offset,
+          offset: this.curPage,
           limit: this.limit,
         }).then((res) => {
           this.transactionsData = res.data.transactionPageVOList;
@@ -271,6 +283,43 @@ export default {
     },
     stepToTransaction(id) {
       this.$router.push({ path: "/transaction/" + id });
+    },
+
+    // pagination
+    onPageChange(curPage, limit) {
+      this.refreshList(curPage, limit);
+    },
+
+    refreshList(curPage = this.curPage, limit = this.limit) {
+      console.log(this.tab);
+      if (this.tab == 0) {
+        this.transactionsData = [];
+        get_my_sell_transaction({
+          offset: curPage,
+          limit: limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      } else if (this.tab == 1) {
+        this.transactionsData = [];
+        get_my_seek_transaction({
+          offset: curPage,
+          limit: limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      } else if (this.tab == 2) {
+        this.transactionsData = [];
+        get_my_collect_transaction({
+          offset: curPage,
+          limit: limit,
+        }).then((res) => {
+          this.transactionsData = res.data.transactionPageVOList;
+          this.total = res.data.total;
+        });
+      }
     },
   },
   mounted() {
