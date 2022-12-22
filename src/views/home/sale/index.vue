@@ -118,7 +118,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn top absolute right v-bind="attrs" v-on="on"
-          >发布{{ topic == "seek" ? "求购" : "出售" }}帖子
+          >发布{{ topic == 1 ? "求购" : "出售" }}帖子
         </v-btn>
       </template>
       <PublishTransaction
