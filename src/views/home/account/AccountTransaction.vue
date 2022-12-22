@@ -2,11 +2,11 @@
   <v-container>
     <v-card height="580" class="ma-4">
       <v-card-title> 我的交易 </v-card-title>
-      <v-tabs v-model="tab" color="#6A5ACD">
+      <v-tabs color="#6A5ACD">
         <v-tab
           v-for="theme in themes"
           :key="theme.name"
-          @click="change_v_tab()"
+          @change="change_v_tab(theme.name)"
         >
           {{ theme.chinese }}
         </v-tab>
@@ -177,6 +177,7 @@ export default {
         this.$store.getters.isAuthenticated,
       // tab
       tab: 0,
+      name:'',
       themes: [
         {
           name: "sell",
@@ -221,9 +222,10 @@ export default {
     };
   },
   methods: {
-    change_v_tab() {
-      console.log(this.tab);
-      if (this.tab == 0) {
+    change_v_tab(name) {
+      console.log(this.name);
+      this.name = name;
+      if (name === 'sell') {
         this.transactionsData = [];
         get_my_sell_transaction({
           offset: this.curPage,
@@ -232,7 +234,7 @@ export default {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
-      } else if (this.tab == 1) {
+      } else if (name === 'seek') {
         this.transactionsData = [];
         get_my_seek_transaction({
           offset: this.curPage,
@@ -241,7 +243,7 @@ export default {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
-      } else if (this.tab == 2) {
+      } else if (name === 'collect') {
         this.transactionsData = [];
         get_my_collect_transaction({
           offset: this.curPage,
@@ -262,7 +264,7 @@ export default {
           JSON.stringify(this.transactionsData)
         );
         newTransactionData.forEach((t) => {
-          if (t.id == id) {
+          if (t.id === id) {
             t.isCollected = !t.isCollected;
           }
         });
@@ -282,7 +284,7 @@ export default {
       console.log("tab", this.tab);
       let fd = new FormData();
       fd.append("transactionId", this.delete_id);
-      if (this.tab == 0) {
+      if (this.name === 'sell') {
         delete_my_sell_transaction(fd)
           .then(() => {
             this.$message.success("删除成功！");
@@ -291,7 +293,7 @@ export default {
           .catch(() => {
             this.$message.error("额，好像网络出了点问题..");
           });
-      } else if (this.tab == 1) {
+      } else if (this.name === 'seek') {
         delete_my_seek_transaction(fd)
           .then(() => {
             this.$message.success("删除成功！");
@@ -312,8 +314,8 @@ export default {
     },
 
     refreshList(curPage = this.curPage, limit = this.limit) {
-      console.log(this.tab);
-      if (this.tab == 0) {
+      console.log(this.name);
+      if (this.name === 'sell') {
         this.transactionsData = [];
         get_my_sell_transaction({
           offset: curPage,
@@ -322,7 +324,7 @@ export default {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
-      } else if (this.tab == 1) {
+      } else if (this.name === 'seek') {
         this.transactionsData = [];
         get_my_seek_transaction({
           offset: curPage,
@@ -331,7 +333,7 @@ export default {
           this.transactionsData = res.data.transactionPageVOList;
           this.total = res.data.total;
         });
-      } else if (this.tab == 2) {
+      } else if (this.name === 'collect') {
         this.transactionsData = [];
         get_my_collect_transaction({
           offset: curPage,
@@ -345,7 +347,14 @@ export default {
   },
   mounted() {
     if (this.have_permission) {
-      this.refreshList();
+      this.name="sell";
+      get_my_sell_transaction({
+        offset: 1,
+        limit: 6,
+      }).then((res) => {
+        this.transactionsData = res.data.transactionPageVOList;
+        this.total = res.data.total;
+      });
     } else {
       this.$message.error("额，你似乎还未完成认证...");
     }

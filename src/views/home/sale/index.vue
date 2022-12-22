@@ -224,7 +224,11 @@ export default {
       campusZoneFilter: "",
 
       // filter by tags
-      tags: [],
+      tags: [{
+        "tagId": undefined,
+        "tagName":"全部",
+        "subtagList":[]
+      },],
       selectTagId: undefined,
       selectSubtagId: undefined,
 
@@ -243,18 +247,18 @@ export default {
   },
   computed: {
     subtags: function () {
-      if (this.selectTagId == undefined) {
+      if (this.selectTagId === '全部') {
         return [];
       } else {
-        return this.tags.find((t) => t.tagId == this.selectTagId).subtagList;
+        return this.tags.find((t) => t.tagId === this.selectTagId).subtagList;
       }
     },
   },
   methods: {
     // change v-tab
     change_v_tab(topic) {
-      if (topic == "sell") this.topic = 0;
-      else if (topic == "seek") this.topic = 1;
+      if (topic === "sell") this.topic = 0;
+      else if (topic === "seek") this.topic = 1;
 
       this.curPage = 1;
       this.refreshList();
@@ -269,7 +273,7 @@ export default {
       get_sale_info({
         searchContent: this.searchContent,
         campus: this.campusZoneFilter,
-        tagId: this.selectTagId,
+        tagId: this.selectTagId === '全部' ? undefined : this.selectTagId,
         subtagId: this.selectSubtagId,
         offset: curPage,
         limit: limit,
@@ -288,7 +292,7 @@ export default {
       get_sale_info({
         searchContent: this.searchContent,
         campus: this.campusZoneFilter,
-        tagId: this.selectTagId,
+        tagId: this.selectTagId === '全部' ? undefined : this.selectTagId,
         subtagId: this.selectSubtagId,
         offset: 1,
         limit: this.limit,
@@ -306,10 +310,10 @@ export default {
       get_sale_info({
         searchContent: this.searchContent,
         campus: this.campusZoneFilter,
-        tagId: this.selectTagId,
+        tagId: this.selectTagId === '全部' ? undefined : this.selectTagId,
         offset: 1,
         limit: this.limit,
-        type: this.topic == 0 ? "sell" : "seek",
+        type: this.topic === 0 ? "sell" : "seek",
       })
         .then((res) => {
           // this.updateTransactionsData(res.data.transactionPageVOList);
@@ -324,7 +328,7 @@ export default {
       get_sale_info({
         searchContent: this.searchContent,
         campus: this.campusZoneFilter,
-        tagId: this.selectTagId,
+        tagId: this.selectTagId === '全部' ? undefined : this.selectTagId,
         subtagId: this.selectSubtagId,
         offset: 1,
         limit: this.limit,
@@ -345,10 +349,12 @@ export default {
       this.refreshList();
       get_all_first_tags()
         .then((res) => {
-          this.tags = res.data;
+          for (let i = 0; i < res.data.length; i++) {
+            this.tags.push(res.data[i])
+          }
           console.log("tags", this.tags);
         })
-        .error(() => {
+        .catch(() => {
           this.$message.error("获取一级tag失败...");
         });
     }
