@@ -26,7 +26,7 @@
     </v-btn>
 
     <!-- 收藏文件夹 -->
-    <v-dialog v-model="show_collect_dialog">
+    <v-dialog v-model="show_collect_dialog" width="30%">
       <v-card>
         <v-card-title>选择收藏文件夹</v-card-title>
         <v-card-text>

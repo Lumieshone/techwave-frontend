@@ -2,7 +2,7 @@
   <v-container>
     <v-card height="580" class="ma-4 mb-6">
       <v-card-title>回复我的</v-card-title>
-      <v-list tile dense height="270%">
+      <v-list tile dense height="80%">
         <v-list-item-group active-class="deep-purple--text">
           <template v-for="item in list_data">
             <v-list-item :key="item.id">
@@ -173,4 +173,17 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.lead{
+  margin-top:7px
+}
+.v-text-field{
+  width:45px;
+  height:20px;
+  margin-left: 8px;
+  margin-right: 8px
+}
+.goBtn{
+  margin-left:10px
+}
+</style>

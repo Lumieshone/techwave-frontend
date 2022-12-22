@@ -15,7 +15,7 @@
                 <v-text-field
                   v-model="transactionInfo.title"
                   :error-messages="errors"
-                  label="Title"
+                  label="主题"
                   color="#7d73be"
                   required
                 ></v-text-field>
@@ -31,7 +31,7 @@
                 <v-text-field
                   v-model="transactionInfo.price"
                   :error-messages="errors"
-                  label="Price(￥)"
+                  label="价格(￥)"
                   color="#7d73be"
                   required
                 ></v-text-field>
@@ -53,7 +53,7 @@
                   item-text="text"
                   color="#7d73be"
                   :error-messages="errors"
-                  label="Campus Zone"
+                  label="校区"
                 ></v-select> </validation-provider
             ></v-col>
 
@@ -68,7 +68,7 @@
                   :items="contactTypes"
                   color="#7d73be"
                   :error-messages="errors"
-                  label="Contact Type"
+                  label="联系方式"
                 ></v-select>
               </validation-provider>
             </v-col>
@@ -82,7 +82,7 @@
                 <v-text-field
                   v-model="transactionInfo.contactNumber"
                   :error-messages="errors"
-                  label="Contact Number"
+                  label="联系号码"
                   color="#7d73be"
                   required
                 ></v-text-field>
@@ -103,7 +103,7 @@
                   item-text="tagName"
                   item-value="tagId"
                   color="#7d73be"
-                  label="Tag"
+                  label="标签"
                   persistent-hint
                 ></v-select>
               </validation-provider>
@@ -120,7 +120,7 @@
                   :items="subtags"
                   item-text="subtagName"
                   item-value="subtagId"
-                  label="Sub Tag"
+                  label="子标签"
                   color="#7d73be"
                   persistent-hint
                 ></v-select>
@@ -138,7 +138,7 @@
                 <v-textarea
                   v-model="transactionInfo.summary"
                   :error-messages="errors"
-                  label="Description"
+                  label="商品描述"
                   color="#7d73be"
                   required
                   solo
@@ -156,11 +156,11 @@
 
           <v-spacer></v-spacer>
 
-          <v-btn color="blue darken-1" text @click="close_publish_dialog">
-            Close
+          <v-btn color="#483D8B" text @click="close_publish_dialog">
+            返回
           </v-btn>
-          <v-btn color="blue darken-1" type="submit" :disabled="invalid" text>
-            Save
+          <v-btn color="#483D8B" type="submit" :disabled="invalid" text>
+            发布
           </v-btn>
         </form>
       </validation-observer>
@@ -264,6 +264,7 @@ export default {
           this.transactionInfo.image.forEach((f) => fd.append("image", f));
           publish_transaction(fd).then(() => {
             this.$message.success("发布成功！");
+            window.location.reload();
           });
         })
         .catch(() => {
