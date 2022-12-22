@@ -66,7 +66,7 @@
         <v-list
             tile
             dense
-            height="300%"
+            height="210%"
         >
           <v-list-item-group
               active-class="deep-purple--text"

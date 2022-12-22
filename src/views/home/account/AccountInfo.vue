@@ -140,7 +140,10 @@ export default {
         edit_info(form)
           .then((res) => {
             console.log(res.message);
-            if (res.code === 20000) this.$message.success("修改个人信息成功！");
+            if (res.code === 20000) {
+              this.$message.success("修改个人信息成功！");
+              window.location.reload();
+            }
             else this.$message.error("修改个人信息失败~");
           })
           .catch((err) => console.log("error: " + err));
