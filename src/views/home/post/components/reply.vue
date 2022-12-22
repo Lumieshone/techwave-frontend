@@ -12,7 +12,7 @@
         <v-card-text>{{ singlereplyData.content }}</v-card-text>
         <v-card-actions>
           <v-btn
-            color="primary"
+            color="#7d73be"
             fab
             small
             :disabled="!is_login"
@@ -23,24 +23,24 @@
               )
             "
           >
-            <v-icon>mdi-comment</v-icon>
+            <v-icon color="white">mdi-comment</v-icon>
           </v-btn>
           <v-btn
-            color="primary"
+            color="#7d73be"
             fab
             small
             :disabled="!is_login"
             v-show="is_login && singlereplyData.ableToDelete"
             v-on:click="open_delete_dialog(singlereplyData.replyId)"
           >
-            <v-icon>mdi-delete</v-icon>
+            <v-icon color="white">mdi-delete</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
 
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog">
+    <v-dialog v-model="show_reply_dialog" width="50%">
       <v-card>
         <v-card-title>回复给 {{ replyToUserName }}</v-card-title>
         <v-card-text>
@@ -52,13 +52,13 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_reply_dialog"
             >取消
           </v-btn>
-          <v-btn color="blue" class="ma-2 white--text" small @click="reply">
+          <v-btn color="#7d73be" class="ma-2 white--text" small @click="reply">
             回复
           </v-btn></v-card-actions
         >
@@ -66,19 +66,19 @@
     </v-dialog>
 
     <!-- delete -->
-    <v-dialog v-model="show_delete_dialog">
+    <v-dialog v-model="show_delete_dialog" width="30%">
       <v-card>
         <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_delete_dialog"
             >取消
           </v-btn>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="delete_reply"

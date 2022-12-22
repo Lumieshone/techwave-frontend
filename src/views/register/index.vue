@@ -149,7 +149,7 @@ export default {
         .catch(() => {
           this.loading = false;
           console.log("register fail");
-          this.$message.error("注册出现了一点问题..");
+          // this.$message.error("注册出现了一点问题..");
         });
     },
     clear() {

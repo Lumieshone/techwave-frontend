@@ -68,7 +68,7 @@ export default {
   methods: {
     publishCertify() {
       let fd = new FormData();
-      fd.append("studentId", this.studentID);
+      fd.append("studentId", this.studentId);
       fd.append("cardPicture", this.file);
       for (let [a, b] of fd.entries()) {
         console.log(a, b);

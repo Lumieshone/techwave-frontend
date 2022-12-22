@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card height="580" class="ma-4">
+    <v-card height="580" class="ma-4 mb-6">
       <v-card-title>回复我的</v-card-title>
       <v-list tile dense height="270%">
         <v-list-item-group active-class="deep-purple--text">
@@ -52,7 +52,7 @@
       </v-row>
     </v-card>
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog">
+    <v-dialog v-model="show_reply_dialog" width="50%">
       <v-card>
         <v-card-title>回复</v-card-title>
         <v-card-text>
@@ -64,14 +64,14 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_reply_dialog"
             >取消
           </v-btn>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click.native="reply()"

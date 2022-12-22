@@ -107,7 +107,10 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn @click.native="collect(transactionData.id)">
-                      <v-icon color="orange">mdi-star </v-icon></v-btn
+                      <v-icon
+                        :color="transactionData.isCollected ? 'orange' : 'grey'"
+                        >mdi-star
+                      </v-icon></v-btn
                     >
                   </v-list-item-action>
                 </v-list-item>
@@ -124,23 +127,24 @@
         v-model="curPage"
         :length="Math.ceil(total / limit)"
         total-visible="7"
+        color="#6A5ACD"
         @input="onPageChange(curPage, limit)"
       ></v-pagination>
     </v-card>
     <!-- delete -->
-    <v-dialog v-model="show_delete_dialog">
+    <v-dialog v-model="show_delete_dialog" width="30%">
       <v-card>
         <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_delete_dialog"
             >取消
           </v-btn>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="delete_transaction()"
@@ -244,6 +248,7 @@ export default {
           limit: this.limit,
         }).then((res) => {
           this.transactionsData = res.data.transactionPageVOList;
+          this.transactionsData.forEach((t) => (t.isCollected = true));
           this.total = res.data.total;
         });
       }
@@ -252,7 +257,17 @@ export default {
     collect(id) {
       let fd = new FormData();
       fd.append("id", id);
-      collect_transaction(fd).then(() => this.refreshList());
+      collect_transaction(fd).then(() => {
+        let newTransactionData = JSON.parse(
+          JSON.stringify(this.transactionsData)
+        );
+        newTransactionData.forEach((t) => {
+          if (t.id == id) {
+            t.isCollected = !t.isCollected;
+          }
+        });
+        this.transactionsData = newTransactionData;
+      });
     },
     // delete
     open_delete_dialog(id) {

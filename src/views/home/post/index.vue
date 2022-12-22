@@ -10,7 +10,7 @@
     <v-btn text>{{ postData.subsectionName }}</v-btn>
 
     <!-- title -->
-    <h1>{{ postData.title }}</h1>
+    <h1 style="margin-bottom:20px;margin-top:10px">{{ postData.title }}</h1>
     <p>帖子id: {{ postId }}</p>
     <p>帖子浏览量: {{ postData.browseNumber }}</p>
 
@@ -91,6 +91,7 @@
       v-model="curPage"
       :length="Math.ceil(postData.total / limit)"
       total-visible="7"
+      color="#6A5ACD"
       @input="onPageChange(curPage, limit)"
     ></v-pagination>
 
@@ -149,7 +150,7 @@
     </div>
 
     <v-btn
-      color="blue"
+      color="#7d73be"
       class="ma-2 white--text"
       small
       @click="reply_on_post"

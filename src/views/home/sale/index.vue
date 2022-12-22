@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-tabs centered v-model="topic" style="margin-bottom: 20px">
+    <v-tabs centered v-model="topic" style="margin-bottom: 20px" color="#6A5ACD">
       <v-tab key="sell" @click="change_v_tab('sell')">出售</v-tab>
       <v-tab key="seek" @click="change_v_tab('seek')">求购</v-tab>
     </v-tabs>
@@ -10,6 +10,7 @@
           v-model="searchContent"
           label="输入搜索关键词~"
           outlined
+          color="#6A5ACD"
           dense
           clearable
           :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
@@ -23,6 +24,7 @@
           item-text="tagName"
           item-value="tagId"
           dense
+          color="#6A5ACD"
           label="一级tag"
           persistent-hint
           @change="filter_by_tag()"
@@ -35,6 +37,7 @@
           item-text="subtagName"
           item-value="subtagId"
           dense
+          color="#6A5ACD"
           label="二级tag"
           persistent-hint
           @change="filter_by_subtag()"
@@ -47,6 +50,7 @@
           item-text="text"
           item-value="value"
           dense
+          color="#6A5ACD"
           disable-lookup
           label="校区"
           persistent-hint
@@ -102,6 +106,7 @@
       v-model="curPage"
       :length="Math.ceil(total / limit)"
       total-visible="7"
+      color="#6A5ACD"
       @input="onPageChange(curPage, limit)"
     ></v-pagination>
 

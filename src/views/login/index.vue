@@ -135,7 +135,7 @@ export default {
         })
         .catch(() => {
           this.loading = false;
-          this.$message.error("登录出现了一点问题..");
+          // this.$message.error("登录出现了一点问题..");
           console.log("login fail");
         });
     },
