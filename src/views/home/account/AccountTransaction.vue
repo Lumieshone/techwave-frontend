@@ -13,7 +13,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item key="sell">
+        <v-tab-item >
           <v-list tile dense height="270%">
             <v-list-item-group active-class="deep-purple--text">
               <template v-for="transactionData in transactionsData">
@@ -48,7 +48,7 @@
             </v-list-item-group>
           </v-list>
         </v-tab-item>
-        <v-tab-item key="seek">
+        <v-tab-item >
           <v-list tile dense height="270%">
             <v-list-item-group active-class="deep-purple--text">
               <template v-for="transactionData in transactionsData">
@@ -83,7 +83,7 @@
             </v-list-item-group>
           </v-list>
         </v-tab-item>
-        <v-tab-item key="collect">
+        <v-tab-item >
           <v-list tile dense height="270%">
             <v-list-item-group active-class="deep-purple--text">
               <template v-for="transactionData in transactionsData">
@@ -226,6 +226,7 @@ export default {
       console.log(this.name);
       this.name = name;
       if (name === 'sell') {
+        this.tab = 0;
         this.transactionsData = [];
         get_my_sell_transaction({
           offset: this.curPage,
@@ -235,6 +236,7 @@ export default {
           this.total = res.data.total;
         });
       } else if (name === 'seek') {
+        this.tab = 1;
         this.transactionsData = [];
         get_my_seek_transaction({
           offset: this.curPage,
@@ -244,6 +246,7 @@ export default {
           this.total = res.data.total;
         });
       } else if (name === 'collect') {
+        this.tab = 2;
         this.transactionsData = [];
         get_my_collect_transaction({
           offset: this.curPage,
