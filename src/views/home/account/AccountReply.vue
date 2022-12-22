@@ -41,6 +41,7 @@
             <span class="lead">跳转至第</span>
             <v-text-field
               class="shrink"
+              id="which_page"
               solo
               dense
               color="#7d73be"
@@ -79,8 +80,7 @@
             @click.native="reply()"
           >
             回复
-          </v-btn></v-card-actions
-        >
+          </v-btn></v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
@@ -177,7 +177,7 @@ export default {
 .lead{
   margin-top:7px
 }
-.v-text-field{
+.shrink{
   width:45px;
   height:20px;
   margin-left: 8px;
