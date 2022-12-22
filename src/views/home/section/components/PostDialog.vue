@@ -171,7 +171,7 @@ export default {
       form: {
         title: "",
         subsection: "",
-        content: "<p>不能超过400个字哦</p>",
+        content: "<p>来说点什么吧~</p>",
       },
 
       // rich text

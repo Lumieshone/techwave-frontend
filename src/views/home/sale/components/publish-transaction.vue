@@ -226,15 +226,15 @@ export default {
 
       contactTypes: ["微信", "QQ", "手机", "领英", "邮箱"],
       transactionInfo: {
-        title: "iphone 18",
-        price: 1234,
+        title: "",
+        price: undefined,
         image: [],
         selectTagId: undefined,
         selectSubtagId: undefined,
-        summary: "十分帝豪啊",
-        campus: "嘉定",
-        contactType: "微信",
-        contactNumber: "1234",
+        summary: "",
+        campus: "",
+        contactType: "",
+        contactNumber: "",
       },
     };
   },
