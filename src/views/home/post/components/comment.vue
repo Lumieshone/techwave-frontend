@@ -55,13 +55,13 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_reply_dialog"
             >取消
           </v-btn>
-          <v-btn color="blue" class="ma-2 white--text" small @click="reply">
+          <v-btn color="#7d73be" class="ma-2 white--text" small @click="reply">
             回复
           </v-btn></v-card-actions
         >

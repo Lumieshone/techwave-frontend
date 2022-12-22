@@ -120,10 +120,10 @@ export default {
   data() {
     return {
       // info
-      email: "1@qq.com",
-      username: "opopop",
-      password: "12345678",
-      repeatPassword: "12345678",
+      email: "",
+      username: "",
+      password: "",
+      repeatPassword: "",
 
       // loading logo
       loading: false,

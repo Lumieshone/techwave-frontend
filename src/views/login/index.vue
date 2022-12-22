@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       // info
-      email: "test@163.com",
+      email: "",
       password: "12345678",
 
       // loading logo

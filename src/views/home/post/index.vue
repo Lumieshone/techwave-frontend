@@ -40,13 +40,13 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click.native="close_collect_dialog"
             >取消
           </v-btn>
-          <v-btn color="blue" class="ma-2 white--text" small @click="collect">
+          <v-btn color="#7d73be" class="ma-2 white--text" small @click="collect">
             确定
           </v-btn></v-card-actions
         >
