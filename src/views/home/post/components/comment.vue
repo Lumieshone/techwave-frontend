@@ -49,6 +49,7 @@
         <v-card-text>
           <v-textarea
             v-model="replyContent"
+            color="#7d73be"
             outlined
             label="输入你的评论（请文明发言~）"
           ></v-textarea>

@@ -29,6 +29,7 @@
                 v-model="email"
                 :error-messages="errors"
                 label="Mail"
+                color="#7d73be"
                 required
               ></v-text-field>
             </validation-provider>
@@ -42,6 +43,7 @@
                 :type="show_password ? 'text' : 'password'"
                 @click:append="show_password = !show_password"
                 v-model="password"
+                color="#7d73be"
                 :error-messages="errors"
                 label="Password"
                 required

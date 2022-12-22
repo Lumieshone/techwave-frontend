@@ -16,6 +16,7 @@
                   v-model="transactionInfo.title"
                   :error-messages="errors"
                   label="Title"
+                  color="#7d73be"
                   required
                 ></v-text-field>
               </validation-provider>
@@ -31,6 +32,7 @@
                   v-model="transactionInfo.price"
                   :error-messages="errors"
                   label="Price(￥)"
+                  color="#7d73be"
                   required
                 ></v-text-field>
               </validation-provider>
@@ -49,6 +51,7 @@
                   :items="campusZones"
                   item-value="value"
                   item-text="text"
+                  color="#7d73be"
                   :error-messages="errors"
                   label="Campus Zone"
                 ></v-select> </validation-provider
@@ -63,6 +66,7 @@
                 <v-select
                   v-model="transactionInfo.contactType"
                   :items="contactTypes"
+                  color="#7d73be"
                   :error-messages="errors"
                   label="Contact Type"
                 ></v-select>
@@ -79,6 +83,7 @@
                   v-model="transactionInfo.contactNumber"
                   :error-messages="errors"
                   label="Contact Number"
+                  color="#7d73be"
                   required
                 ></v-text-field>
               </validation-provider>
@@ -97,6 +102,7 @@
                   :items="tags"
                   item-text="tagName"
                   item-value="tagId"
+                  color="#7d73be"
                   label="Tag"
                   persistent-hint
                 ></v-select>
@@ -115,6 +121,7 @@
                   item-text="subtagName"
                   item-value="subtagId"
                   label="Sub Tag"
+                  color="#7d73be"
                   persistent-hint
                 ></v-select>
               </validation-provider>
@@ -132,6 +139,7 @@
                   v-model="transactionInfo.summary"
                   :error-messages="errors"
                   label="Description"
+                  color="#7d73be"
                   required
                   solo
                 ></v-textarea>

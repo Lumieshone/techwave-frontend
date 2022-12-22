@@ -15,6 +15,7 @@
                   v-model="email"
                   :error-messages="errors"
                   label="Mail"
+                  color="#7d73be"
                   required
                 ></v-text-field>
               </validation-provider>
@@ -35,6 +36,7 @@
               :error-messages="errors"
               label="VerifyCode"
               required
+              color="#7d73be"
             ></v-text-field>
           </validation-provider>
 
@@ -50,6 +52,7 @@
               v-model="old_password"
               :error-messages="errors"
               label="Old Password"
+              color="#7d73be"
               required
             ></v-text-field>
           </validation-provider> -->
@@ -67,6 +70,7 @@
               v-model="new_password"
               :error-messages="errors"
               label="New Password"
+              color="#7d73be"
               required
             ></v-text-field>
           </validation-provider>
@@ -83,6 +87,7 @@
               v-model="repeat_password"
               :error-messages="errors"
               label="Repeat Password"
+              color="#7d73be"
               required
             ></v-text-field>
             <v-spacer></v-spacer>

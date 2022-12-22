@@ -36,6 +36,7 @@
             item-text="folderName"
             item-value="id"
             label="选择收藏夹"
+            color="#7d73be"
           ></v-select>
         </v-card-text>
         <v-card-actions>
@@ -103,6 +104,7 @@
         <v-card-text>
           <v-textarea
             v-model="commentContent"
+            color="#7d73be"
             outlined
             label="评论"
           ></v-textarea>

@@ -98,6 +98,7 @@
                 class="shrink"
                 solo
                 dense
+                color="#7d73be"
                 v-model="whichPage"
               ></v-text-field>
               <span class="lead">页</span>

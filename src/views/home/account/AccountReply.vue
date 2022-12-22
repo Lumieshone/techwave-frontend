@@ -43,6 +43,7 @@
               class="shrink"
               solo
               dense
+              color="#7d73be"
               v-model="whichPage"
             ></v-text-field>
             <span class="lead">页</span>
@@ -58,6 +59,7 @@
         <v-card-text>
           <v-textarea
             v-model="reply_content"
+            color="#7d73be"
             outlined
             label="输入你的评论（请文明发言~）"
           ></v-textarea>

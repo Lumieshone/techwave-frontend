@@ -71,6 +71,7 @@
         <!-- <v-textarea
             v-model="form.content"
             maxlength="400"
+            color="#7d73be"
             :rows="7"
             filled
             outlined

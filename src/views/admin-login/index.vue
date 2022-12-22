@@ -8,6 +8,7 @@
             v-model="username"
             :error-messages="errors"
             label="Name"
+            color="#7d73be"
             required
           ></v-text-field>
         </validation-provider>
