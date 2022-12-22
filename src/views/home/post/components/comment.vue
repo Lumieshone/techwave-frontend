@@ -43,7 +43,7 @@
     </v-card>
 
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog">
+    <v-dialog v-model="show_reply_dialog" width="50%">
       <v-card>
         <v-card-title>回复给 {{ commentData.floor }} 楼</v-card-title>
         <v-card-text>

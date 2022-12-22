@@ -146,10 +146,10 @@ export default {
   name: "FindPassword",
   data() {
     return {
-      email: "1@qq.com",
-      verify_code: 12345678,
-      new_password: "123456789",
-      repeat_password: "123456789",
+      email: "",
+      verify_code: undefined,
+      new_password: "",
+      repeat_password: "",
 
       show_password1: false,
       show_password2: false,
