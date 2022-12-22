@@ -246,6 +246,7 @@ export default {
             console.log(res.message);
             if (res.code === 20000) this.$message.success("发布帖子成功！");
             else this.$message.error("发布帖子失败~");
+            window.location.reload();
           })
           .catch((err) => console.log("error: " + err));
         this.$emit("callBack", false);

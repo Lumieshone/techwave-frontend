@@ -131,7 +131,7 @@ export default {
     },
     submit_2(flag){
       this.showEditDialog = flag
-      // window.location.reload();
+      window.location.reload();
     },
     closeConfirm(flag){
       this.showConfirm = flag
