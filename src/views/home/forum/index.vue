@@ -41,6 +41,7 @@
             label="输入搜索关键词~"
             outlined
             dense
+            color="#7d73be"
             clearable
             :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
             @click:append="search()"

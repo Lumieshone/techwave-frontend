@@ -122,6 +122,9 @@ export function publish_certify(fd) {
     url: "/user/account/apply_to_student",
     method: "post",
     data: fd,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 }
 
@@ -149,22 +152,24 @@ export function get_my_collect_transaction(params) {
   });
 }
 
-export function delete_my_sell_transaction(id) {
+export function delete_my_sell_transaction(data) {
   return request({
     url: "/user/account/delete_transaction_post",
     method: "post",
-    data: {
-      id: id,
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
     },
   });
 }
 
-export function delete_my_seek_transaction(id) {
+export function delete_my_seek_transaction(data) {
   return request({
     url: "/user/account/delete_transaction_post",
     method: "post",
-    data: {
-      id: id,
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
     },
   });
 }
@@ -207,24 +212,24 @@ export function change_section_avatar(fd) {
   });
 }
 
-export function change_section_intro(sectionId,sectionIntro) {
+export function change_section_intro(sectionId, sectionIntro) {
   return request({
     url: "/user/account/change_section_intro",
     method: "post",
     data: {
-      sectionId:sectionId,
-      sectionIntro:sectionIntro
+      sectionId: sectionId,
+      sectionIntro: sectionIntro,
     },
   });
 }
 
-export function add_subsection(id,subsections) {
+export function add_subsection(id, subsections) {
   return request({
     url: "/user/account/add_subsection",
     method: "post",
     data: {
-      sectionId:id,
-      subsections:subsections
+      sectionId: id,
+      subsections: subsections,
     },
   });
 }
@@ -239,13 +244,13 @@ export function delete_subsection(id) {
   });
 }
 
-export function rename_subsection(id,name) {
+export function rename_subsection(id, name) {
   return request({
     url: "/user/account/rename_subsection",
     method: "post",
     data: {
-      subsectionId:id,
-      name:name
+      subsectionId: id,
+      name: name,
     },
   });
 }

@@ -19,6 +19,7 @@
               :error-messages="errors"
               label="Mail"
               required
+              color="#7d73be"
             ></v-text-field>
           </validation-provider>
 
@@ -32,6 +33,7 @@
               :error-messages="errors"
               label="Username"
               required
+              color="#7d73be"
             ></v-text-field>
           </validation-provider>
 
@@ -49,6 +51,7 @@
               :error-messages="errors"
               label="Password"
               required
+              color="#7d73be"
             ></v-text-field>
           </validation-provider>
 
@@ -63,6 +66,7 @@
               @click:append="show_password2 = !show_password2"
               v-model="repeatPassword"
               :error-messages="errors"
+              color="#7d73be"
               label="Repeat Password"
               required
             ></v-text-field>
@@ -120,17 +124,17 @@ export default {
   data() {
     return {
       // info
-      email: "1@qq.com",
-      username: "opopop",
-      password: "12345678",
-      repeatPassword: "12345678",
+      email: "",
+      username: "",
+      password: "",
+      repeatPassword: "",
 
       // loading logo
       loading: false,
 
       // show password
-      show_password1: true,
-      show_password2: true,
+      show_password1: false,
+      show_password2: false,
     };
   },
   methods: {
@@ -149,7 +153,7 @@ export default {
         .catch(() => {
           this.loading = false;
           console.log("register fail");
-          this.$message.error("注册出现了一点问题..");
+          // this.$message.error("注册出现了一点问题..");
         });
     },
     clear() {

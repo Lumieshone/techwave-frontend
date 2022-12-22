@@ -1,10 +1,13 @@
 import request from "@/utils/request";
 
-export function collect_transaction(id) {
+export function collect_transaction(fd) {
   return request({
     url: "/transaction/collect_transaction",
     method: "post",
-    data: { id: id },
+    data: fd,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 }
 

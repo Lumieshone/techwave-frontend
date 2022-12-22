@@ -59,7 +59,7 @@
           <v-col cols="4">
             <v-row no-gutters>
               <span class="lead">跳转至第</span>
-              <v-text-field class="shrink" solo dense v-model="whichPage" ></v-text-field>
+              <v-text-field class="shrink" color="#7d73be" solo dense v-model="whichPage" ></v-text-field>
               <span class="lead">页</span>
               <v-btn class="goBtn" small fab @click="jumpPage()">GO</v-btn>
             </v-row>

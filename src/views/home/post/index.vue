@@ -10,7 +10,7 @@
     <v-btn text>{{ postData.subsectionName }}</v-btn>
 
     <!-- title -->
-    <h1>{{ postData.title }}</h1>
+    <h1 style="margin-bottom:20px;margin-top:10px">{{ postData.title }}</h1>
     <p>帖子id: {{ postId }}</p>
     <p>帖子浏览量: {{ postData.browseNumber }}</p>
 
@@ -36,17 +36,18 @@
             item-text="folderName"
             item-value="id"
             label="选择收藏夹"
+            color="#7d73be"
           ></v-select>
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click.native="close_collect_dialog"
             >取消
           </v-btn>
-          <v-btn color="blue" class="ma-2 white--text" small @click="collect">
+          <v-btn color="#7d73be" class="ma-2 white--text" small @click="collect">
             确定
           </v-btn></v-card-actions
         >
@@ -81,6 +82,7 @@
         :commentData="singleCommentVOList"
         :postId="Number(postId)"
         :is_login="Boolean(is_login)"
+        @refresh="refreshList"
       />
     </v-col>
 
@@ -90,6 +92,7 @@
       v-model="curPage"
       :length="Math.ceil(postData.total / limit)"
       total-visible="7"
+      color="#6A5ACD"
       @input="onPageChange(curPage, limit)"
     ></v-pagination>
 
@@ -101,6 +104,7 @@
         <v-card-text>
           <v-textarea
             v-model="commentContent"
+            color="#7d73be"
             outlined
             label="评论"
           ></v-textarea>
@@ -127,26 +131,28 @@
     </v-col> -->
 
     <!-- 富文本 -->
-    <template>
-      <div style="border: 1px solid #ccc">
-        <Toolbar
-          style="border-bottom: 1px solid #ccc"
-          :editor="editor"
-          :defaultConfig="toolbarConfig"
-          :mode="mode"
-        />
-        <Editor
-          style="height: 500px; overflow-y: hidden"
-          v-model="commentContent"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="onCreated"
-        />
-      </div>
-    </template>
+    <div v-show="is_login">
+      <template>
+        <div style="border: 1px solid #ccc">
+          <Toolbar
+            style="border-bottom: 1px solid #ccc"
+            :editor="editor"
+            :defaultConfig="toolbarConfig"
+            :mode="mode"
+          />
+          <Editor
+            style="height: 500px; overflow-y: hidden"
+            v-model="commentContent"
+            :defaultConfig="editorConfig"
+            :mode="mode"
+            @onCreated="onCreated"
+          />
+        </div>
+      </template>
+    </div>
 
     <v-btn
-      color="blue"
+      color="#7d73be"
       class="ma-2 white--text"
       small
       @click="reply_on_post"
@@ -274,6 +280,7 @@ export default {
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
+            this.refreshList();
           } else this.$message.error("阿欧，好像回复出现了一点小问题..");
         })
         .catch((err) => console.log("error: " + err));
@@ -290,7 +297,7 @@ export default {
           .error(() => {
             this.$message.error("额，似乎取消收藏出现了问题..");
           });
-          return;
+        return;
       }
 
       this.show_collect_dialog = true;
@@ -319,9 +326,11 @@ export default {
   },
   mounted() {
     this.postId = this.$route.params.postId;
-    get_folders().then((res) => {
-      this.folders = res.data.folders;
-    });
+    if (this.is_login) {
+      get_folders().then((res) => {
+        this.folders = res.data.folders;
+      });
+    }
     this.refreshList();
   },
 

@@ -50,6 +50,7 @@
               label="收藏夹名称"
               @click:append="renameFolder"
               :value="this.folderName"
+              v-model="folderName"
           ></v-text-field>
           <v-btn
               color="#6A5ACD"
@@ -117,7 +118,7 @@
     </v-row>
     <DeleteConfirm
         :showConfirm="this.showConfirm"
-        :folder="this.folderId"
+        :folderId="this.folderId"
         @close="closeConfirm"
     >
     </DeleteConfirm>

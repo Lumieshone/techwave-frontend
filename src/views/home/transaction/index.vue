@@ -27,11 +27,11 @@
           absolute
           right
         >
-          <v-icon :color="isCollected ? 'orange' : 'grey'">mdi-star</v-icon>
+          <v-icon :color="transactionInfo.isCollected ? 'orange' : 'grey'">mdi-star</v-icon>
           收藏
-          {{
+          <!-- {{
             transactionInfo.type == "出售" ? transactionInfo.collectNumber : ""
-          }}
+          }} -->
         </v-btn>
         浏览{{ transactionInfo.viewCounts }}
       </v-card-subtitle>
@@ -78,15 +78,15 @@
     </v-card>
 
     <!-- contact -->
-    <v-dialog v-model="show_contact_dialog">
-      <v-card>
+    <v-dialog v-model="show_contact_dialog" width="30%">
+      <v-card >
         <v-card-title>联系方式</v-card-title>
         <v-card-text
           >{{ contactInfo.contactType }} ： {{ contactInfo.contactNumber }}
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be" 
             class="ma-2 white--text"
             small
             @click="close_contact_dialog"
@@ -146,14 +146,11 @@ export default {
 
     // collect
     collect() {
-      collect_transaction(this.transactionId)
+      let fd = new FormData();
+      fd.append("id", this.transactionId);
+      collect_transaction(fd)
         .then(() => {
-          this.isCollected = !this.isCollected;
-          if (this.isCollected == true) {
-            this.transactionInfo.collectNumber++;
-          } else {
-            this.transactionInfo.collectNumber--;
-          }
+          this.transactionInfo.isCollected = !this.transactionInfo.isCollected;
         })
         .catch((err) => console.log("error: " + err));
     },

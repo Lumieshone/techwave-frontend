@@ -29,6 +29,7 @@
                 v-model="email"
                 :error-messages="errors"
                 label="Mail"
+                color="#7d73be"
                 required
               ></v-text-field>
             </validation-provider>
@@ -42,6 +43,7 @@
                 :type="show_password ? 'text' : 'password'"
                 @click:append="show_password = !show_password"
                 v-model="password"
+                color="#7d73be"
                 :error-messages="errors"
                 label="Password"
                 required
@@ -99,7 +101,7 @@ export default {
   data() {
     return {
       // info
-      email: "test@163.com",
+      email: "",
       password: "12345678",
 
       // loading logo
@@ -135,7 +137,7 @@ export default {
         })
         .catch(() => {
           this.loading = false;
-          this.$message.error("登录出现了一点问题..");
+          // this.$message.error("登录出现了一点问题..");
           console.log("login fail");
         });
     },

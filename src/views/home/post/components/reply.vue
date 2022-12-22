@@ -12,50 +12,54 @@
         <v-card-text>{{ singlereplyData.content }}</v-card-text>
         <v-card-actions>
           <v-btn
-            color="primary"
+            color="#7d73be"
             fab
             small
             :disabled="!is_login"
             v-on:click="
-              open_reply_dialog(singlereplyData.authorName, singlereplyData.replyId)
+              open_reply_dialog(
+                singlereplyData.authorName,
+                singlereplyData.replyId
+              )
             "
           >
-            <v-icon>mdi-comment</v-icon>
+            <v-icon color="white">mdi-comment</v-icon>
           </v-btn>
           <v-btn
-            color="primary"
+            color="#7d73be"
             fab
             small
             :disabled="!is_login"
             v-show="is_login && singlereplyData.ableToDelete"
             v-on:click="open_delete_dialog(singlereplyData.replyId)"
           >
-            <v-icon>mdi-delete</v-icon>
+            <v-icon color="white">mdi-delete</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
 
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog">
+    <v-dialog v-model="show_reply_dialog" width="50%">
       <v-card>
         <v-card-title>回复给 {{ replyToUserName }}</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="reply_content"
+            color="#7d73be"
             outlined
             label="输入你的评论（请文明发言~）"
           ></v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_reply_dialog"
             >取消
           </v-btn>
-          <v-btn color="blue" class="ma-2 white--text" small @click="reply">
+          <v-btn color="#7d73be" class="ma-2 white--text" small @click="reply">
             回复
           </v-btn></v-card-actions
         >
@@ -63,19 +67,19 @@
     </v-dialog>
 
     <!-- delete -->
-    <v-dialog v-model="show_delete_dialog">
+    <v-dialog v-model="show_delete_dialog" width="30%">
       <v-card>
         <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="close_delete_dialog"
             >取消
           </v-btn>
           <v-btn
-            color="blue"
+            color="#7d73be"
             class="ma-2 white--text"
             small
             @click="delete_reply"
@@ -145,8 +149,10 @@ export default {
         replyId: this.replyId,
       })
         .then((res) => {
-          if (res.code === 20000) this.$message.success("回复成功！");
-          else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          if (res.code === 20000) {
+            this.$message.success("回复成功！");
+            this.$emit("refresh");
+          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
           this.show_reply_dialog = false;
         })
         .catch((err) => console.log("error: " + err));
@@ -156,7 +162,7 @@ export default {
     open_delete_dialog(replyId) {
       this.show_delete_dialog = true;
       this.delete_replyId = replyId;
-      console.log(this.delete_replyId)
+      console.log(this.delete_replyId);
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
@@ -164,8 +170,10 @@ export default {
     },
     delete_reply() {
       delete_reply(this.delete_replyId).then((res) => {
-        if (res.code === 20000) this.$message.success("删除成功！");
-        else this.$message.error("阿欧，好像删除出现了一点小问题..");
+        if (res.code === 20000) {
+          this.$message.success("删除成功！");
+          this.$emit("refresh");
+        } else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
       this.show_delete_dialog = false;
     },

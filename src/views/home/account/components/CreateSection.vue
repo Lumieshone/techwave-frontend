@@ -15,12 +15,12 @@
         <v-text-field
             v-model="title"
             color="#483D8B"
-            maxlength="10"
+            maxlength="20"
             :rules="titleRules"
             dense
             outlined
             prepend-icon="mdi-view-dashboard-edit-outline"
-            :counter="30"
+            :counter="20"
             label="版块名"
             required
         ></v-text-field>
