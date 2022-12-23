@@ -267,21 +267,27 @@ export default {
           change_section_avatar(fd)
             .then((res) => {
               console.log(res.message);
-              if (res.code === 20000) this.$message.success("更换头像成功！");
+              if (res.code === 20000) {
+                this.$message.success("更换头像成功！");
+                this.$emit("submit_2", false);
+              }
               else this.$message.error("更换头像失败~");
             })
             .catch((err) => console.log("error: " + err));
-          this.$emit("submit_2", false);
+          this.clearDialog()
         }
         else if(this.select===this.choices[1]){
           change_section_intro(this.id,this.intro)
               .then((res) => {
                 console.log(res.message);
-                if (res.code === 20000) this.$message.success("编辑简介成功！");
+                if (res.code === 20000) {
+                  this.$message.success("编辑简介成功！");
+                  this.$emit("submit_2", false);
+                }
                 else this.$message.error("编辑简介失败~");
               })
               .catch((err) => console.log("error: " + err));
-          this.$emit("submit_2", false);
+          this.clearDialog()
         }
         else if(this.select===this.choices[2]){
           if(this.subSelect===this.subChoices[0])
@@ -294,29 +300,38 @@ export default {
             console.log(subsections)
             add_subsection(this.id,subsections) .then((res) => {
               console.log(res.message);
-              if (res.code === 20000) this.$message.success("创建子版块成功！");
+              if (res.code === 20000) {
+                this.$message.success("创建子版块成功！");
+                this.$emit("submit_2", false);
+              }
               else this.$message.error("创建子版块失败~");
             })
                 .catch((err) => console.log("error: " + err));
-            this.$emit("submit_2", false);
+            this.clearDialog()
           }
           else if(this.subSelect===this.subChoices[1]){
             rename_subsection(this.subSection,this.subSectionName).then((res) => {
               console.log(res.message);
-              if (res.code === 20000) this.$message.success("重命名成功！");
+              if (res.code === 20000) {
+                this.$message.success("重命名成功！");
+                this.$emit("submit_2", false);
+              }
               else this.$message.error("重命名失败~");
             })
                 .catch((err) => console.log("error: " + err));
-            this.$emit("submit_2", false);
+            this.clearDialog()
           }
           else if(this.subSelect===this.subChoices[2]){
             delete_subsection(this.subSection).then((res) => {
               console.log(res.message);
-              if (res.code === 20000) this.$message.success("删除成功！");
+              if (res.code === 20000) {
+                this.$message.success("删除成功！");
+                this.$emit("submit_2", false);
+              }
               else this.$message.error("删除失败~");
             })
                 .catch((err) => console.log("error: " + err));
-            this.$emit("submit_2", false);
+            this.clearDialog()
           }
         }
       }
