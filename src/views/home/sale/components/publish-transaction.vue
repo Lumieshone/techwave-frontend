@@ -1,6 +1,6 @@
 <template>
   <v-card
-    ><v-card-title>发布{{ topic == 1 ? "求购" : "出售" }}帖子</v-card-title>
+    ><v-card-title>发布{{ topic === 1 ? "求购" : "出售" }}帖子</v-card-title>
     <v-card-subtitle>*可以查看联系方式的用户均经过学号认证</v-card-subtitle>
     <v-card-text>
       <validation-observer ref="observer" v-slot="{ invalid }">
@@ -149,6 +149,7 @@
           <v-file-input
             v-model="transactionInfo.image"
             accept="image/*"
+            color="#7d73be"
             small-chips
             multiple
             label="上传图片"
@@ -252,7 +253,7 @@ export default {
         .validate()
         .then(() => {
           let fd = new FormData();
-          fd.append("type", this.topic == 0 ? "sell" : "seek");
+          fd.append("type", this.topic === 0 ? "sell" : "seek");
           fd.append("title", this.transactionInfo.title);
           fd.append("price", this.transactionInfo.price);
           fd.append("tagId", this.transactionInfo.selectTagId);
@@ -274,10 +275,10 @@ export default {
   },
   computed: {
     subtags: function () {
-      if (this.transactionInfo.selectTagId == undefined) {
+      if (this.transactionInfo.selectTagId === undefined) {
         return [];
       } else {
-        return this.tags.find((t) => t.tagId == this.transactionInfo.selectTagId).subtagList;
+        return this.tags.find((t) => t.tagId === this.transactionInfo.selectTagId).subtagList;
       }
     },
   },

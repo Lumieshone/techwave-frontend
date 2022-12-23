@@ -243,13 +243,16 @@ export default {
         }
         create_section(fd)
             .then((res) => {
-              console.log(res.message);
-              if (res.code === 20000) this.$message.success("创建版块成功！");
+              console.log(res.msg);
+              console.log(res.success)
+              if (res.code === 20000) {
+                this.$message.success("创建版块成功！");
+                this.$emit("submit_1", false);
+              }
               else this.$message.error("创建版块失败~");
             })
             .catch((err) => console.log("error: " + err));
-        this.$emit("submit_1", false);
-        this.clearDialog();
+        this.clearDialog()
       }
     },
     edit (index, item) {
