@@ -71,17 +71,20 @@ export const constantRoutes = [
       {
         path: "/moderator-dashboard/:sectionId/process-report",
         meta: { title: "处理举报" },
-        component: () => import("@/views/moderator-dashboard/ProcessReport/index"),
+        component: () =>
+          import("@/views/moderator-dashboard/ProcessReport/index"),
       },
       {
         path: "/moderator-dashboard/:sectionId/edit-section",
         meta: { title: "编辑版块" },
-        component: () => import("@/views/moderator-dashboard/EditSectionData/index"),
+        component: () =>
+          import("@/views/moderator-dashboard/EditSectionData/index"),
       },
       {
         path: "/moderator-dashboard/:sectionId/highlight-post",
         meta: { title: "设为精华" },
-        component: () => import("@/views/moderator-dashboard/HighlightPost/index"),
+        component: () =>
+          import("@/views/moderator-dashboard/HighlightPost/index"),
       },
       {
         path: "/moderator-dashboard/:sectionId/pin-post",
@@ -92,7 +95,7 @@ export const constantRoutes = [
         path: "/moderator-dashboard/:sectionId/ban-user",
         meta: { title: "封禁用户" },
         component: () => import("@/views/moderator-dashboard/BanUser/index"),
-      }
+      },
     ],
   },
 
@@ -138,8 +141,30 @@ export const constantRoutes = [
       {
         path: "/message/",
         meta: { title: "消息" },
-
         component: () => import("@/views/home/message/index"),
+        redirect: "/message/my-message",
+        children: [
+          {
+            path: "/message/my-message",
+            meta: { title: "我的消息" },
+            component: () => import("@/views/home/message/MyMessages"),
+          },
+          {
+            path: "/message/system-notification",
+            meta: { title: "系统通知" },
+            component: () => import("@/views/home/message/SystemNotification"),
+          },
+          {
+            path: "/message/received-like",
+            meta: { title: "收到的赞" },
+            component: () => import("@/views/home/message/ReceivedLikes"),
+          },
+          {
+            path: "/message/reply-me",
+            meta: { title: "回复我的" },
+            component: () => import("@/views/home/message/ReplyMe"),
+          },
+        ],
       },
       {
         path: "/account",
@@ -177,13 +202,6 @@ export const constantRoutes = [
             path: "/account/safety",
             meta: { title: "安全设置" },
             component: () => import("@/views/home/account/AccountSafety"),
-          },
-          {
-            name: "section",
-            path: "/account/section",
-            meta: { title: "创建版块" },
-            component: () =>
-              import("@/views/home/account/AccountSectionManagement"),
           },
         ],
       },

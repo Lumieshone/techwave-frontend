@@ -1,6 +1,6 @@
 import router from "./router";
 import store from "./store";
-// import { Message } from 'element-ui'
+import Message from "./components/Message/index.js";
 import { getToken } from "@/utils/auth"; // get token from cookie
 import getPageTitle from "@/utils/getPageTitle";
 
@@ -16,17 +16,52 @@ router.beforeEach(async (to, from, next) => {
       // if is logged in, redirect to the home page
       next({ path: "/" });
     } else {
+      console.log(store.getters.roles);
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0;
       if (hasRoles) {
-        if (
-          to.path === "/admin-login" &&
-          store.getters.roles.includes("admin")
-        ) {
-          // if is logged in, redirect to the home page
-          next({ path: "/admin-dashboard" });
-        } else {
-          next();
+        // moderator
+        console.log(store.getters.roles);
+        if (to.path.includes("/moderator-dashboard")) {
+          const sectionId = to.params.sectionId;
+          console.log(sectionId);
+          let isModerator = false;
+          console.log(sectionId);
+          store.getters.roles.forEach((role) => {
+            if (role.name == "moderator" && role.sectionId == sectionId) {
+              isModerator = true;
+              console.log(isModerator);
+            }
+          });
+          if (isModerator) {
+            next();
+          } else {
+            Message.error("您不是该版块的版主");
+            next({ path: "/" });
+          }
+        }
+        // admin
+        let isAdmin = false;
+        store.getters.roles.forEach((role) => {
+          if (role.name == "admin") {
+            isAdmin = true;
+          }
+        });
+        if (isAdmin) {
+          if (to.path == "/admin-login") {
+            // if is logged in, redirect to the home page
+            next({ path: "/admin-dashboard" });
+          }
+          if (to.path.includes("/admin-dashboard")) {
+            next();
+          } else {
+            Message.error("管理员只能访问管理员中台");
+            next({ path: "/admin-dashboard" });
+          }
+        }
+        if (to.path.includes("/admin-dashboard")) {
+          Message.error("普通用户无法访问管理员中台");
+          next({ path: "/" });
         }
       } else {
         try {
@@ -57,7 +92,7 @@ router.beforeEach(async (to, from, next) => {
           // remove token and go to login page to re-login
           await store.dispatch("user/resetToken");
 
-          // TODO: 报错提示
+          Message.error("获取信息失败，请重新登录");
           next(`/login?redirect=${to.path}`);
         }
       }

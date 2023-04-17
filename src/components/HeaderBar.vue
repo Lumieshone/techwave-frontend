@@ -29,6 +29,10 @@
           <v-icon left dense> mdi-facebook-messenger </v-icon>
           交流论坛
         </v-tab>
+        <v-tab class="mx-2 white--text" to="/message">
+          <v-icon left dense> mdi-message </v-icon>
+          我的消息
+        </v-tab>
         <v-tab class="mx-2 white--text" to="/account">
           <v-icon left dense> mdi-account </v-icon>
           个人中心
@@ -44,17 +48,17 @@
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="50" v-on:click.native="drawer = !drawer"
             ><img
-              :src="is_login ? avatar : ''"
-              :alt="is_login ? name : '登录'"
+              :src="isLogin ? avatar : ''"
+              :alt="isLogin ? name : '登录'"
               v-bind="attrs"
               v-on="on"
           /></v-avatar>
         </template>
         <v-list>
-          <v-list-item :disabled="is_login" @click="login()"
+          <v-list-item :disabled="isLogin" @click="login()"
             ><v-list-item-title>登录</v-list-item-title></v-list-item
           >
-          <v-list-item :disabled="!is_login" @click="logout()"
+          <v-list-item :disabled="!isLogin" @click="logout()"
             ><v-list-item-title>登出</v-list-item-title></v-list-item
           >
         </v-list>
@@ -70,7 +74,7 @@ export default {
   data() {
     return {
       drawer: false,
-      is_login: this.$store.getters.roles.length != 0,
+      isLogin: this.$store.getters.roles.length != 0,
       avatar: this.$store.getters.avatar,
       name: this.$store.getters.name,
     };

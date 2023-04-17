@@ -3,7 +3,7 @@ let baseURL = process.env.VUE_APP_BASE_API;
 const tokens = {
   admin: "admin-token",
   user: "user-token",
-  moderator: "user-token",
+  moderator: "moderator-token",
 };
 
 const users = {
