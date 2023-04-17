@@ -93,7 +93,7 @@ export default {
   name: "AccountInfo",
   data() {
     return {
-      is_login: this.$store.getters.roles.length != 0,
+      isLogin: this.$store.getters.roles.length != 0,
 
       title: "个人信息",
       isReadonly: true,
@@ -151,7 +151,7 @@ export default {
     },
   },
   mounted() {
-    if (this.is_login) {
+    if (this.isLogin) {
       getUserInfo()
         .then((res) => {
           if (res.code === 20000) {

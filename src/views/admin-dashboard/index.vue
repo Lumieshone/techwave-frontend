@@ -2,6 +2,8 @@
   <v-app>
     <v-app-bar app color="indigo" dark>
       <v-toolbar-title>TechWave管理员中台</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn @click="logout" text>退出登录</v-btn>
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
@@ -45,6 +47,19 @@ export default {
       drawer: true,
       mini: true,
     };
+  },
+  methods: {
+    logout() {
+      this.$store
+        .dispatch("user/logout")
+        .then(() => {
+          console.log("logout completed");
+          this.$router.push("/admin-login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>

@@ -18,11 +18,11 @@
     <!-- <v-chip class="ma-2" v-for="tag in postData.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
 
     <!-- 是否收藏 -->
-    <v-btn :disabled="!is_login" v-on:click="open_collect_dialog">
+    <v-btn :disabled="!isLogin" v-on:click="open_collect_dialog">
       <v-icon :color="postData.isCollected ? 'orange' : 'grey'"
         >mdi-star
       </v-icon>
-      {{ is_login ? "收藏" : "请先登录再收藏" }}
+      {{ isLogin ? "收藏" : "请先登录再收藏" }}
     </v-btn>
 
     <!-- 收藏文件夹 -->
@@ -81,7 +81,7 @@
       <PostComment
         :commentData="singleCommentVOList"
         :postId="Number(postId)"
-        :is_login="Boolean(is_login)"
+        :isLogin="Boolean(isLogin)"
         @refresh="refreshList"
       />
     </v-col>
@@ -122,16 +122,16 @@
             class="ma-2 white--text"
             small
             @click="replyOnPost"
-            :disabled="!is_login"
+            :disabled="!isLogin"
           >
-            {{ is_login ? "评论" : "请先登录再发表评论" }}
+            {{ isLogin ? "评论" : "请先登录再发表评论" }}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-col> -->
 
     <!-- 富文本 -->
-    <div v-show="is_login">
+    <div v-show="isLogin">
       <template>
         <div style="border: 1px solid #ccc">
           <Toolbar
@@ -156,9 +156,9 @@
       class="ma-2 white--text"
       small
       @click="replyOnPost"
-      :disabled="!is_login"
+      :disabled="!isLogin"
     >
-      {{ is_login ? "评论" : "请先登录再发表评论" }}
+      {{ isLogin ? "评论" : "请先登录再发表评论" }}
     </v-btn>
   </v-container>
 </template>
@@ -198,7 +198,7 @@ export default {
       // comment_image_info: [],
 
       // is login?
-      is_login: this.$store.getters.roles.length > 0,
+      isLogin: this.$store.getters.roles.length > 0,
 
       // post id (from query)
       postId: undefined,
@@ -326,7 +326,7 @@ export default {
   },
   mounted() {
     this.postId = this.$route.params.postId;
-    if (this.is_login) {
+    if (this.isLogin) {
       getFolders().then((res) => {
         this.folders = res.data.folders;
       });

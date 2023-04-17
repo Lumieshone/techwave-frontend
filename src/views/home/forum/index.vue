@@ -4,10 +4,10 @@
       <v-card-title>
         <!-- <v-avatar size="50"
           ><img
-            :src="is_login ? avatar : ''"
-            :alt="is_login ? this.$store.getters.name : '登录'"
+            :src="isLogin ? avatar : ''"
+            :alt="isLogin ? this.$store.getters.name : '登录'"
         /></v-avatar> -->
-        {{ is_login ? "我的收藏" : "登录后查看收藏~" }}
+        {{ isLogin ? "我的收藏" : "登录后查看收藏~" }}
       </v-card-title>
       <v-card-text>
         <v-row>
@@ -88,7 +88,7 @@ export default {
       searchLoading: false,
 
       // info
-      is_login: this.$store.getters.roles.length > 0,
+      isLogin: this.$store.getters.roles.length > 0,
       avatar: this.$store.getters.avatar,
 
       // collect sections
@@ -108,7 +108,7 @@ export default {
     },
   },
   mounted() {
-    // if (this.is_login) {
+    // if (this.isLogin) {
     //   get_collect_sections().then((res) => {
     //     this.collectSectionsInfo = res.data;
     //   });

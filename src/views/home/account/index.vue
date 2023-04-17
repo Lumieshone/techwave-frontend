@@ -55,13 +55,8 @@
             </v-list>
             <v-divider></v-divider>
             <v-list>
-              <template v-for="(item, index) in items">
-                <v-list-item
-                  :key="item.title"
-                  :to="item.router"
-                  link
-                  class="pl-16"
-                >
+              <div v-for="(item, index) in items" :key="item.title">
+                <v-list-item :to="item.router" link class="pl-16">
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
@@ -74,7 +69,7 @@
                   v-if="index < items.length - 1"
                   :key="index"
                 ></v-divider>
-              </template>
+              </div>
             </v-list>
 
             <template v-slot:append>
@@ -133,14 +128,30 @@ export default {
       userAvatar: "",
       nickname: "",
       items: [
-        { title: '个人信息', icon: 'mdi-account-box', router: '/account/info'},
-        { title: '我的收藏', icon: 'mdi-star', router: '/account/collect'},
-        { title: '我的帖子', icon: 'mdi-note-edit', router: '/account/post'},
-        { title: '回复我的', icon: 'mdi-message-reply-text', router: '/account/reply'},
-        { title: '我的交易', icon: 'mdi-wallet', router: '/account/transaction'},
-        { title: '我的版块', icon: 'mdi-view-dashboard', router: '/account/section'},
-        { title: '安全设置', icon: 'mdi-lock', router: '/account/safety'},
-        { title: '学生认证', icon: 'mdi-account-check', router: '/account/certify'},
+        { title: "个人信息", icon: "mdi-account-box", router: "/account/info" },
+        { title: "我的收藏", icon: "mdi-star", router: "/account/collect" },
+        { title: "我的帖子", icon: "mdi-note-edit", router: "/account/post" },
+        {
+          title: "回复我的",
+          icon: "mdi-message-reply-text",
+          router: "/account/reply",
+        },
+        {
+          title: "我的交易",
+          icon: "mdi-wallet",
+          router: "/account/transaction",
+        },
+        {
+          title: "我的版块",
+          icon: "mdi-view-dashboard",
+          router: "/account/section",
+        },
+        { title: "安全设置", icon: "mdi-lock", router: "/account/safety" },
+        {
+          title: "学生认证",
+          icon: "mdi-account-check",
+          router: "/account/certify",
+        },
       ],
     };
   },

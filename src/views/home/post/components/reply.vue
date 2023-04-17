@@ -15,7 +15,7 @@
             color="#7d73be"
             fab
             small
-            :disabled="!is_login"
+            :disabled="!isLogin"
             v-on:click="
               open_reply_dialog(
                 singlereplyData.authorName,
@@ -29,9 +29,9 @@
             color="#7d73be"
             fab
             small
-            :disabled="!is_login"
-            v-show="is_login && singlereplyData.ableToDelete"
-            v-on:click="open_delete_dialog(singlereplyData.replyId)"
+            :disabled="!isLogin"
+            v-show="isLogin && singlereplyData.ableToDelete"
+            v-on:click="openDeleteDialog(singlereplyData.replyId)"
           >
             <v-icon color="white">mdi-delete</v-icon>
           </v-btn>
@@ -40,12 +40,12 @@
     </v-col>
 
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog" width="50%">
+    <v-dialog v-model="showReplyDialog" width="50%">
       <v-card>
         <v-card-title>回复给 {{ replyToUserName }}</v-card-title>
         <v-card-text>
           <v-textarea
-            v-model="reply_content"
+            v-model="replyContent"
             color="#7d73be"
             outlined
             label="输入你的评论（请文明发言~）"
@@ -56,7 +56,7 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click="close_reply_dialog"
+            @click="closeReplyDialog"
             >取消
           </v-btn>
           <v-btn color="#7d73be" class="ma-2 white--text" small @click="reply">
@@ -67,7 +67,7 @@
     </v-dialog>
 
     <!-- delete -->
-    <v-dialog v-model="show_delete_dialog" width="30%">
+    <v-dialog v-model="showDeleteDialog" width="30%">
       <v-card>
         <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
@@ -75,7 +75,7 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click="close_delete_dialog"
+            @click="closeDeleteDialog"
             >取消
           </v-btn>
           <v-btn
@@ -99,7 +99,7 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Postreply",
   props: {
-    is_login: Boolean,
+    isLogin: Boolean,
     replyData: {
       replyId: Number,
       updateTime: Date,
@@ -112,13 +112,13 @@ export default {
   data() {
     return {
       // reply
-      show_reply_dialog: false,
+      showReplyDialog: false,
       replyId: undefined,
       replyToUserName: "",
-      reply_content: undefined,
+      replyContent: undefined,
 
       // delete
-      show_delete_dialog: false,
+      showDeleteDialog: false,
       deleteReplyId: undefined,
     };
   },
@@ -127,25 +127,25 @@ export default {
 
     // reply
     open_reply_dialog(author, replyId) {
-      this.show_reply_dialog = true;
+      this.showReplyDialog = true;
       this.replyId = replyId;
       this.replyToUserName = author;
-      this.reply_content = "";
+      this.replyContent = "";
     },
-    close_reply_dialog() {
-      this.show_reply_dialog = false;
+    closeReplyDialog() {
+      this.showReplyDialog = false;
       this.replyId = undefined;
       this.replyToUserName = "";
-      this.reply_content = "";
+      this.replyContent = "";
     },
     reply() {
-      if (this.reply_content == "") {
+      if (this.replyContent == "") {
         this.$message.error("评论内容还为空哦");
         return;
       }
 
       replyOnReply({
-        content: this.reply_content,
+        content: this.replyContent,
         replyId: this.replyId,
       })
         .then((res) => {
@@ -153,19 +153,19 @@ export default {
             this.$message.success("回复成功！");
             this.$emit("refresh");
           } else this.$message.error("阿欧，好像回复出现了一点小问题..");
-          this.show_reply_dialog = false;
+          this.showReplyDialog = false;
         })
         .catch((err) => console.log("error: " + err));
     },
 
     // delete
-    open_delete_dialog(replyId) {
-      this.show_delete_dialog = true;
+    openDeleteDialog(replyId) {
+      this.showDeleteDialog = true;
       this.deleteReplyId = replyId;
       console.log(this.deleteReplyId);
     },
-    close_delete_dialog() {
-      this.show_delete_dialog = false;
+    closeDeleteDialog() {
+      this.showDeleteDialog = false;
       this.deleteReplyId = undefined;
     },
     deleteReply() {
@@ -175,7 +175,7 @@ export default {
           this.$emit("refresh");
         } else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
-      this.show_delete_dialog = false;
+      this.showDeleteDialog = false;
     },
   },
 };

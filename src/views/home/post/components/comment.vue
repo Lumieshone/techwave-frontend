@@ -15,7 +15,7 @@
         <div v-html="commentData.content"></div>
         <PostReply
           :replyData="commentData.replyVOList"
-          :is_login="Boolean(is_login)"
+          :isLogin="Boolean(isLogin)"
           @refresh="refresh"
         ></PostReply>
       </v-card-text>
@@ -24,7 +24,7 @@
           color="#7d73be"
           fab
           small
-          :disabled="!is_login"
+          :disabled="!isLogin"
           v-on:click="open_reply_dialog(commentData.commentId)"
         >
           <v-icon color="white">mdi-comment</v-icon>
@@ -33,9 +33,9 @@
           color="#7d73be"
           fab
           small
-          :disabled="!is_login"
-          v-show="is_login && commentData.ableToDelete"
-          v-on:click="open_delete_dialog(commentData.commentId)"
+          :disabled="!isLogin"
+          v-show="isLogin && commentData.ableToDelete"
+          v-on:click="openDeleteDialog(commentData.commentId)"
         >
           <v-icon color="white">mdi-delete</v-icon>
         </v-btn>
@@ -43,7 +43,7 @@
     </v-card>
 
     <!-- reply -->
-    <v-dialog v-model="show_reply_dialog" width="50%">
+    <v-dialog v-model="showReplyDialog" width="50%">
       <v-card>
         <v-card-title>回复给 {{ commentData.floor }} 楼</v-card-title>
         <v-card-text>
@@ -59,7 +59,7 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click="close_reply_dialog"
+            @click="closeReplyDialog"
             >取消
           </v-btn>
           <v-btn color="#7d73be" class="ma-2 white--text" small @click="reply">
@@ -70,7 +70,7 @@
     </v-dialog>
 
     <!-- delete -->
-    <v-dialog v-model="show_delete_dialog" width="30%">
+    <v-dialog v-model="showDeleteDialog" width="30%">
       <v-card>
         <v-card-title>确认删除 {{ commentData.floor }} 楼？</v-card-title>
         <v-card-actions>
@@ -78,7 +78,7 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click="close_delete_dialog"
+            @click="closeDeleteDialog"
             >取消
           </v-btn>
           <v-btn
@@ -114,7 +114,7 @@ export default {
       ableToDelete: Boolean,
     },
     postId: Number,
-    is_login: Boolean,
+    isLogin: Boolean,
   },
   components: {
     PostReply,
@@ -122,24 +122,24 @@ export default {
   data() {
     return {
       // reply to some commentId
-      show_reply_dialog: false,
+      showReplyDialog: false,
       replyToCommentId: undefined,
       replyContent: undefined,
 
       // delete my commentId
-      show_delete_dialog: false,
+      showDeleteDialog: false,
       deleteCommentId: undefined,
     };
   },
   methods: {
     // reply
     open_reply_dialog(commentId) {
-      this.show_reply_dialog = true;
+      this.showReplyDialog = true;
       this.replyToCommentId = commentId;
       this.replyContent = "";
     },
-    close_reply_dialog() {
-      this.show_reply_dialog = false;
+    closeReplyDialog() {
+      this.showReplyDialog = false;
       this.replyToCommentId = undefined;
       this.replyContent = "";
     },
@@ -158,18 +158,18 @@ export default {
             this.$message.success("回复成功！");
             this.$emit("refresh");
           } else this.$message.error("阿欧，好像回复出现了一点小问题..");
-          this.show_reply_dialog = false;
+          this.showReplyDialog = false;
         })
         .catch((err) => console.log("error: " + err));
     },
 
     // delete
-    open_delete_dialog(commentId) {
-      this.show_delete_dialog = true;
+    openDeleteDialog(commentId) {
+      this.showDeleteDialog = true;
       this.deleteCommentId = commentId;
     },
-    close_delete_dialog() {
-      this.show_delete_dialog = false;
+    closeDeleteDialog() {
+      this.showDeleteDialog = false;
       this.deleteCommentId = undefined;
     },
     deleteComment() {
@@ -179,7 +179,7 @@ export default {
           this.$emit("refresh");
         } else this.$message.error("阿欧，好像删除出现了一点小问题..");
       });
-      this.show_delete_dialog = false;
+      this.showDeleteDialog = false;
     },
     refresh() {
       console.log("receive message from reply");
