@@ -1,14 +1,13 @@
-import { login, logout, getInfo, adminlogin } from "@/api/user";
+import { login, logout, getInfo, adminLogin } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import { resetRouter } from "@/router";
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: "",
+    username: "",
     avatar: "",
     roles: [],
-    isAuthenticated: false,
   };
 };
 
@@ -21,8 +20,8 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
   },
-  SET_NAME: (state, name) => {
-    state.name = name;
+  SET_USERNAME: (state, username) => {
+    state.username = username;
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar;
@@ -30,22 +29,18 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles;
   },
-  SET_AUTHENTICATION: (state, isAuthenticated) => {
-    // 是否为在校生
-    state.isAuthenticated = isAuthenticated;
-  },
 };
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { email, password } = userInfo;
+    const { account, password } = userInfo;
     return new Promise((resolve, reject) => {
-      login({ email: email.trim(), password: password })
+      login({ account: account.trim(), password: password })
         .then((response) => {
           const { data } = response;
-          commit("SET_TOKEN", data.token);
-          setToken(data.token);
+          commit("SET_TOKEN", data);
+          setToken(data);
           resolve();
         })
         .catch((error) => {
@@ -55,14 +50,14 @@ const actions = {
   },
 
   // user login
-  adminlogin({ commit }, userInfo) {
+  adminLogin({ commit }, userInfo) {
     const { username, password } = userInfo;
     return new Promise((resolve, reject) => {
-      adminlogin({ username: username.trim(), password: password })
+      adminLogin({ username: username.trim(), password: password })
         .then((response) => {
           const { data } = response;
-          commit("SET_TOKEN", data.token);
-          setToken(data.token);
+          commit("SET_TOKEN", data);
+          setToken(data);
           resolve();
         })
         .catch((error) => {
@@ -82,7 +77,7 @@ const actions = {
             return reject("Verification failed, please Login again.");
           }
 
-          const { roles, name, avatar, isAuthenticated } = data;
+          const { roles, username, avatar } = data;
 
           // roles must be a non-empty array
           if (!roles || roles.length <= 0) {
@@ -90,9 +85,8 @@ const actions = {
           }
 
           commit("SET_ROLES", roles);
-          commit("SET_NAME", name);
+          commit("SET_USERNAME", username);
           commit("SET_AVATAR", avatar);
-          commit("SET_AUTHENTICATION", isAuthenticated);
 
           resolve(data);
         })

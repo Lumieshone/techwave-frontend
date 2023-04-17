@@ -52,7 +52,7 @@
 <script>
 import EditEmail from "@/views/home/account/components/EditEmail";
 import EditPassword from "@/views/home/account/components/EditPassword";
-import { get_user_info } from "@/api/account";
+import { getUserInfo } from "@/api/account";
 export default {
   name: "AccountSafety",
   data() {
@@ -85,7 +85,7 @@ export default {
     },
   },
   mounted() {
-    get_user_info()
+    getUserInfo()
       .then((res) => {
         if (res.code === 20000) {
           console.log("获取邮箱成功");

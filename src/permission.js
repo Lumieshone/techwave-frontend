@@ -2,7 +2,7 @@ import router from "./router";
 import store from "./store";
 // import { Message } from 'element-ui'
 import { getToken } from "@/utils/auth"; // get token from cookie
-import getPageTitle from "@/utils/get-page-title";
+import getPageTitle from "@/utils/getPageTitle";
 
 router.beforeEach(async (to, from, next) => {
   // set page title

@@ -17,10 +17,10 @@ Vue.config.productionTip = false
 Vue.prototype.$baseURL = process.env.VUE_APP_BASE_API
 Vue.use(VueParticles)
 
-// if (process.env.NODE_ENV === 'development') {
-//   const { mockXHR } = require('../mock')
-//   mockXHR()
-// }
+if (process.env.NODE_ENV === 'development') {
+  const { mockXHR } = require('../mock')
+  mockXHR()
+}
 
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'

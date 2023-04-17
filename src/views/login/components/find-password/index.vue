@@ -22,7 +22,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="2">
-              <v-btn @click="send_email_code()">发送验证码</v-btn>
+              <v-btn @click="sendEmailCode()">发送验证码</v-btn>
             </v-col>
           </v-row>
 
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { send_email_code, verify_and_modify_pwd } from "@/api/user";
+import { sendEmailCode, verifyAndModifyPassword } from "@/api/user";
 import { required, max, min, email, confirmed } from "vee-validate/dist/rules";
 import {
   extend,
@@ -164,8 +164,8 @@ export default {
       this.$emit("close_find_password_dialog");
     },
 
-    send_email_code() {
-      send_email_code(this.email)
+    sendEmailCode() {
+      sendEmailCode(this.email)
         .then(() => {
           this.$message("发送成功！");
         })
@@ -178,7 +178,7 @@ export default {
       this.$refs.observer
         .validate()
         .then(() => {
-          verify_and_modify_pwd({
+          verifyAndModifyPassword({
             email: this.email,
             verifyCode: this.verify_code,
             newPassword: this.new_password,

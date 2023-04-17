@@ -1,16 +1,8 @@
 <template>
-  <v-footer
-      app
-      dark
-      color="#483D8B"
-      padless
-      absolute
-  >
-    <v-col
-        class="text-center"
-        cols="12"
-    >
-      {{ new Date().getFullYear() }} — <strong>济客空间</strong>
+  <v-footer app dark color="#483D8B" padless absolute>
+    <v-col class="text-center" cols="12">
+      {{ new Date().getFullYear() }} —
+      <strong>TechWave Team - @CopyRight</strong>
     </v-col>
   </v-footer>
 </template>

@@ -79,7 +79,7 @@
 
 <script>
 import CreateSection from "@/views/home/account/components/CreateSection";
-import {get_user_sections} from "@/api/account";
+import {getUserSections} from "@/api/account";
 import EditSection from "@/views/home/account/components/EditSection";
 export default {
   name: "AccountSection",
@@ -142,7 +142,7 @@ export default {
     },
   },
   mounted() {
-    get_user_sections()
+    getUserSections()
         .then(res => {
       if(res.code === 20000){
         console.log("获取用户版块信息成功")

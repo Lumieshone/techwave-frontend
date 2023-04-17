@@ -1,47 +1,43 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card width="50%">
       <v-card-title>Login - 登录</v-card-title>
       <v-card-subtitle>
         <router-link to="/register">注册</router-link>
         <span style="margin: 10px">|</span>
+        <router-link to="/admin-login">管理员登录</router-link>
+        <span style="margin: 10px">|</span>
         <v-dialog
-          v-model="show_find_password_dialog"
+          v-model="showFindPasswordDialog"
           transition="dialog-bottom-transition"
         >
           <template v-slot:activator="{ on, attrs }">
             <span v-bind="attrs" v-on="on">找回密码</span>
           </template>
-          <FindPassword
-            @close_find_password_dialog="show_find_password_dialog = false"
+          <find-password
+            @closeFindPasswordDialog="showFindPasswordDialog = false"
           />
         </v-dialog>
       </v-card-subtitle>
       <v-card-text>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="handleLogin">
-            <validation-provider
-              v-slot="{ errors }"
-              name="Mail"
-              rules="required|email"
-            >
-              <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="Mail"
-                color="#7d73be"
-                required
-              ></v-text-field>
-            </validation-provider>
+            <v-text-field
+              v-model="account"
+              :error-messages="errors"
+              label="Mail"
+              color="#7d73be"
+              required
+            ></v-text-field>
             <validation-provider
               v-slot="{ errors }"
               name="Password"
               rules="required"
             >
               <v-text-field
-                :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show_password ? 'text' : 'password'"
-                @click:append="show_password = !show_password"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
                 v-model="password"
                 color="#7d73be"
                 :error-messages="errors"
@@ -50,9 +46,9 @@
               ></v-text-field>
             </validation-provider>
             <v-btn class="mr-4" type="submit" :disabled="invalid">
-              submit
+              登录
             </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
+            <v-btn @click="clear"> 清空 </v-btn>
           </form>
         </validation-observer>
       </v-card-text>
@@ -63,7 +59,7 @@
 <script>
 import FindPassword from "@/views/login/components/find-password/index";
 
-import { required, max, min, email } from "vee-validate/dist/rules";
+import { required, max, min } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -75,19 +71,15 @@ setInteractionMode("eager");
 
 extend("max", {
   ...max,
-  message: "{_field_} may not be greater than {length} characters",
+  message: "{field} may not be greater than {length} characters",
 });
 extend("min", {
   ...min,
-  message: "{_field_} may not be fewer than {length} characters",
+  message: "{field} may not be fewer than {length} characters",
 });
 extend("required", {
   ...required,
-  message: "{_field_} can not be empty",
-});
-extend("email", {
-  ...email,
-  message: "{_field_} must be a valid email address",
+  message: "{field} can not be empty",
 });
 
 export default {
@@ -100,26 +92,17 @@ export default {
   },
   data() {
     return {
-      // info
-      email: "",
+      account: "user",
       password: "12345678",
-
-      // loading logo
       loading: false,
-
-      // 重定向
       redirect: undefined,
-
-      // find password
-      show_find_password_dialog: false,
-
-      // show password
-      show_password: false,
+      showFindPasswordDialog: false,
+      showPassword: false,
     };
   },
   watch: {
-    $route: {
-      handler: function (route) {
+    route: {
+      handler(route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true,
@@ -129,7 +112,11 @@ export default {
     handleLogin() {
       this.loading = true;
       this.$store
-        .dispatch("user/login", { email: this.email, password: this.password })
+        .dispatch("user/login", {
+          account: this.account,
+          password: this.password,
+        })
+
         .then(() => {
           this.loading = false;
           this.$message.success("登录成功！已为你自动跳转");
@@ -137,17 +124,16 @@ export default {
         })
         .catch(() => {
           this.loading = false;
-          // this.$message.error("登录出现了一点问题..");
           console.log("login fail");
         });
     },
     clear() {
-      this.email = "";
+      this.account = "";
       this.password = "";
       this.$refs.observer.reset();
     },
-    close_find_password_dialog() {
-      this.find_password_dialog = false;
+    closeFindPasswordDialog() {
+      this.showFindPasswordDialog = false;
     },
   },
 };

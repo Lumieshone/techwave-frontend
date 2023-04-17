@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || '济客空间'
+const title = defaultSettings.title || 'TechWave'
 
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {

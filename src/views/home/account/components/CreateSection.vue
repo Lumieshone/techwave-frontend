@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import {create_section} from "@/api/account";
+import {createSection} from "@/api/account";
 export default {
   name: "CreateSection",
   props: {
@@ -241,7 +241,7 @@ export default {
         for (let [a, b] of fd.entries()) {
           console.log(a, b);
         }
-        create_section(fd)
+        createSection(fd)
             .then((res) => {
               console.log(res.msg);
               console.log(res.success)

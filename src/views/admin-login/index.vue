@@ -1,8 +1,8 @@
-<template>
-  <v-card>
-    <v-card-title>AdminLogin - 管理员登录</v-card-title>
+<template style="display: flex; justify-content: center">
+  <v-card width="50%">
+    <v-card-title>adminLogin - 管理员登录</v-card-title>
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="handleLogin" class="pa-4">
         <validation-provider v-slot="{ errors }" name="Name" rules="required">
           <v-text-field
             v-model="username"
@@ -22,11 +22,16 @@
             :counter="10"
             :error-messages="errors"
             label="Password"
+            :type="showPwd ? 'text' : 'password'"
             required
+            append-icon="mdi-eye"
+            @click:append="showPwd = !showPwd"
           ></v-text-field>
         </validation-provider>
-        <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-        <v-btn @click="clear"> clear </v-btn>
+        <div class="d-flex justify-center flex-wrap">
+          <v-btn class="mt-2" type="submit" :disabled="invalid">登录</v-btn>
+          <v-btn class="mt-2" @click="clear">清空</v-btn>
+        </div>
       </form>
     </validation-observer>
   </v-card>
@@ -45,19 +50,20 @@ setInteractionMode("eager");
 
 extend("max", {
   ...max,
-  message: "{_field_} may not be greater than {length} characters",
+  message: "{field} 不能超过 {length} 个字符",
 });
+
 extend("min", {
   ...min,
-  message: "{_field_} may not be fewer than {length} characters",
+  message: "{field} 至少需要 {length} 个字符",
 });
+
 extend("required", {
   ...required,
-  message: "{_field_} can not be empty",
+  message: "{field} 不能为空",
 });
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: "AdminLogin",
   components: {
     ValidationProvider,
@@ -66,40 +72,19 @@ export default {
   data() {
     return {
       username: "admin",
-      password: "111111",
-      redirect: undefined,
+      password: "12345678",
+      showPwd: false,
     };
   },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true,
-    },
-  },
   methods: {
-    showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
-      } else {
-        this.passwordType = "password";
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
     handleLogin() {
       this.$store
-        .dispatch("user/adminlogin", {
+        .dispatch("user/adminLogin", {
           username: this.username,
           password: this.password,
         })
         .then(() => {
-          this.$router.push({ path: this.redirect || "/admin-dashboard" });
-        })
-        .catch(() => {
-          console.log("admin login fail");
+          this.$router.push("/admin-dashboard");
         });
     },
     clear() {
@@ -110,3 +95,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.pa-4 {
+  padding: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 2rem !important;
+}
+</style>

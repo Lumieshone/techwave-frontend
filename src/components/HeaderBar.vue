@@ -17,7 +17,7 @@
         ></v-img>
       </template>
       <v-col class="text-center" cols="1">
-        <strong>济客空间</strong>
+        <strong>TechWave</strong>
       </v-col>
       <v-divider class="mx-4" vertical dark></v-divider>
       <v-tabs align-with-title>
@@ -29,10 +29,6 @@
           <v-icon left dense> mdi-facebook-messenger </v-icon>
           交流论坛
         </v-tab>
-        <v-tab class="mx-2 white--text" to="/sale">
-          <v-icon left dense> mdi-hand-coin </v-icon>
-          二手交易
-        </v-tab>
         <v-tab class="mx-2 white--text" to="/account">
           <v-icon left dense> mdi-account </v-icon>
           个人中心
@@ -41,6 +37,10 @@
 
       <!-- 右部菜单栏 -->
       <v-menu offset-y>
+        <v-tab class="mx-2 white--text" to="/message">
+          <v-icon left dense> mdi-account </v-icon>
+          消息
+        </v-tab>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="50" v-on:click.native="drawer = !drawer"
             ><img

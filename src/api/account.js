@@ -1,15 +1,15 @@
 import request from "@/utils/request";
 
-export function get_user_info() {
+export function getUserInfo() {
   return request({
-    url: "/user/account/get_user_info",
+    url: "/account/info",
     method: "get",
-    params: {},
   });
 }
-export function change_avatar(fd) {
+
+export function changeAvatar(fd) {
   return request({
-    url: "/user/account/change_avatar",
+    url: "/account/change_avatar",
     method: "post",
     headers: {
       "Content-Type": "multipart/form-data",
@@ -18,181 +18,116 @@ export function change_avatar(fd) {
   });
 }
 
-export function edit_info(form) {
+export function editInfo(form) {
   return request({
-    url: "/user/account/edit_info",
+    url: "/account/info",
     method: "post",
     data: form,
   });
 }
 
-export function edit_password(oldPassword, newPassword) {
+export function editPassword(oldPassword, newPassword) {
   return request({
-    url: "/user/account/edit_password",
+    url: "/account/modify_password",
     method: "post",
     data: {
-      oldPassword: oldPassword,
-      newPassword: newPassword,
+      oldPassword,
+      newPassword,
     },
   });
 }
 
-export function edit_email(password, email) {
+export function editEmail(password, email) {
   return request({
-    url: "/user/account/edit_email",
+    url: "/account/modify_email",
     method: "post",
     data: {
-      password: password,
-      email: email,
+      password,
+      email,
     },
   });
 }
-export function get_folders() {
+export function getFolders() {
   return request({
-    url: "/user/account/get_folders",
+    url: "/account/getFolders",
     method: "get",
-    params: {},
   });
 }
-export function get_collect_info(folderId, curPage, limit) {
+export function getCollectInfo(folderId, page, perPage) {
   return request({
-    url: "/user/account/get_collect_info",
+    url: "/account/collect",
     method: "get",
     params: {
       folderId,
-      curPage,
-      limit,
+      page,
+      perPage,
     },
   });
 }
 
-export function rename_folder(folderId, folderName) {
+export function renameFolder(folderId, folderName) {
   return request({
-    url: "/user/account/rename_folder",
+    url: "account/rename_folder",
     method: "post",
     data: {
-      folderId: folderId,
-      folderName: folderName,
+      folderId,
+      folderName,
     },
   });
 }
-export function create_folder(folderName) {
+export function createFolder(folderName) {
   return request({
-    url: "/user/account/create_folder",
+    url: "/account/create_folder",
     method: "post",
     data: {
-      folderName: folderName,
+      folderName,
     },
   });
 }
 
-export function delete_folder(folderId) {
+export function deleteFolder(folderId) {
   return request({
-    url: "/user/account/delete_folder",
+    url: "/account/folder",
     method: "delete",
     data: {
-      folderId: folderId,
+      folderId,
     },
   });
 }
 
-export function get_my_post(curPage, limit) {
+export function getMyPost(page, perPage) {
   return request({
-    url: "/user/account/get_my_post",
+    url: "/account/post",
     method: "get",
     params: {
       type: "post",
-      curPage: curPage,
-      limit: limit,
+      curPage: page,
+      limit: perPage,
     },
   });
 }
 
-export function delete_my_post(postId) {
+export function deleteMyPost(postId) {
   return request({
-    url: "/user/account/delete_my_post",
+    url: "/account/post",
     method: "delete",
     data: {
       postId: postId,
     },
   });
 }
-export function publish_certify(fd) {
-  return request({
-    url: "/user/account/apply_to_student",
-    method: "post",
-    data: fd,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-}
 
-export function get_my_sell_transaction(params) {
+
+export function getUserSections() {
   return request({
-    url: "/user/account/get_my_sell_transaction",
+    url: "/account/section",
     method: "get",
-    params: params,
   });
 }
 
-export function get_my_seek_transaction(params) {
+export function createSection(fd) {
   return request({
-    url: "/user/account/get_my_seek_transaction",
-    method: "get",
-    params: params,
-  });
-}
-
-export function get_my_collect_transaction(params) {
-  return request({
-    url: "/user/account/get_my_collect_transaction",
-    method: "get",
-    params: params,
-  });
-}
-
-export function delete_my_sell_transaction(data) {
-  return request({
-    url: "/user/account/delete_transaction_post",
-    method: "post",
-    data,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-}
-
-export function delete_my_seek_transaction(data) {
-  return request({
-    url: "/user/account/delete_transaction_post",
-    method: "post",
-    data,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-}
-
-export function get_my_comment_and_reply(params) {
-  return request({
-    url: "/user/get_my_reply",
-    method: "get",
-    params: params,
-  });
-}
-
-export function get_user_sections() {
-  return request({
-    url: "/user/account/get_user_sections",
-    method: "get",
-    params: {},
-  });
-}
-
-export function create_section(fd) {
-  return request({
-    url: "/user/account/create_section",
+    url: "/account/create_section",
     method: "post",
     headers: {
       "Content-Type": "multipart/form-data",
@@ -201,56 +136,4 @@ export function create_section(fd) {
   });
 }
 
-export function change_section_avatar(fd) {
-  return request({
-    url: "/user/account/change_section_avatar",
-    method: "post",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    data: fd,
-  });
-}
 
-export function change_section_intro(sectionId, sectionIntro) {
-  return request({
-    url: "/user/account/change_section_intro",
-    method: "post",
-    data: {
-      sectionId: sectionId,
-      sectionIntro: sectionIntro,
-    },
-  });
-}
-
-export function add_subsection(id, subsections) {
-  return request({
-    url: "/user/account/add_subsection",
-    method: "post",
-    data: {
-      sectionId: id,
-      subsections: subsections,
-    },
-  });
-}
-
-export function delete_subsection(id) {
-  return request({
-    url: "/user/account/delete_subsection",
-    method: "delete",
-    data: {
-      subsectionId: id,
-    },
-  });
-}
-
-export function rename_subsection(id, name) {
-  return request({
-    url: "/user/account/rename_subsection",
-    method: "post",
-    data: {
-      subsectionId: id,
-      name: name,
-    },
-  });
-}

@@ -141,7 +141,7 @@ import { getToken } from "@/utils/auth";
 // eslint-disable-next-line no-unused-vars
 import { IEditorConfig } from "@wangeditor/editor";
 
-import { publish_post } from "@/api/section";
+import { publishPost } from "@/api/section";
 export default {
   name: "PostDialog",
   components: {
@@ -184,7 +184,7 @@ export default {
             server: this.$baseURL + "/post/upload_picture",
             fieldName: "image",
             headers: {
-              "JK-Token": "Bearer " + getToken(),
+              "T-Token": "Bearer " + getToken(),
             },
             withCredentials: true,
             // 自定义插入图片
@@ -236,7 +236,7 @@ export default {
         // for (let [a, b] of fd.entries()) {
         //   console.log(a, b);
         // }
-        publish_post({
+        publishPost({
           sectionId: this.sectionId,
           subsectionId: this.form.subsection,
           title: this.form.title,

@@ -121,7 +121,7 @@
             color="blue"
             class="ma-2 white--text"
             small
-            @click="reply_on_post"
+            @click="replyOnPost"
             :disabled="!is_login"
           >
             {{ is_login ? "评论" : "请先登录再发表评论" }}
@@ -155,7 +155,7 @@
       color="#7d73be"
       class="ma-2 white--text"
       small
-      @click="reply_on_post"
+      @click="replyOnPost"
       :disabled="!is_login"
     >
       {{ is_login ? "评论" : "请先登录再发表评论" }}
@@ -171,8 +171,8 @@ import { getToken } from "@/utils/auth";
 import { IEditorConfig } from "@wangeditor/editor";
 
 import PostComment from "@/views/home/post/components/comment.vue";
-import { get_post_info, collect_post, reply_on_post } from "@/api/post";
-import { get_folders } from "@/api/account";
+import { getPostInfo, collectOrUncollectPost, replyOnPost } from "@/api/post";
+import { getFolders } from "@/api/account";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -219,7 +219,7 @@ export default {
             server: this.$baseURL + "/post/upload_picture",
             fieldName: "image",
             headers: {
-              "JK-Token": "Bearer " + getToken(),
+              "T-Token": "Bearer " + getToken(),
             },
             withCredentials: true,
             // 自定义插入图片
@@ -248,7 +248,7 @@ export default {
       this.refreshList(curPage, limit);
     },
     refreshList(curPage = this.curPage, limit = this.limit) {
-      get_post_info({
+      getPostInfo({
         id: this.postId,
         offset: curPage,
         limit: limit,
@@ -265,7 +265,7 @@ export default {
     },
 
     // comment
-    reply_on_post() {
+    replyOnPost() {
       if (this.commentContent == "") {
         this.$message.error("评论内容还为空哦");
         return;
@@ -276,7 +276,7 @@ export default {
       // this.comment_image_info.forEach((f) => fd.append("image", f));
       // fd.append("postId", this.postId);
 
-      reply_on_post({ content: this.commentContent, postId: this.postId })
+      replyOnPost({ content: this.commentContent, postId: this.postId })
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
@@ -289,7 +289,7 @@ export default {
     // collect
     open_collect_dialog() {
       if (this.postData.isCollected == true) {
-        collect_post({ id: this.postId })
+        collectOrUncollectPost({ id: this.postId })
           .then(() => {
             this.postData.isCollected = !this.postData.isCollected;
             this.$message.success("取消收藏成功！");
@@ -308,7 +308,7 @@ export default {
     },
 
     collect() {
-      collect_post({ id: this.postId, folderId: this.folderId })
+      collectOrUncollectPost({ id: this.postId, folderId: this.folderId })
         .then(() => {
           this.postData.isCollected = !this.postData.isCollected;
           this.$message.success("收藏成功");
@@ -327,7 +327,7 @@ export default {
   mounted() {
     this.postId = this.$route.params.postId;
     if (this.is_login) {
-      get_folders().then((res) => {
+      getFolders().then((res) => {
         this.folders = res.data.folders;
       });
     }

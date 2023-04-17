@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { edit_info, get_user_info } from "@/api/account";
+import { editInfo, getUserInfo } from "@/api/account";
 
 export default {
   name: "AccountInfo",
@@ -137,7 +137,7 @@ export default {
           gender: this.gender,
           intro: this.intro,
         };
-        edit_info(form)
+        editInfo(form)
           .then((res) => {
             console.log(res.message);
             if (res.code === 20000) {
@@ -152,7 +152,7 @@ export default {
   },
   mounted() {
     if (this.is_login) {
-      get_user_info()
+      getUserInfo()
         .then((res) => {
           if (res.code === 20000) {
             console.log("获取用户信息成功");

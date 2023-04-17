@@ -1,44 +1,92 @@
 import request from "@/utils/request";
 
-export function get_section_data(sectionId,curPage,limit) {
-    return request({
-        url: "/section/get_section_data",
-        method: "get",
-        params: {
-            sectionId,
-            curPage,
-            limit
-        },
-    });
+export function getSectionData(sectionId, page, perPage) {
+  return request({
+    url: `/section/${sectionId}/info`,
+    method: "get",
+    params: {
+      page,
+      perPage,
+    },
+  });
 }
-export function get_posts_by_subsection(sectionId, subsectionId, curPage, limit) {
-    return request({
-        url: "/section/get_posts_by_subsection",
-        method: "get",
-        params: {
-            sectionId,
-            subsectionId,
-            curPage,
-            limit
-        },
-    });
+
+export function getPostsBySubsection(subsectionId, page, perPage) {
+  return request({
+    url: `/section/${subsectionId}`,
+    method: "get",
+    params: {
+      page,
+      perPage,
+    },
+  });
 }
-export function publish_post(data) {
-    return request({
-        url: "/section/publish_post",
-        method: "post",
-        // headers: {
-        //     'Content-Type': 'multipart/form-data'
-        // },
-        data
-    });
+
+export function publishPost(data) {
+  return request({
+    url: "/section/publish_post",
+    method: "post",
+    data,
+  });
 }
-export function collect_section(sectionId) {
-    return request({
-        url: "/section/collect_section",
-        method: "post",
-        data: {
-            sectionId: sectionId
-        },
-    });
+
+export function collectSection(sectionId) {
+  return request({
+    url: "/section/collect",
+    method: "post",
+    data: {
+      sectionId: sectionId,
+    },
+  });
+}
+
+export function searchPostInSection(sectionId, content, page, perPage) {
+  return request({
+    url: `/section/${sectionId}/search`,
+    method: "get",
+    params: {
+      content,
+      page,
+      perPage,
+    },
+  });
+}
+
+export function getAllPosts(sectionId, page, perPage) {
+  return request({
+    url: `section/${sectionId}/post`,
+    method: "get",
+    params: {
+      page,
+      perPage,
+    },
+  });
+}
+
+export function getPinnedPosts(sectionId) {
+  return request({
+    url: `section/${sectionId}/pinned_post`,
+    method: "get",
+  });
+}
+
+export function getHighlightedPosts(sectionId, page, perPage) {
+  return request({
+    url: `section/${sectionId}/highlighted_post`,
+    method: "get",
+    params: {
+      page,
+      perPage,
+    },
+  });
+}
+
+export function followOrUnfollowSection(sectionId) {
+  return request({
+    url: `/section/follow`,
+    method: "post",
+    params: {
+      sectionId,
+    },
+  });
 }

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import {get_my_post} from "@/api/account";
+import {getMyPost} from "@/api/account";
 import DeletePost from "@/views/home/account/components/DeletePost";
 
 export default {
@@ -115,7 +115,7 @@ export default {
       this.curPage = Number(this.whichPage);
     },
     onPageChange(curPage, limit) {
-      get_my_post(curPage,limit)
+      getMyPost(curPage,limit)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
@@ -125,7 +125,7 @@ export default {
     },
     refreshList() {
       this.curPage = 1;
-      get_my_post(1,this.limit)
+      getMyPost(1,this.limit)
           .then(res => {
             this.posts = res.data.myPosts;
           })
@@ -138,7 +138,7 @@ export default {
 
   },
   mounted() {
-    get_my_post(1,this.limit)
+    getMyPost(1,this.limit)
         .then((res) => {
           console.log(res.data.total)
           this.total = res.data.total;

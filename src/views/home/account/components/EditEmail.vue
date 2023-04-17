@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import {edit_email} from "@/api/account";
+import {editEmail} from "@/api/account";
 
 export default {
   name: "EditEmail",
@@ -102,7 +102,7 @@ export default {
       this.clearDialog()
     },
     submit(){
-      edit_email(this.password,this.email)
+      editEmail(this.password,this.email)
           .then((res) => {
             console.log(res.data)
             if(res.code === 20000){

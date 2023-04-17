@@ -8,7 +8,7 @@ export function login(data) {
   });
 }
 
-export function adminlogin(data) {
+export function adminLogin(data) {
   return request({
     url: "/admin/login",
     method: "post",
@@ -39,7 +39,7 @@ export function register(data) {
   });
 }
 
-export function find_password(data) {
+export function findPassword(data) {
   return request({
     url: "/user/find_password",
     method: "post",
@@ -47,17 +47,17 @@ export function find_password(data) {
   });
 }
 
-export function send_email_code(email) {
+export function sendEmailCode(email) {
   return request({
-    url: "/user/send-email-code",
-    method: "get",
-    params: { email: email },
+    url: "/user/email_code",
+    method: "post",
+    data: { email: email },
   });
 }
 
-export function verify_and_modify_pwd(data) {
+export function verifyAndModifyPassword(data) {
   return request({
-    url: "/user/forget-pwd",
+    url: "/user/reset_password",
     method: "post",
     data,
   });

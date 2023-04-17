@@ -3,7 +3,7 @@ let baseURL = process.env.VUE_APP_BASE_API;
 module.exports = [
     // get user info
     {
-        url: baseURL + "/account/get_user_info.*",
+        url: baseURL + "/account/getUserInfo.*",
         type: "get",
         response: () => {
             return {
@@ -23,7 +23,7 @@ module.exports = [
     },
     // change avatar
     {
-        url: baseURL + "/account/change_avatar.*",
+        url: baseURL + "/account/changeAvatar.*",
         type: "post",
         response: () => {
             return {
@@ -194,7 +194,7 @@ module.exports = [
     },
     // rename folder
     {
-        url: baseURL + "/account/rename_folder.*",
+        url: baseURL + "/account/renameFolder.*",
         type: "post",
         response: () => {
             return {

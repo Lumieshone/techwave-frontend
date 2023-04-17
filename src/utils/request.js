@@ -19,9 +19,9 @@ service.interceptors.request.use(
 
     if (store.getters.token) {
       // let each request carry token
-      // ['JK-Token'] is a custom headers key
+      // ['T-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers["JK-Token"] = "Bearer " + getToken();
+      config.headers["T-Token"] = "Bearer " + getToken();
     }
 
     console.log(config);

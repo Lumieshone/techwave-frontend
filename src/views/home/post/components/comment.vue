@@ -85,7 +85,7 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click="delete_comment"
+            @click="deleteComment"
           >
             删除
           </v-btn></v-card-actions
@@ -97,7 +97,7 @@
 
 <script>
 import PostReply from "@/views/home/post/components/reply.vue";
-import { reply_on_comment, delete_comment } from "@/api/post";
+import { replyOnComment, deleteComment } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -128,7 +128,7 @@ export default {
 
       // delete my commentId
       show_delete_dialog: false,
-      delete_commentId: undefined,
+      deleteCommentId: undefined,
     };
   },
   methods: {
@@ -149,7 +149,7 @@ export default {
         return;
       }
 
-      reply_on_comment({
+      replyOnComment({
         content: this.replyContent,
         commentId: this.replyToCommentId,
       })
@@ -166,14 +166,14 @@ export default {
     // delete
     open_delete_dialog(commentId) {
       this.show_delete_dialog = true;
-      this.delete_commentId = commentId;
+      this.deleteCommentId = commentId;
     },
     close_delete_dialog() {
       this.show_delete_dialog = false;
-      this.delete_commentId = undefined;
+      this.deleteCommentId = undefined;
     },
-    delete_comment() {
-      delete_comment(this.delete_commentId).then((res) => {
+    deleteComment() {
+      deleteComment(this.deleteCommentId).then((res) => {
         if (res.code === 20000) {
           this.$message.success("删除成功！");
           this.$emit("refresh");

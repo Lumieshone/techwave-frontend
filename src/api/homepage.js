@@ -1,15 +1,16 @@
 import request from "@/utils/request";
 
-export function get_news() {
+export function getNews() {
   return request({
     url: "/homepage/news",
     method: "get",
   });
 }
 
-export function get_hot_posts() {
+export function getHotPosts() {
   return request({
-    url: "/homepage/hot_post",
+    url: "/homepage/post",
     method: "get",
   });
 }
+

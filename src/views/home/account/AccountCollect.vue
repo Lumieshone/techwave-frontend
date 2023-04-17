@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import {get_collect_info, get_folders, rename_folder} from "@/api/account";
+import {getCollectInfo, getFolders, renameFolder} from "@/api/account";
 import CreateFolder from "@/views/home/account/components/CreateFolder";
 import DeleteConfirm from "@/views/home/account/components/DeleteConfirm";
 
@@ -175,7 +175,7 @@ export default {
       this.curPage = Number(this.whichPage);
     },
     onPageChange(curPage, limit) {
-      get_collect_info(this.folderId, curPage, limit)
+      getCollectInfo(this.folderId, curPage, limit)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
@@ -187,7 +187,7 @@ export default {
       this.folderId = this.folders[0].id;
       this.folderName = '默认收藏夹';
       this.curPage = 1;
-      get_collect_info(this.folderId, 1, this.limit)
+      getCollectInfo(this.folderId, 1, this.limit)
           .then(res => {
             this.collects = res.data.folderPostDTOList;
           })
@@ -197,7 +197,7 @@ export default {
       this.curPage = 1;
       this.folderId = id;
       this.folderName = name;
-      get_collect_info(this.folderId, 1, this.limit)
+      getCollectInfo(this.folderId, 1, this.limit)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
@@ -209,7 +209,7 @@ export default {
       if (this.isEdit) {
         if (this.$refs.form.validate()) {
           this.isEdit = !this.isEdit
-          rename_folder(this.folderId, this.folderName)
+          renameFolder(this.folderId, this.folderName)
               .then((res) => {
                 if (res.code === 20000) {
                   this.$message.success("重命名成功！")
@@ -231,13 +231,13 @@ export default {
 
   },
   mounted() {
-    get_folders()
+    getFolders()
         .then((res) => {
           this.folders = res.data.folders;
           this.folderId = res.data.folders[0].id
         })
         .catch((err) => console.log("error: " + err));
-    get_collect_info(0, 1, this.limit)
+    getCollectInfo(0, 1, this.limit)
         .then((res) => {
           console.log(res.data.total)
           this.total = res.data.total;

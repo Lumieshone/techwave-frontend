@@ -1,22 +1,33 @@
 import request from "@/utils/request";
 
-export function get_post_info(params) {
+export function getUserCards(userId) {
   return request({
-    url: "/post/post_data",
+    url: `/account/${userId}/card`,
     method: "get",
-    params,
   });
 }
 
-export function collect_post(data) {
+export function getPostInfo(postId, page, perPage, isOnlyHost) {
   return request({
-    url: "/post/collect_post",
+    url: `/post/${postId}`,
+    method: "get",
+    params: {
+      page: page,
+      perPage: perPage,
+      isOnlyHost: isOnlyHost,
+    },
+  });
+}
+
+export function collectOrUncollectPost(data) {
+  return request({
+    url: "/post/collect",
     method: "post",
     data,
   });
 }
 
-export function delete_reply(replyId) {
+export function deleteReply(replyId) {
   return request({
     url: "/post/reply",
     method: "delete",
@@ -24,7 +35,7 @@ export function delete_reply(replyId) {
   });
 }
 
-export function delete_comment(commentId) {
+export function deleteComment(commentId) {
   return request({
     url: "/post/comment",
     method: "delete",
@@ -32,18 +43,15 @@ export function delete_comment(commentId) {
   });
 }
 
-export function reply_on_post(data) {
+export function replyOnPost(data) {
   return request({
     url: "/post/reply_on_post",
     method: "post",
     data,
-    // headers: {
-    //     "Content-Type": "multipart/form-data",
-    // },
   });
 }
 
-export function reply_on_comment(data) {
+export function replyOnComment(data) {
   return request({
     url: "/post/reply_on_comment",
     method: "post",
@@ -51,9 +59,33 @@ export function reply_on_comment(data) {
   });
 }
 
-export function reply_on_reply(data) {
+export function replyOnReply(data) {
   return request({
     url: "/post/reply_on_reply",
+    method: "post",
+    data,
+  });
+}
+
+export function reportInPost(data) {
+  return request({
+    url: "/post/report",
+    method: "post",
+    data,
+  });
+}
+
+export function likeOrUnlikePost(data) {
+  return request({
+    url: "/post/like",
+    method: "post",
+    data,
+  });
+}
+
+export function followOrUnfollowUser(data) {
+  return request({
+    url: "/post/follow_user",
     method: "post",
     data,
   });

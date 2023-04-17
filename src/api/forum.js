@@ -1,23 +1,17 @@
 import request from "@/utils/request";
 
-export function get_collect_sections() {
+export function getHotSections(page, perPage) {
   return request({
-    url: "/homepage/collect_section",
+    url: "/section/hot",
     method: "get",
+    params: { page: page, perPage: perPage },
   });
 }
 
-export function get_hot_sections() {
+export function getSearchSections(searchContent, page, perPage) {
   return request({
-    url: "/homepage/hot_section",
+    url: "/section/search",
     method: "get",
-  });
-}
-
-export function get_search_sections(searchContent) {
-  return request({
-    url: "/homepage/search_section",
-    method: "get",
-    params: { searchContent: searchContent },
+    params: { searchContent: searchContent, page: page, perPage: perPage },
   });
 }

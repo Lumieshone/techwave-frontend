@@ -121,9 +121,9 @@
 
 <script>
 import {
-  collect_section,
-  get_posts_by_subsection,
-  get_section_data,
+  collectSection,
+  getPostsBySubsection,
+  getSectionData,
 } from "@/api/section";
 import PostDialog from "@/views/home/section/components/PostDialog";
 export default {
@@ -155,7 +155,7 @@ export default {
     },
     collect() {
       this.sectionData.isCollected = !this.sectionData.isCollected;
-      collect_section(this.sectionId)
+      collectSection(this.sectionId)
         .then((res) => {
           console.log(res.message);
           if (res.code === 20000) {
@@ -178,13 +178,13 @@ export default {
     },
     onPageChange(curPage, limit) {
       if (this.subsectionId === 0)
-        get_section_data(this.sectionId, curPage, limit)
+        getPostsBySubsection(this.sectionId, curPage, limit)
           .then((res) => {
             this.sectionData = res.data;
           })
           .catch((err) => console.log("error: " + err));
       else {
-        get_posts_by_subsection(
+        getPostsBySubsection(
           this.sectionId,
           this.subsectionId,
           curPage,
@@ -205,7 +205,7 @@ export default {
     refreshList() {
       this.subsectionId = 0;
       this.curPage = 1;
-      get_section_data(this.sectionId, 1, 10)
+      getPostsBySubsection(this.sectionId, 1, 10)
         .then((res) => {
           this.sectionData = res.data;
         })
@@ -215,7 +215,7 @@ export default {
       this.curPage = 1;
       this.subsectionId = id;
       console.log(id);
-      get_posts_by_subsection(this.sectionId, id, 1, 10)
+      getPostsBySubsection(this.sectionId, id, 1, 10)
         .then((res) => {
           if (res.code === 20000) {
             console.log(res.data.total);
@@ -230,7 +230,7 @@ export default {
   },
   mounted() {
     this.sectionId = this.$route.params.sectionId;
-    get_section_data(this.sectionId, 1, this.limit)
+    getSectionData(this.sectionId, 1, this.limit)
       .then((res) => {
         this.sectionData = res.data;
         this.subsectionList = res.data.subSectionList;

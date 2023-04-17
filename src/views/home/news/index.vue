@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { get_news, get_hot_posts } from "@/api/get-news";
+import { getNews, getHotPosts } from "@/api/homepage.js";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "GetNews",
@@ -137,12 +137,12 @@ export default {
     },
   },
   mounted() {
-    get_hot_posts()
+    getHotPosts()
       .then((res) => {
         this.postsInfo = res.data;
       })
       .catch((err) => console.log("error: " + err));
-    get_news()
+    getNews()
       .then((res) => {
         this.newsInfo = res.data;
       })

@@ -32,32 +32,74 @@ export const constantRoutes = [
     path: "/login",
     component: () => import("@/views/login/index"),
     meta: { title: "登录" },
-    hidden: true,
   },
 
   {
     path: "/admin-login",
     component: () => import("@/views/admin-login/index"),
     meta: { title: "管理员登录" },
+  },
 
+  {
+    // TODO: 加上权限控制
+    path: "/admin-dashboard",
+    component: () => import("@/views/admin-dashboard/index"),
+    meta: { title: "管理员中台" },
+
+    children: [
+      {
+        path: "/admin-dashboard/process-report",
+        meta: { title: "处理举报" },
+        component: () => import("@/views/admin-dashboard/ProcessReport/index"),
+      },
+      {
+        path: "/admin-dashboard/process-section-request",
+        meta: { title: "处理版块申请" },
+        component: () =>
+          import("@/views/admin-dashboard/ProcessSectionRequest/index"),
+      },
+    ],
     hidden: true,
   },
 
   {
-    path: "/admin-dashboard",
-    component: () => import("@/views/admin-dashboard/index"),
-    meta: { title: "管理面板" },
-
-    children: [], //TODO: 未做的管理员功能
-    hidden: true,
+    // TODO: 加上权限控制
+    path: "/moderator-dashboard/:sectionId/",
+    component: () => import("@/views/moderator-dashboard/index"),
+    meta: { title: "版主中台" },
+    children: [
+      {
+        path: "/moderator-dashboard/:sectionId/process-report",
+        meta: { title: "处理举报" },
+        component: () => import("@/views/moderator-dashboard/ProcessReport/index"),
+      },
+      {
+        path: "/moderator-dashboard/:sectionId/edit-section",
+        meta: { title: "编辑版块" },
+        component: () => import("@/views/moderator-dashboard/EditSectionData/index"),
+      },
+      {
+        path: "/moderator-dashboard/:sectionId/highlight-post",
+        meta: { title: "设为精华" },
+        component: () => import("@/views/moderator-dashboard/HighlightPost/index"),
+      },
+      {
+        path: "/moderator-dashboard/:sectionId/pin-post",
+        meta: { title: "置顶帖子" },
+        component: () => import("@/views/moderator-dashboard/PinPost/index"),
+      },
+      {
+        path: "/moderator-dashboard/:sectionId/ban-user",
+        meta: { title: "封禁用户" },
+        component: () => import("@/views/moderator-dashboard/BanUser/index"),
+      }
+    ],
   },
 
   {
     path: "/register",
     component: () => import("@/views/register/index"),
     meta: { title: "注册" },
-
-    hidden: true,
   },
 
   {
@@ -68,13 +110,12 @@ export const constantRoutes = [
   {
     path: "/home",
     redirect: "/news",
-    hidden: true,
     component: () => import("@/components/HeaderBar"),
     children: [
       {
         path: "/news",
         meta: { title: "首页资讯" },
-        component: () => import("@/views/home/get-news/index"),
+        component: () => import("@/views/home/news/index"),
       },
       {
         path: "/forum",
@@ -95,8 +136,14 @@ export const constantRoutes = [
         component: () => import("@/views/home/post/index"),
       },
       {
+        path: "/message/",
+        meta: { title: "消息" },
+
+        component: () => import("@/views/home/message/index"),
+      },
+      {
         path: "/account",
-        meta: { title: "个人管理" },
+        meta: { title: "个人中心" },
         component: () => import("@/views/home/account/index"),
         redirect: "/account/info",
         children: [
@@ -118,22 +165,11 @@ export const constantRoutes = [
             meta: { title: "我的帖子" },
             component: () => import("@/views/home/account/AccountPost"),
           },
+
           {
-            name: "reply",
-            path: "/account/reply",
-            meta: { title: "回复我的" },
-            component: () => import("@/views/home/account/AccountReply"),
-          },
-          {
-            name: "transaction",
-            path: "/account/transaction",
-            meta: { title: "我的交易" },
-            component: () => import("@/views/home/account/AccountTransaction"),
-          },
-          {
-            name:"section",
+            name: "section",
             path: "/account/section",
-            meta: { title: "我的版块" },
+            meta: { title: "创建版块" },
             component: () => import("@/views/home/account/AccountSection"),
           },
           {
@@ -143,24 +179,13 @@ export const constantRoutes = [
             component: () => import("@/views/home/account/AccountSafety"),
           },
           {
-            name: "certify",
-            path: "/account/certify",
-            meta: { title: "学生认证" },
-            component: () => import("@/views/home/account/AccountCertify"),
+            name: "section",
+            path: "/account/section",
+            meta: { title: "创建版块" },
+            component: () =>
+              import("@/views/home/account/AccountSectionManagement"),
           },
         ],
-      },
-      {
-        path: "/sale",
-        meta: { title: "交易求购" },
-
-        component: () => import("@/views/home/sale/index"),
-      },
-      {
-        path: "/transaction/:transactionId",
-        meta: { title: "交易帖子" },
-
-        component: () => import("@/views/home/transaction/index"),
       },
     ],
   },
@@ -168,9 +193,7 @@ export const constantRoutes = [
   {
     path: "/404",
     meta: { title: "404" },
-
     component: () => import("@/views/page-404"),
-    hidden: true,
   },
 
   // 404 page must be placed at the end !!!

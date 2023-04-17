@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {create_folder} from "@/api/account";
+import {createFolder} from "@/api/account";
 
 export default {
   name: "CreateFolder",
@@ -82,7 +82,7 @@ export default {
       this.clearDialog()
     },
     submit(){
-      create_folder(this.folderName)
+      createFolder(this.folderName)
           .then((res) => {
             console.log(res.message)
             if(res.code === 20000){

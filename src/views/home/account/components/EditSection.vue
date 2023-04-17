@@ -188,12 +188,12 @@
 
 <script>
 import {
-  add_subsection,
-  change_section_avatar,
-  change_section_intro,
-  delete_subsection,
-  rename_subsection
-} from "@/api/account";
+  addSubsection,
+  editSectionAvatar,
+  editSectionDescription,
+  deleteSubsection,
+  renameSubsection
+} from "@/api/moderator";
 
 export default {
   name: "EditSection",
@@ -264,7 +264,7 @@ export default {
           let fd = new FormData();
           fd.append("sectionId", this.id);
           fd.append("avatar", this.file);
-          change_section_avatar(fd)
+          editSectionAvatar(fd)
             .then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
@@ -277,7 +277,7 @@ export default {
           this.clearDialog()
         }
         else if(this.select===this.choices[1]){
-          change_section_intro(this.id,this.intro)
+          editSectionDescription(this.id,this.intro)
               .then((res) => {
                 console.log(res.message);
                 if (res.code === 20000) {
@@ -298,7 +298,7 @@ export default {
               subsections.push(this.model[i].text)
             }
             console.log(subsections)
-            add_subsection(this.id,subsections) .then((res) => {
+            addSubsection(this.id,subsections) .then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
                 this.$message.success("创建子版块成功！");
@@ -310,7 +310,7 @@ export default {
             this.clearDialog()
           }
           else if(this.subSelect===this.subChoices[1]){
-            rename_subsection(this.subSection,this.subSectionName).then((res) => {
+            renameSubsection(this.subSection,this.subSectionName).then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
                 this.$message.success("重命名成功！");
@@ -322,7 +322,7 @@ export default {
             this.clearDialog()
           }
           else if(this.subSelect===this.subChoices[2]){
-            delete_subsection(this.subSection).then((res) => {
+            deleteSubsection(this.subSection).then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
                 this.$message.success("删除成功！");

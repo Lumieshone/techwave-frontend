@@ -4,7 +4,7 @@
     <v-row justify="center">
       <v-card
         max-width="50%"
-        v-show="!is_login"
+        v-show="!isLogin"
         style="
           position: absolute;
           left: 50%;
@@ -28,7 +28,7 @@
         </v-card-actions>
       </v-card>
     </v-row>
-    <v-row v-show="is_login">
+    <v-row v-show="isLogin">
       <v-col cols="3" class="pa-0">
         <v-card height="100%" width="100%" color="#483D8B" tile>
           <v-navigation-drawer color="#483D8B" width="100%" dark tile permanent>
@@ -45,7 +45,7 @@
                   <v-list-item-subtitle
                     class="pt-1"
                     @click="changeAvatar"
-                    id="change_avatar"
+                    id="changeAvatar"
                   >
                     <v-icon dark small>mdi-pencil </v-icon>
                     修改头像
@@ -116,13 +116,13 @@
 <script>
 import "babel-polyfill";
 import myUpload from "vue-image-crop-upload/upload-2.vue";
-import { change_avatar, get_user_info } from "@/api/account";
+import { changeAvatar, getUserInfo } from "@/api/account";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Account",
   data() {
     return {
-      is_login: this.$store.getters.roles.length != 0,
+      isLogin: this.$store.getters.roles.length != 0,
 
       show: false,
       size: 2.5,
@@ -168,7 +168,7 @@ export default {
         console.log(a, b);
       }
       this.$refs.uploadRef.off();
-      change_avatar(fd)
+      changeAvatar(fd)
         .then((res) => {
           console.log(res.message);
           if (res.code === 20000) this.$message.success("修改头像成功！");
@@ -189,8 +189,8 @@ export default {
     },
   },
   mounted() {
-    if (this.is_login) {
-      get_user_info()
+    if (this.is) {
+      getUserInfo()
         .then((res) => {
           if (res.code === 20000) {
             console.log("获取用户信息成功");

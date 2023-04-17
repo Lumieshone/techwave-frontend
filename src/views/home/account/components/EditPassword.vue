@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {edit_password} from "@/api/account";
+import {editPassword} from "@/api/account";
 
 export default {
   name: "EditPassword",
@@ -132,7 +132,7 @@ export default {
     },
     submit(){
       if(this.newPassword === this.password)
-        edit_password(this.oldPassword, this.newPassword)
+        editPassword(this.oldPassword, this.newPassword)
             .then((res) => {
               console.log(res.message)
               if(res.code === 20000){

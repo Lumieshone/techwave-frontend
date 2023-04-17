@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'software_engineering_token'
+const TokenKey = 'techwave_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)

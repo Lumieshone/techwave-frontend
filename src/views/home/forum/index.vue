@@ -72,9 +72,9 @@
 
 <script>
 import {
-  get_collect_sections,
-  get_hot_sections,
-  get_search_sections,
+  // get_collect_sections,
+  getHotSections,
+  getSearchSections,
 } from "@/api/forum";
 
 export default {
@@ -101,19 +101,19 @@ export default {
   methods: {
     search() {
       this.searchLoading = true;
-      get_search_sections(this.searchContent).then((res) => {
+      getSearchSections(this.searchContent).then((res) => {
         this.sectionsInfo = res.data;
       });
       this.searchLoading = false;
     },
   },
   mounted() {
-    if (this.is_login) {
-      get_collect_sections().then((res) => {
-        this.collectSectionsInfo = res.data;
-      });
-    }
-    get_hot_sections().then((res) => {
+    // if (this.is_login) {
+    //   get_collect_sections().then((res) => {
+    //     this.collectSectionsInfo = res.data;
+    //   });
+    // }
+    getHotSections().then((res) => {
       this.sectionsInfo = res.data;
     });
   },
