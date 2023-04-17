@@ -11,19 +11,19 @@ const users = {
     roles: [{ name: "admin", sectionId: null }],
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-    name: "Super Admin",
+    username: "Super Admin",
   },
   "user-token": {
     roles: [{ name: "user", sectionId: null }],
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-    name: "Normal User",
+    username: "Normal User",
   },
   "moderator-token": {
     roles: [{ name: "moderator", sectionId: 1 }],
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-    name: "Moderator",
+    username: "Moderator",
   },
 };
 
