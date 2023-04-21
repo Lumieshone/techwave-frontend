@@ -64,13 +64,13 @@ service.interceptors.response.use(
         });
         // })
       }
-      return Promise.reject(new Error(res.message || "Error"));
+      return Promise.reject(new Error(res.msg || "Error"));
     } else {
       return res;
     }
   },
   (error) => {
-    Message.error(error.message || "阿欧，好像哪里出现了问题..");
+    Message.error(error.msg || "阿欧，好像哪里出现了问题..");
     return Promise.reject(error);
   }
 );
