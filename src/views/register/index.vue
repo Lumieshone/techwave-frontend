@@ -11,6 +11,20 @@
         <form @submit.prevent="handleRegister">
           <validation-provider
             v-slot="{ errors }"
+            name="Account"
+            rules="required"
+          >
+            <v-text-field
+              v-model="account"
+              :error-messages="errors"
+              label="Account"
+              required
+              color="#7d73be"
+            ></v-text-field>
+          </validation-provider>
+
+          <validation-provider
+            v-slot="{ errors }"
             name="Mail"
             rules="required|email"
           >
@@ -128,6 +142,7 @@ export default {
       username: "",
       password: "",
       repeatPassword: "",
+      account: "",
 
       // loading logo
       loading: false,
@@ -144,6 +159,7 @@ export default {
         email: this.email,
         password: this.password,
         username: this.username,
+        account: this.account,
       })
         .then(() => {
           this.loading = false;
@@ -160,6 +176,7 @@ export default {
       this.email = "";
       this.username = "";
       this.password = "";
+      this.account = "";
       this.repeatPassword = "";
       this.$refs.observer.reset();
     },
