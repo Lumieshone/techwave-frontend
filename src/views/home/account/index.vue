@@ -39,7 +39,7 @@
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title class="text-h6">
-                    {{ nickname }}
+                    {{ username }}
                   </v-list-item-title>
                   <v-list-item-subtitle>{{ userEmail }}</v-list-item-subtitle>
                   <v-list-item-subtitle
@@ -56,7 +56,7 @@
             <v-divider></v-divider>
             <v-list>
               <div v-for="(item, index) in items" :key="item.title">
-                <v-list-item :to="item.router" link class="pl-16">
+                <v-list-item :to="item.router" link class="pl-16 py-1">
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
@@ -117,8 +117,7 @@ export default {
   name: "Account",
   data() {
     return {
-      isLogin: this.$store.getters.roles.length != 0,
-
+      isLogin: this.$store.getters.roles.length !== 0,
       show: false,
       size: 2.5,
       // nickname:'莴苣某人',
@@ -126,7 +125,7 @@ export default {
       // userAvatar:require("@/assets/avatar.jpg"),
       userEmail: "",
       userAvatar: "",
-      nickname: "",
+      username: "",
       items: [
         { title: "个人信息", icon: "mdi-account-box", router: "/account/info" },
         { title: "我的收藏", icon: "mdi-star", router: "/account/collect" },
@@ -147,11 +146,6 @@ export default {
           router: "/account/section",
         },
         { title: "安全设置", icon: "mdi-lock", router: "/account/safety" },
-        {
-          title: "学生认证",
-          icon: "mdi-account-check",
-          router: "/account/certify",
-        },
       ],
     };
   },
@@ -200,12 +194,12 @@ export default {
     },
   },
   mounted() {
-    if (this.is) {
+    if (this.isLogin) {
       getUserInfo()
         .then((res) => {
           if (res.code === 20000) {
             console.log("获取用户信息成功");
-            this.nickname = res.data.nickname;
+            this.username = res.data.username;
             this.userEmail = res.data.email;
             this.userAvatar = res.data.avatar;
           } else {

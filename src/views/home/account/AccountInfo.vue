@@ -15,8 +15,8 @@
         filled
         outlined
         prepend-icon="mdi-card-account-details-outline"
-        label="用户名"
-        :value="username"
+        label="账户名"
+        :value="account"
       ></v-text-field>
       <v-text-field
         color="#483D8B"
@@ -28,7 +28,7 @@
         prepend-icon="mdi-account-circle-outline"
         :rules="nameRules"
         label="昵称"
-        v-model="nickname"
+        v-model="username"
       ></v-text-field>
       <v-text-field
         v-model="phoneNum"
@@ -69,7 +69,7 @@
       <v-row justify="end">
         <v-btn
           color="#6A5ACD"
-          class="ma-4 white--text"
+          class="ma-4 mt-6 white--text"
           :disabled="isDisabled"
           @click="changeInfo"
           >编辑
@@ -77,7 +77,7 @@
         <v-btn
           color="#6A5ACD"
           :disabled="!valid || !isDisabled"
-          class="ma-4 white--text"
+          class="ma-4 mt-6 white--text"
           @click="submitChange"
           >保存
         </v-btn>
@@ -93,8 +93,7 @@ export default {
   name: "AccountInfo",
   data() {
     return {
-      isLogin: this.$store.getters.roles.length != 0,
-
+      isLogin: this.$store.getters.roles.length !== 0,
       title: "个人信息",
       isReadonly: true,
       isFilled: true,
@@ -102,19 +101,11 @@ export default {
       valid: true,
       avatar: require("@/assets/avatar.jpg"),
       username: "",
-      nickname: "",
+      account: "",
       phoneNum: "",
       gender: "",
-
-      // username: 'wlf',
-      // nickname: "wlf_1989",
-      // phoneNum: "19890604918",
-      // gender: "男",
       genderList: ["男", "女", "其他"],
       intro: "",
-      // intro: "你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。" +
-      //     "游戏发生在一个被称作「提瓦特」的幻想世界，" +
-      //     "在这里，被神选中的人将被授予「神之眼」，导引元素之力。后边忘了",
       nameRules: [(v) => v.length <= 10 || "昵称长度不应超过10个字符"],
       phoneRules: [(v) => v.length >= 11 || "电话号码长度为11位"],
       introRules: [(v) => v.length <= 100 || "自我介绍不应超过100个字符"],
@@ -132,7 +123,7 @@ export default {
         this.isReadonly = !this.isReadonly;
         this.isFilled = !this.isFilled;
         let form = {
-          nickname: this.nickname,
+          username: this.username,
           phone: this.phoneNum,
           gender: this.gender,
           intro: this.intro,
@@ -156,8 +147,8 @@ export default {
         .then((res) => {
           if (res.code === 20000) {
             console.log("获取用户信息成功");
-            this.nickname = res.data.nickname;
             this.username = res.data.username;
+            this.account = res.data.account;
             this.phoneNum = res.data.phoneNumber;
             this.gender = res.data.gender;
             this.intro = res.data.summary;

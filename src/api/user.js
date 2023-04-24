@@ -8,14 +8,6 @@ export function login(data) {
   });
 }
 
-export function adminLogin(data) {
-  return request({
-    url: "/admin/login",
-    method: "post",
-    data,
-  });
-}
-
 export function getInfo() {
   return request({
     url: "/user/info",
@@ -39,17 +31,9 @@ export function register(data) {
   });
 }
 
-export function findPassword(data) {
-  return request({
-    url: "/user/find_password",
-    method: "post",
-    data,
-  });
-}
-
 export function sendEmailCode(email) {
   return request({
-    url: "/user/email_code",
+    url: "/user/send_email_code",
     method: "post",
     data: { email: email },
   });

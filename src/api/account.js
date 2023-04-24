@@ -20,7 +20,7 @@ export function changeAvatar(fd) {
 
 export function editInfo(form) {
   return request({
-    url: "/account/info",
+    url: "/account/edit_info",
     method: "post",
     data: form,
   });
@@ -49,7 +49,7 @@ export function editEmail(password, email) {
 }
 export function getFolders() {
   return request({
-    url: "/account/getFolders",
+    url: "/account/folder",
     method: "get",
   });
 }
@@ -87,11 +87,8 @@ export function createFolder(folderName) {
 
 export function deleteFolder(folderId) {
   return request({
-    url: "/account/folder",
+    url: `/account/${folderId}`,
     method: "delete",
-    data: {
-      folderId,
-    },
   });
 }
 
@@ -109,14 +106,16 @@ export function getMyPost(page, perPage) {
 
 export function deleteMyPost(postId) {
   return request({
-    url: "/account/post",
+    url: `/account/${postId}`,
     method: "delete",
-    data: {
-      postId: postId,
-    },
   });
 }
-
+export function getUserCards(userId) {
+  return request({
+    url: `/account/${userId}/card`,
+    method: "get",
+  });
+}
 
 export function getUserSections() {
   return request({

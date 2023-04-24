@@ -41,10 +41,6 @@
 
       <!-- 右部菜单栏 -->
       <v-menu offset-y>
-        <v-tab class="mx-2 white--text" to="/message">
-          <v-icon left dense> mdi-account </v-icon>
-          消息
-        </v-tab>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="50" v-on:click.native="drawer = !drawer"
             ><img
@@ -52,15 +48,22 @@
               :alt="isLogin ? name : '登录'"
               v-bind="attrs"
               v-on="on"
+              style="font-size: 18px"
           /></v-avatar>
         </template>
         <v-list>
-          <v-list-item :disabled="isLogin" @click="login()"
-            ><v-list-item-title>登录</v-list-item-title></v-list-item
-          >
-          <v-list-item :disabled="!isLogin" @click="logout()"
-            ><v-list-item-title>登出</v-list-item-title></v-list-item
-          >
+          <v-list-item v-if="isLogin" to="/message">
+            <v-icon left dense> mdi-account </v-icon>
+            <v-list-item-title>消息</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="!isLogin" @click="login()">
+            <v-icon left dense> mdi-login </v-icon>
+            <v-list-item-title>登录</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="isLogin" @click="logout()">
+            <v-icon left dense> mdi-logout </v-icon>
+            <v-list-item-title>登出</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>

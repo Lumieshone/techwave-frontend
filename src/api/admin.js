@@ -35,6 +35,14 @@ export function getSectionRequest(page, perPage) {
   });
 }
 
+export function adminLogin(data) {
+  return request({
+    url: "/admin/login",
+    method: "post",
+    data,
+  });
+}
+
 export function getReport(page, perPage) {
   return request({
     url: "/admin/report",

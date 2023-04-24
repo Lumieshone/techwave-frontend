@@ -75,7 +75,7 @@ import {
   // get_collect_sections,
   getHotSections,
   getSearchSections,
-} from "@/api/forum";
+} from "@/api/homepage";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names

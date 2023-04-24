@@ -1,12 +1,4 @@
 import request from "@/utils/request";
-
-export function getUserCards(userId) {
-  return request({
-    url: `/account/${userId}/card`,
-    method: "get",
-  });
-}
-
 export function getPostInfo(postId, page, perPage, isOnlyHost) {
   return request({
     url: `/post/${postId}`,
@@ -29,17 +21,15 @@ export function collectOrUncollectPost(data) {
 
 export function deleteReply(replyId) {
   return request({
-    url: "/post/reply",
+    url: `/post/${replyId}`,
     method: "delete",
-    data: { replyId: replyId },
   });
 }
 
 export function deleteComment(commentId) {
   return request({
-    url: "/post/comment",
+    url: `/post/${commentId}`,
     method: "delete",
-    data: { commentId: commentId },
   });
 }
 

@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+    import request from "@/utils/request";
 
 export function editSectionAvatar(fd) {
   return request({
@@ -67,7 +67,7 @@ export function renameSubsection(id, name) {
 
 export function getSubsectionInfo(id) {
   return request({
-    url: "/moderator/subsection_info",
+    url: "/moderator/subsection",
     method: "get",
     params: {
       subsectionId: id,
@@ -161,31 +161,11 @@ export function acceptCommentReport(data) {
     });
 }
 
-export function getPinnedPosts(sectionId) {
-    return request({
-        url: "/moderator/pinned_post",
-        method: "get",
-        params: {
-            sectionId,
-        },
-    });
-}
-
 export function pinOrNotPinPost(data) {
     return request({
         url: "/moderator/pin_post",
         method: "post",
         data,
-    });
-}
-
-export function getHighlightedPosts(sectionId) {
-    return request({
-        url: "/moderator/highlighted_post",
-        method: "get",
-        params: {
-            sectionId,
-        },
     });
 }
 
