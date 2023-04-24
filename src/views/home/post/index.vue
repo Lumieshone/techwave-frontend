@@ -10,15 +10,12 @@
     <v-btn text>{{ postData.subsectionName }}</v-btn>
 
     <!-- title -->
-    <h1 style="margin-bottom:20px;margin-top:10px">{{ postData.title }}</h1>
+    <h1 style="margin-bottom: 20px; margin-top: 10px">{{ postData.title }}</h1>
     <p>帖子id: {{ postId }}</p>
     <p>帖子浏览量: {{ postData.browseNumber }}</p>
 
-    <!-- tags -->
-    <!-- <v-chip class="ma-2" v-for="tag in postData.tags.map((t) => '#' + t)" :key="tag">{{tag}}</v-chip> -->
-
     <!-- 是否收藏 -->
-    <v-btn :disabled="!isLogin" v-on:click="open_collect_dialog">
+    <v-btn :disabled="!isLogin" v-on:click="openCollectDialog">
       <v-icon :color="postData.isCollected ? 'orange' : 'grey'"
         >mdi-star
       </v-icon>
@@ -26,7 +23,7 @@
     </v-btn>
 
     <!-- 收藏文件夹 -->
-    <v-dialog v-model="show_collect_dialog" width="30%">
+    <v-dialog v-model="showCollectDialog" width="30%">
       <v-card>
         <v-card-title>选择收藏文件夹</v-card-title>
         <v-card-text>
@@ -44,10 +41,15 @@
             color="#7d73be"
             class="ma-2 white--text"
             small
-            @click.native="close_collect_dialog"
+            @click="closeCollectDialog"
             >取消
           </v-btn>
-          <v-btn color="#7d73be" class="ma-2 white--text" small @click="collect">
+          <v-btn
+            color="#7d73be"
+            class="ma-2 white--text"
+            small
+            @click="collect"
+          >
             确定
           </v-btn></v-card-actions
         >
@@ -65,7 +67,7 @@
           </v-avatar>
         </v-card-title>
         <v-card-subtitle
-          ><span>{{ postData.updateTime }}</span></v-card-subtitle
+          ><span>{{ postData.time }}</span></v-card-subtitle
         >
         <v-card-text>
           <div v-html="postData.content"></div>
@@ -88,12 +90,12 @@
 
     <!-- 分页 -->
     <v-pagination
-      v-if="Math.ceil(postData.total / limit) > 1"
-      v-model="curPage"
-      :length="Math.ceil(postData.total / limit)"
+      v-if="Math.ceil(postData.total / perPage) > 1"
+      v-model="page"
+      :length="Math.ceil(postData.total / perPage)"
       total-visible="7"
       color="#6A5ACD"
-      @input="onPageChange(curPage, limit)"
+      @input="onPageChange(page, perPage)"
     ></v-pagination>
 
     <!-- comment on post -->
@@ -184,14 +186,17 @@ export default {
   },
   data() {
     return {
+      // is only host
+      isOnlyHost: false,
+
       // user collect folder
       folders: [],
       folderId: undefined,
-      show_collect_dialog: false,
+      showCollectDialog: false,
 
       // pagination
-      curPage: 1,
-      limit: 5,
+      page: 1,
+      perPage: 5,
 
       // comment
       commentContent: "<p>发表你的看法~</p>",
@@ -207,7 +212,7 @@ export default {
       postData: {},
 
       // comment data (from backend)
-      commentVOList: {},
+      commentVOList: [],
 
       // rich text
       editor: null,
@@ -244,21 +249,16 @@ export default {
   },
   methods: {
     // pagination
-    onPageChange(curPage, limit) {
-      this.refreshList(curPage, limit);
+    onPageChange(page, perPage) {
+      this.refreshList(page, perPage);
     },
-    refreshList(curPage = this.curPage, limit = this.limit) {
-      getPostInfo({
-        id: this.postId,
-        offset: curPage,
-        limit: limit,
-      })
+    refreshList(page = this.page, perPage = this.perPage) {
+      getPostInfo(this.postId, page, perPage, this.isOnlyHost)
         .then((res) => {
           this.postData = res.data;
           this.postData.floor = 1;
           this.postData.commentVOList.forEach(
-            (c, index) =>
-              (c.floor = index + this.limit * (this.curPage - 1) + 2)
+            (c, index) => (c.floor = index + this.perPage * (this.page - 1) + 2)
           );
         })
         .catch((err) => console.log("error: " + err));
@@ -281,42 +281,36 @@ export default {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
             this.refreshList();
-          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          }
         })
         .catch((err) => console.log("error: " + err));
     },
 
     // collect
-    open_collect_dialog() {
+    openCollectDialog() {
       if (this.postData.isCollected == true) {
-        collectOrUncollectPost({ id: this.postId })
-          .then(() => {
-            this.postData.isCollected = !this.postData.isCollected;
-            this.$message.success("取消收藏成功！");
-          })
-          .error(() => {
-            this.$message.error("额，似乎取消收藏出现了问题..");
-          });
+        collectOrUncollectPost({ id: this.postId }).then(() => {
+          this.postData.isCollected = !this.postData.isCollected;
+          this.$message.success("取消收藏成功！");
+        });
         return;
       }
 
-      this.show_collect_dialog = true;
+      this.showCollectDialog = true;
     },
 
-    close_collect_dialog() {
-      this.show_collect_dialog = false;
+    closeCollectDialog() {
+      this.showCollectDialog = false;
     },
 
     collect() {
-      collectOrUncollectPost({ id: this.postId, folderId: this.folderId })
-        .then(() => {
+      collectOrUncollectPost({ id: this.postId, folderId: this.folderId }).then(
+        () => {
           this.postData.isCollected = !this.postData.isCollected;
           this.$message.success("收藏成功");
-          this.show_collect_dialog = false;
-        })
-        .error(() => {
-          this.$message.error("额，似乎收藏出现了问题..");
-        });
+          this.showCollectDialog = false;
+        }
+      );
     },
 
     // rich text
@@ -325,7 +319,7 @@ export default {
     },
   },
   mounted() {
-    this.postId = this.$route.params.postId;
+    this.postId = parseInt(this.$route.params.postId);
     if (this.isLogin) {
       getFolders().then((res) => {
         this.folders = res.data.folders;

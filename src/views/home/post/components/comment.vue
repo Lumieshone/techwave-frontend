@@ -3,13 +3,13 @@
     <v-card>
       <v-card-title>
         <span style="margin: 5px">{{ commentData.floor }} 楼 </span>
-        <span style="margin: 5px">{{ commentData.author }}</span>
+        <span style="margin: 5px">{{ commentData.authorName }}</span>
         <v-avatar>
-          <img :src="commentData.avatar" :alt="commentData.author" />
+          <img :src="commentData.avatar" :alt="commentData.authorName" />
         </v-avatar>
       </v-card-title>
       <v-card-subtitle
-        ><span>{{ commentData.updateTime }}</span></v-card-subtitle
+        ><span>{{ commentData.time }}</span></v-card-subtitle
       >
       <v-card-text>
         <div v-html="commentData.content"></div>
@@ -25,7 +25,7 @@
           fab
           small
           :disabled="!isLogin"
-          v-on:click="open_reply_dialog(commentData.commentId)"
+          v-on:click="openReplyDialog(commentData.commentId)"
         >
           <v-icon color="white">mdi-comment</v-icon>
         </v-btn>
@@ -107,10 +107,11 @@ export default {
       commentId: Number,
       floor: Number,
       avatar: String,
-      author: String,
-      updateTime: Date,
-      content: undefined,
-      replyVOList: undefined,
+      authorName: String,
+      authorId: Number,
+      time: Date,
+      content: String,
+      replyVOList: Array,
       ableToDelete: Boolean,
     },
     postId: Number,
@@ -133,7 +134,7 @@ export default {
   },
   methods: {
     // reply
-    open_reply_dialog(commentId) {
+    openReplyDialog(commentId) {
       this.showReplyDialog = true;
       this.replyToCommentId = commentId;
       this.replyContent = "";
@@ -157,10 +158,9 @@ export default {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
             this.$emit("refresh");
-          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          }
           this.showReplyDialog = false;
         })
-        .catch((err) => console.log("error: " + err));
     },
 
     // delete
@@ -177,7 +177,7 @@ export default {
         if (res.code === 20000) {
           this.$message.success("删除成功！");
           this.$emit("refresh");
-        } else this.$message.error("阿欧，好像删除出现了一点小问题..");
+        }
       });
       this.showDeleteDialog = false;
     },

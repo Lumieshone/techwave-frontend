@@ -1,5 +1,6 @@
 import request from "@/utils/request";
 export function getPostInfo(postId, page, perPage, isOnlyHost) {
+  // console.log("getPostInfo", postId, page, perPage, isOnlyHost)
   return request({
     url: `/post/${postId}`,
     method: "get",
@@ -21,14 +22,14 @@ export function collectOrUncollectPost(data) {
 
 export function deleteReply(replyId) {
   return request({
-    url: `/post/${replyId}`,
+    url: `/post/reply/${replyId}`,
     method: "delete",
   });
 }
 
 export function deleteComment(commentId) {
   return request({
-    url: `/post/${commentId}`,
+    url: `/post/comment/${commentId}`,
     method: "delete",
   });
 }

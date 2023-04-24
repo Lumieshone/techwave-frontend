@@ -19,7 +19,7 @@
           <validation-provider
             v-slot="{ errors }"
             name="Password"
-            rules="required|min:6"
+            rules="required"
           >
             <v-text-field
               v-model="password"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { required, max, min } from "vee-validate/dist/rules";
+import { required, max } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -56,11 +56,6 @@ setInteractionMode("eager");
 extend("max", {
   ...max,
   message: "{field} 不能超过 {length} 个字符",
-});
-
-extend("min", {
-  ...min,
-  message: "{field} 至少需要 {length} 个字符",
 });
 
 extend("required", {
@@ -77,7 +72,7 @@ export default {
   data() {
     return {
       username: "admin",
-      password: "12345678",
+      password: "admin",
       showPwd: false,
     };
   },

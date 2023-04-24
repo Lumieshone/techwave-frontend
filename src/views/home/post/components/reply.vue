@@ -1,15 +1,15 @@
 <template>
   <v-container>
-    <v-col v-for="singlereplyData in replyData" :key="singlereplyData.replyId">
+    <v-col v-for="singleReplyData in replyData" :key="singleReplyData.replyId">
       <v-card>
-        <v-card-title>{{ singlereplyData.authorName }}</v-card-title>
-        <v-card-subtitle v-show="singlereplyData.replyTo"
+        <v-card-title>{{ singleReplyData.authorName }}</v-card-title>
+        <v-card-subtitle v-show="singleReplyData.toName"
           ><span
-            >回复给 {{ singlereplyData.replyTo }}
-            {{ singlereplyData.updateTime }}</span
+            >回复给 {{ singleReplyData.toName }}
+            {{ singleReplyData.time }}</span
           ></v-card-subtitle
         >
-        <v-card-text>{{ singlereplyData.content }}</v-card-text>
+        <v-card-text>{{ singleReplyData.content }}</v-card-text>
         <v-card-actions>
           <v-btn
             color="#7d73be"
@@ -17,9 +17,9 @@
             small
             :disabled="!isLogin"
             v-on:click="
-              open_reply_dialog(
-                singlereplyData.authorName,
-                singlereplyData.replyId
+              openReplyDialog(
+                singleReplyData.authorName,
+                singleReplyData.replyId
               )
             "
           >
@@ -30,8 +30,8 @@
             fab
             small
             :disabled="!isLogin"
-            v-show="isLogin && singlereplyData.ableToDelete"
-            v-on:click="openDeleteDialog(singlereplyData.replyId)"
+            v-show="isLogin && singleReplyData.ableToDelete"
+            v-on:click="openDeleteDialog(singleReplyData.replyId)"
           >
             <v-icon color="white">mdi-delete</v-icon>
           </v-btn>
@@ -97,14 +97,16 @@ import { replyOnReply, deleteReply } from "@/api/post";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Postreply",
+  name: "PostReply",
   props: {
     isLogin: Boolean,
     replyData: {
       replyId: Number,
-      updateTime: Date,
+      time: Date,
       authorName: String,
-      replyTo: String,
+      authorId: Number,
+      toName: String,
+      toId: Number,
       content: String,
       ableToDelete: Boolean,
     },
@@ -124,9 +126,8 @@ export default {
   },
   methods: {
     // arrow methods can't bind to this, so use function instead!!
-
     // reply
-    open_reply_dialog(author, replyId) {
+    openReplyDialog(author, replyId) {
       this.showReplyDialog = true;
       this.replyId = replyId;
       this.replyToUserName = author;
@@ -152,7 +153,7 @@ export default {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
             this.$emit("refresh");
-          } else this.$message.error("阿欧，好像回复出现了一点小问题..");
+          }
           this.showReplyDialog = false;
         })
         .catch((err) => console.log("error: " + err));
@@ -173,7 +174,7 @@ export default {
         if (res.code === 20000) {
           this.$message.success("删除成功！");
           this.$emit("refresh");
-        } else this.$message.error("阿欧，好像删除出现了一点小问题..");
+        }
       });
       this.showDeleteDialog = false;
     },
