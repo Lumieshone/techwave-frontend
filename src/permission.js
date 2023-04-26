@@ -28,7 +28,7 @@ router.beforeEach(async (to, from, next) => {
         next({ path: "/" });
       }
       // moderator
-      if (to.path.includes("/moderator-dashboard")) {
+      else if (to.path.includes("/moderator-dashboard")) {
         const sectionId = to.params.sectionId;
         console.log(sectionId);
         let isModerator = false;
@@ -57,14 +57,14 @@ router.beforeEach(async (to, from, next) => {
           // if is logged in, redirect to the dashboard
           next({ path: "/admin-dashboard" });
         }
-        if (to.path.includes("/admin-dashboard")) {
+        else if (to.path.includes("/admin-dashboard")) {
           next();
         } else {
           Message.error("管理员只能访问管理员中台");
           next({ path: "/admin-dashboard" });
         }
       }
-      if (to.path.includes("/admin-dashboard")) {
+      else if (to.path.includes("/admin-dashboard")) {
         Message.error("普通用户无法访问管理员中台");
         next({ path: "/" });
       }
