@@ -280,7 +280,8 @@ export default {
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
-            this.refreshList();
+            this.refreshList()
+            this.commentContent = "<p>发表你的看法~</p>";
           }
         })
         .catch((err) => console.log("error: " + err));

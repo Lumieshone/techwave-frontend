@@ -15,7 +15,7 @@ router.beforeEach(async (to, from, next) => {
     // determine whether the user has obtained his permission roles through getInfo
     const hasRoles = store.getters.roles && store.getters.roles.length > 0;
     if (hasRoles) {
-      console.log(store.getters.roles);
+      // console.log(store.getters.roles);
       // user
       let isUser = false;
       store.getters.roles.forEach((role) => {

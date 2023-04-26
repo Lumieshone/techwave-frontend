@@ -142,6 +142,7 @@ import { getToken } from "@/utils/auth";
 import { IEditorConfig } from "@wangeditor/editor";
 
 import { publishPost } from "@/api/section";
+
 export default {
   name: "PostDialog",
   components: {
@@ -227,15 +228,6 @@ export default {
     publishPost() {
       console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
-        // let fd = new FormData();
-        // fd.append("sectionId", this.sectionId);
-        // fd.append("title", this.form.title);
-        // fd.append("subsection", this.form.subsection);
-        // fd.append("content", this.form.content);
-        // fd.append("pictureList", this.files);
-        // for (let [a, b] of fd.entries()) {
-        //   console.log(a, b);
-        // }
         publishPost({
           sectionId: this.sectionId,
           subsectionId: this.form.subsection,
@@ -245,11 +237,8 @@ export default {
           .then((res) => {
             console.log(res.message);
             if (res.code === 20000) this.$message.success("发布帖子成功！");
-            else this.$message.error("发布帖子失败~");
-            window.location.reload();
+            this.$emit("callBack", false);
           })
-          .catch((err) => console.log("error: " + err));
-        this.$emit("callBack", false);
         this.clearDialog();
       }
     },
