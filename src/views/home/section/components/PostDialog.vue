@@ -27,7 +27,6 @@
           color="#483D8B"
           maxlength="30"
           :rules="titleRules"
-          filled
           dense
           outlined
           prepend-icon="mdi-view-dashboard-edit-outline"
@@ -39,7 +38,6 @@
           v-model="form.subsection"
           color="#483D8B"
           prepend-icon="mdi-tag-heart-outline"
-          filled
           dense
           outlined
           :items="subsections"
@@ -67,52 +65,6 @@
             />
           </div>
         </template>
-
-        <!-- <v-textarea
-            v-model="form.content"
-            maxlength="400"
-            color="#7d73be"
-            :rows="7"
-            filled
-            outlined
-            prepend-icon="mdi-draw-pen"
-            :counter="400"
-            :rules="contentRules"
-            color="#483D8B"
-            label="帖子内容"
-            required
-        ></v-textarea>
-        <v-file-input
-            v-model="files"
-            label="添加图片"
-            counter
-            dense
-            multiple
-            filled
-            outlined
-            :show-size="1000"
-            accept="image/*"
-            color="#483D8B"
-            prepend-icon="mdi-panorama-outline"
-        >
-          <template v-slot:selection="{ index, text }">
-            <v-chip
-                v-if="index < 2"
-                label
-                dark
-                small
-                color="#6A5ACD"
-            >
-              {{ text }}
-            </v-chip>
-            <span
-                v-else-if="index === 2"
-                class="text-overline grey--text text--darken-3 mx-2"
-            >
-          +{{ files.length - 2 }} Picture(s)
-        </span>
-          </template>
-        </v-file-input> -->
         <v-row justify="end">
           <v-btn
             color="#6A5ACD"

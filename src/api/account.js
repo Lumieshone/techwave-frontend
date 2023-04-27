@@ -28,7 +28,7 @@ export function editInfo(form) {
 
 export function editPassword(oldPassword, newPassword) {
   return request({
-    url: "/account/modify_password",
+    url: "/account/edit_password",
     method: "post",
     data: {
       oldPassword,
@@ -39,7 +39,7 @@ export function editPassword(oldPassword, newPassword) {
 
 export function editEmail(password, email) {
   return request({
-    url: "/account/modify_email",
+    url: "/account/edit_email",
     method: "post",
     data: {
       password,
@@ -87,7 +87,7 @@ export function createFolder(folderName) {
 
 export function deleteFolder(folderId) {
   return request({
-    url: `/account/${folderId}`,
+    url: `/account/folder/${folderId}`,
     method: "delete",
   });
 }
@@ -106,7 +106,7 @@ export function getMyPost(page, perPage) {
 
 export function deleteMyPost(postId) {
   return request({
-    url: `/account/${postId}`,
+    url: `/account/post/${postId}`,
     method: "delete",
   });
 }

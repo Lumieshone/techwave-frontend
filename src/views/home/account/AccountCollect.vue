@@ -98,11 +98,11 @@
                 circle
                 class="left"
                 color="#6A5ACD"
-                v-if="Math.ceil(total / limit) > 1"
-                v-model="curPage"
-                :length="Math.ceil(total/ limit)"
+                v-if="Math.ceil(total / perPage) > 1"
+                v-model="page"
+                :length="Math.ceil(total/ perPage)"
                 :total-visible="10"
-                @input="onPageChange(curPage, limit)"
+                @input="onPageChange(page, perPage)"
             ></v-pagination>
           </v-col>
           <v-col cols="4">
@@ -146,9 +146,9 @@ export default {
       dialogVisible: false,
       valid: true,
       isEdit: false,
-      curPage: 1,
+      page: 1,
       show_post_dialog: false,
-      limit: 6,
+      perPage: 6,
       whichPage: 1,
       total: 20,
       folderId: 0,
@@ -172,7 +172,7 @@ export default {
       this.$router.push({path: '/post/' + postId, params: {id: postId}})
     },
     jumpPage() {
-      this.curPage = Number(this.whichPage);
+      this.page = Number(this.whichPage);
     },
     onPageChange(curPage, limit) {
       getCollectInfo(this.folderId, curPage, limit)
@@ -186,18 +186,18 @@ export default {
     refreshList() {
       this.folderId = this.folders[0].id;
       this.folderName = '默认收藏夹';
-      this.curPage = 1;
-      getCollectInfo(this.folderId, 1, this.limit)
+      this.page = 1;
+      getCollectInfo(this.folderId, 1, this.perPage)
           .then(res => {
             this.collects = res.data.folderPostDTOList;
           })
           .catch((err) => console.log("error: " + err));
     },
     getCollects(id, name) {
-      this.curPage = 1;
+      this.page = 1;
       this.folderId = id;
       this.folderName = name;
-      getCollectInfo(this.folderId, 1, this.limit)
+      getCollectInfo(this.folderId, 1, this.perPage)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
@@ -237,7 +237,7 @@ export default {
           this.folderId = res.data.folders[0].id
         })
         .catch((err) => console.log("error: " + err));
-    getCollectInfo(0, 1, this.limit)
+    getCollectInfo(0, 1, this.perPage)
         .then((res) => {
           console.log(res.data.total)
           this.total = res.data.total;

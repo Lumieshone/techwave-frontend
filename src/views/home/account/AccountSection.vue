@@ -1,10 +1,10 @@
 <template>
-  <v-card height="550" class="ma-4 mb-8">
+  <v-card height="550" class="mx-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-toolbar
         flat
     >
-      <v-btn color="#6A5ACD" class="mt-1 ml-1 white--text" @click="createSection">
+      <v-btn color="#6A5ACD" class="ml-1 white--text" @click="createSection">
         <v-icon>mdi-plus</v-icon>
         创建版块
       </v-btn>
@@ -25,7 +25,7 @@
            ></v-avatar>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
-            <v-tooltip top>
+            <v-tooltip top class="mr-1">
               <template v-slot:activator="{ on, attrs }">
               <v-btn
                   icon
@@ -34,7 +34,7 @@
                 <v-icon
                     @click="stepToSection(item)"
                 >
-                  mdi-location-enter
+                  mdi-arrow-right-bold-box-outline
                 </v-icon>
               </v-btn>
               </template>
@@ -47,13 +47,13 @@
                     v-bind="attrs"
                     v-on="on">
                 <v-icon
-                    @click="editItem(item)"
+                    @click="stepToManage(item)"
                 >
-                  mdi-pencil
+                  mdi-account-tie-outline
                 </v-icon>
                 </v-btn>
               </template>
-              <span>编辑信息</span>
+              <span>管理版块</span>
             </v-tooltip>
           </template>
         </v-data-table>
@@ -65,25 +65,28 @@
         @submit_1="submit_1"
     >
     </CreateSection>
-    <EditSection
-        :showEditDialog="this.showEditDialog"
-        :Intro="item.sectionIntro"
-        :SubsectionList="item.subSectionList"
-        :SectionId="item.sectionId"
-        @callBack_2="callBack_2"
-        @submit_2="submit_2"
-    >
-    </EditSection>
+<!--    <EditSection-->
+<!--        :showEditDialog="this.showEditDialog"-->
+<!--        :Intro="item.sectionIntro"-->
+<!--        :SubsectionList="item.subSectionList"-->
+<!--        :SectionId="item.sectionId"-->
+<!--        @callBack_2="callBack_2"-->
+<!--        @submit_2="submit_2"-->
+<!--    >-->
+<!--    </EditSection>-->
   </v-card>
 </template>
 
 <script>
 import CreateSection from "@/views/home/account/components/CreateSection";
 import {getUserSections} from "@/api/account";
-import EditSection from "@/views/home/account/components/EditSection";
+// import EditSection from "@/views/home/account/components/EditSection";
 export default {
   name: "AccountSection",
-  components: {EditSection, CreateSection},
+  components: {
+    // EditSection,
+    CreateSection
+  },
   data(){
     return {
       title:"我的版块",
@@ -114,11 +117,11 @@ export default {
     createSection(){
       this.showSectionDialog = !this.showSectionDialog
     },
-    editItem(item){
-      console.log(item)
-      this.showEditDialog = !this.showEditDialog
-      this.item = item
-    },
+    // editItem(item){
+    //   console.log(item)
+    //   this.showEditDialog = !this.showEditDialog
+    //   this.item = item
+    // },
     callBack_1(flag){
       this.showSectionDialog  = flag
     },
@@ -139,6 +142,9 @@ export default {
     },
     stepToSection(item){
       this.$router.push({path: '/section/'+ item.sectionId, params:{id:item.sectionId}})
+    },
+    stepToManage(item){
+      this.$router.push({path: '/moderator-dashboard/'+ item.sectionId, params:{id:item.sectionId}})
     },
   },
   mounted() {

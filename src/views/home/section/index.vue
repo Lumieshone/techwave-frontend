@@ -183,6 +183,7 @@ export default {
   methods: {
     callBack(flag) {
       this.showPostDialog = flag;
+      window.location.reload();
     },
     collect() {
       this.sectionData.isCollected = !this.sectionData.isCollected;
