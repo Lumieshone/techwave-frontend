@@ -73,7 +73,7 @@
             </v-list>
 
             <template v-slot:append>
-              <div class="pa-5">
+              <div class="pa-7 pt-4">
                 <v-btn block light @click="logout">
                   <span id="logout"> 登出 </span>
                 </v-btn>
@@ -130,21 +130,7 @@ export default {
         { title: "个人信息", icon: "mdi-account-box", router: "/account/info" },
         { title: "我的收藏", icon: "mdi-star", router: "/account/collect" },
         { title: "我的帖子", icon: "mdi-note-edit", router: "/account/post" },
-        {
-          title: "回复我的",
-          icon: "mdi-message-reply-text",
-          router: "/account/reply",
-        },
-        {
-          title: "我的交易",
-          icon: "mdi-wallet",
-          router: "/account/transaction",
-        },
-        {
-          title: "我的版块",
-          icon: "mdi-view-dashboard",
-          router: "/account/section",
-        },
+        { title: "我的版块", icon: "mdi-view-dashboard", router: "/account/section" },
         { title: "安全设置", icon: "mdi-lock", router: "/account/safety" },
       ],
     };

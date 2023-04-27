@@ -64,7 +64,7 @@
         <v-list subheader tile min-height="600" max-height="1000">
           <v-list-item-group active-class="deep-purple--text">
             <template v-for="(item, index) in sectionData.postVOList">
-              <v-list-item @click="stepToPost(item.id)" :key="index">
+              <v-list-item @click="stepToPost(item.id)" :key="item.id">
                 <template>
                   <v-list-item-avatar>
                     <v-chip color="#E6E6FA" label small>
@@ -73,9 +73,9 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title v-text="item.title"></v-list-item-title>
-                    <!-- <v-list-item-subtitle
-                      v-text="item.summary"
-                    ></v-list-item-subtitle> -->
+<!--                    <v-list-item-subtitle-->
+<!--                      v-text="item.title"-->
+<!--                    ></v-list-item-subtitle>-->
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-list-item-action-text
@@ -148,7 +148,7 @@ import {
   collectSection,
   // getHighlightedPosts,
   // getPinnedPosts,
-  getAllPosts,
+  // getAllPosts,
   getPostsBySubsection,
   getSectionData,
   // followOrUnfollowSection,
@@ -270,18 +270,13 @@ export default {
     this.sectionId = this.$route.params.sectionId;
     getSectionData(this.sectionId, 1, this.perPage)
       .then((res) => {
+        console.log(res.data)
         this.sectionData = res.data;
         this.subsectionList = res.data.subSectionList;
         this.sectionName = res.data.name;
-        // console.log(this.subsectionList);
+        console.log(this.sectionData);
       })
       .catch((err) => console.log("error: " + err));
-    getAllPosts(this.sectionId, 1, this.perPage).then((res) => {
-      console.log(res.data.total);
-      this.sectionData.postCount = res.data.total;
-      this.sectionData.postVOList = res.data.postDataVOList;
-      console.log("this.sectionData.postVOList", this.sectionData.postVOList);
-    });
   },
 };
 </script>

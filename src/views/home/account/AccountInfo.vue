@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580" class="mx-4 my-5">
+  <v-card height="550" class="mx-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-form
       ref="form"

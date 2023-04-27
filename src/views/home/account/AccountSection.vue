@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580" class="ma-4 mb-6">
+  <v-card height="550" class="ma-4 mb-8">
     <v-card-title v-text="title"></v-card-title>
     <v-toolbar
         flat
@@ -16,7 +16,7 @@
             :items="sectionInfo"
             class="elevation-1 px-5"
             hide-default-footer
-            height="460"
+            height="435"
         >
           <template v-slot:[`item.sectionAvatar`]="{ item }">
            <v-avatar class="my-2"><img

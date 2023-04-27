@@ -1,5 +1,5 @@
 <template>
-  <v-card height="600" class="ma-4">
+  <v-card height="550" class="mx-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-card width="100%">
@@ -92,7 +92,7 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row>
+        <v-row v-if="this.total > 10">
           <v-col cols="8">
             <v-pagination
                 circle
