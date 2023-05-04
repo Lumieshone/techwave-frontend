@@ -1,43 +1,52 @@
 <template>
   <v-container>
-    <v-col v-for="singleReplyData in replyData" :key="singleReplyData.replyId">
-      <v-card>
-        <v-card-title>{{ singleReplyData.authorName }}</v-card-title>
-        <v-card-subtitle v-show="singleReplyData.toName"
-          ><span
-            >回复给 {{ singleReplyData.toName }}
-            {{ singleReplyData.time }}</span
-          ></v-card-subtitle
+    <v-list>
+      <v-list-group :value="true">
+        <v-list-item
+          v-for="singleReplyData in replyData"
+          :key="singleReplyData.replyId"
         >
-        <v-card-text>{{ singleReplyData.content }}</v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="#7d73be"
-            fab
-            small
-            :disabled="!isLogin"
-            v-on:click="
-              openReplyDialog(
-                singleReplyData.authorName,
-                singleReplyData.replyId
-              )
-            "
-          >
-            <v-icon color="white">mdi-comment</v-icon>
-          </v-btn>
-          <v-btn
-            color="#7d73be"
-            fab
-            small
-            :disabled="!isLogin"
-            v-show="isLogin && singleReplyData.ableToDelete"
-            v-on:click="openDeleteDialog(singleReplyData.replyId)"
-          >
-            <v-icon color="white">mdi-delete</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
+          <v-list-item-content>
+            <v-row>
+              <v-col cols="8">
+                <v-list-item-title
+                  >{{ singleReplyData.authorName }} 回复
+                  {{ singleReplyData.toName }}:
+                  {{ singleReplyData.content }}</v-list-item-title
+                >
+              </v-col>
+              <v-col cols="4">
+                <v-list-item-subtitle>
+                  {{ singleReplyData.time }}
+                </v-list-item-subtitle>
+                <v-list-item-action>
+                  <v-btn
+                    text
+                    :disabled="!isLogin"
+                    v-show="isLogin && singleReplyData.ableToDelete"
+                    >删除</v-btn
+                  >
+                  <v-btn text @click="openReportDialog(singleReplyData.replyId)" v-show="isLogin"
+                    >举报</v-btn
+                  >
+                  <v-btn
+                    text
+                    :disabled="!isLogin"
+                    @click="
+                      openReplyDialog(
+                        singleReplyData.authorName,
+                        singleReplyData.replyId
+                      )
+                    "
+                    >回复</v-btn
+                  >
+                </v-list-item-action>
+              </v-col>
+            </v-row>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
+    </v-list>
 
     <!-- reply -->
     <v-dialog v-model="showReplyDialog" width="50%">
@@ -89,17 +98,35 @@
         >
       </v-card>
     </v-dialog>
+
+    <!-- report -->
+    <v-dialog width="50%" v-model="showReportDialog">
+      <report-post
+        :reportType="'reply'"
+        :reportedId="reportedId"
+        :sectionId="sectionId"
+        @closeReportDialog="
+          showReportDialog = false;
+          reportedId = undefined;
+        "
+      ></report-post>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { replyOnReply, deleteReply } from "@/api/post";
+import ReportPost from "./ReportPost.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PostReply",
+  components: {
+    ReportPost,
+  },
   props: {
     isLogin: Boolean,
+    sectionId: Number,
     replyData: {
       replyId: Number,
       time: Date,
@@ -113,6 +140,10 @@ export default {
   },
   data() {
     return {
+      // report
+      showReportDialog: false,
+      reportedId: undefined,
+
       // reply
       showReplyDialog: false,
       replyId: undefined,
@@ -126,6 +157,12 @@ export default {
   },
   methods: {
     // arrow methods can't bind to this, so use function instead!!
+    // report
+    openReportDialog(replyId) {
+      this.reportedId = replyId;
+      this.showReportDialog = true;
+    },
+
     // reply
     openReplyDialog(author, replyId) {
       this.showReplyDialog = true;

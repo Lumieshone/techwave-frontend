@@ -4,9 +4,18 @@
       <v-card-title>
         <span style="margin: 5px">{{ commentData.floor }} 楼 </span>
         <span style="margin: 5px">{{ commentData.authorName }}</span>
-        <v-avatar>
-          <img :src="commentData.avatar" :alt="commentData.authorName" />
-        </v-avatar>
+        <v-hover v-slot:default="{ hover }">
+          <div>
+            <v-avatar>
+              <img :src="commentData.avatar" :alt="commentData.authorName" />
+            </v-avatar>
+            <user-card
+              :userId="commentData.authorId"
+              :avatar="commentData.avatar"
+              v-if="hover"
+              style="z-index: 1000; position: absolute; right: 0; top: 0"
+            ></user-card></div
+        ></v-hover>
       </v-card-title>
       <v-card-subtitle
         ><span>{{ commentData.time }}</span></v-card-subtitle
@@ -15,6 +24,7 @@
         <div v-html="commentData.content"></div>
         <PostReply
           :replyData="commentData.replyVOList"
+          :sectionId="sectionId"
           :isLogin="Boolean(isLogin)"
           @refresh="refresh"
         ></PostReply>
@@ -25,7 +35,7 @@
           fab
           small
           :disabled="!isLogin"
-          v-on:click="openReplyDialog(commentData.commentId)"
+          @click="openReplyDialog(commentData.commentId)"
         >
           <v-icon color="white">mdi-comment</v-icon>
         </v-btn>
@@ -35,9 +45,19 @@
           small
           :disabled="!isLogin"
           v-show="isLogin && commentData.ableToDelete"
-          v-on:click="openDeleteDialog(commentData.commentId)"
+          @click="openDeleteDialog(commentData.commentId)"
         >
           <v-icon color="white">mdi-delete</v-icon>
+        </v-btn>
+        <v-btn
+          color="#7d73be"
+          fab
+          small
+          :disabled="!isLogin"
+          v-show="isLogin"
+          @click="showReportDialog = true"
+        >
+          <v-icon color="white">mdi-alert</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -92,12 +112,24 @@
         >
       </v-card>
     </v-dialog>
+
+    <!-- report -->
+    <v-dialog width="50%" v-model="showReportDialog">
+      <report-post
+        :reportType="'comment'"
+        :reportedId="commentData.commentId"
+        :sectionId="sectionId"
+        @closeReportDialog="showReportDialog = false"
+      ></report-post>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import PostReply from "@/views/home/post/components/reply.vue";
+import ReportPost from "./ReportPost.vue";
 import { replyOnComment, deleteComment } from "@/api/post";
+import UserCard from "./UserCard.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -113,12 +145,16 @@ export default {
       content: String,
       replyVOList: Array,
       ableToDelete: Boolean,
+      sectionId: Number,
     },
+    sectionId: Number,
     postId: Number,
     isLogin: Boolean,
   },
   components: {
     PostReply,
+    ReportPost,
+    UserCard,
   },
   data() {
     return {
@@ -130,6 +166,9 @@ export default {
       // delete my commentId
       showDeleteDialog: false,
       deleteCommentId: undefined,
+
+      // report
+      showReportDialog: false,
     };
   },
   methods: {
@@ -153,14 +192,13 @@ export default {
       replyOnComment({
         content: this.replyContent,
         commentId: this.replyToCommentId,
-      })
-        .then((res) => {
-          if (res.code === 20000) {
-            this.$message.success("回复成功！");
-            this.$emit("refresh");
-          }
-          this.showReplyDialog = false;
-        })
+      }).then((res) => {
+        if (res.code === 20000) {
+          this.$message.success("回复成功！");
+          this.$emit("refresh");
+        }
+        this.showReplyDialog = false;
+      });
     },
 
     // delete

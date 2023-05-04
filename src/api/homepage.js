@@ -14,11 +14,11 @@ export function getCollectSections(page, perPage) {
   });
 }
 
-export function getSearchSections(searchContent, page, perPage) {
+export function getSearchSections(content, page, perPage) {
   return request({
     url: "/homepage/search",
     method: "get",
-    params: { searchContent: searchContent, page: page, perPage: perPage },
+    params: { content, page, perPage },
   });
 }
 
@@ -35,4 +35,3 @@ export function getHotPosts() {
     method: "get",
   });
 }
-

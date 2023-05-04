@@ -10,27 +10,24 @@
             <strong>{{ sectionData.name }}</strong>
           </v-chip>
           <span class="section_intro">介绍：{{ sectionData.summary }}</span>
-          <span class="section_intro">关注：{{ sectionData.followCount }}</span>
           <template v-slot:actions>
-            <v-btn color="#6A5ACD" text v-on:click="followOrUnfollow">
-              <v-icon :color="sectionData.isFollowed ? 'orange' : 'grey'"
+            <v-btn color="#6A5ACD" text v-on:click="collectOrUnCollect">
+              <v-icon :color="sectionData.isCollected ? 'orange' : 'grey'"
                 >mdi-bell</v-icon
               >
-              关注
+              收藏{{ sectionData.collectCount }}
             </v-btn>
-            <v-btn color="#6A5ACD" text v-on:click="collect">
-              <v-icon :color="sectionData.isCollected ? 'orange' : 'grey'"
-                >mdi-star</v-icon
-              >
-              收藏
-            </v-btn>
-            <v-btn color="#6A5ACD" text v-on:click="post">
+            <v-btn color="#6A5ACD" text @click="showPostDialog = true">
               <v-icon>mdi-square-edit-outline</v-icon>
               发帖
             </v-btn>
-            <v-btn color="#6A5ACD" text v-on:click="report">
-              <v-icon>mdi-chart-multiple</v-icon>
-              举报
+            <v-text-field
+              v-model="searchContent"
+              label="搜索帖子"
+            ></v-text-field>
+            <v-btn color="#6A5ACD" text @click="refreshList('search')">
+              <v-icon>mdi-magnify</v-icon>
+              搜索
             </v-btn>
           </template>
         </v-banner>
@@ -46,9 +43,9 @@
           show-arrows
         >
           <v-tabs-slider color="#6A5ACD"></v-tabs-slider>
-          <v-tab @change="refreshList"> 全部帖子 </v-tab>
-          <v-tab @change="getPinnedPost">置顶</v-tab>
-          <v-tab @change="getHighlightedPosts">精华</v-tab>
+          <v-tab @change="refreshList('all')"> 全部帖子 </v-tab>
+          <v-tab @change="refreshList('pinned')">置顶</v-tab>
+          <v-tab @change="refreshList('highlighted')">精华</v-tab>
           <v-tab
             v-for="subsection in sectionData.subSectionList"
             :key="subsection.id"
@@ -73,9 +70,6 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title v-text="item.title"></v-list-item-title>
-<!--                    <v-list-item-subtitle-->
-<!--                      v-text="item.title"-->
-<!--                    ></v-list-item-subtitle>-->
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-list-item-action-text
@@ -89,26 +83,30 @@
                   </v-list-item-action>
                   <v-list-item-action>
                     <v-list-item-action-text
-                      v-text="item.likeCount"
-                    ></v-list-item-action-text>
+                      >like:{{ item.likeCount }}
+                    </v-list-item-action-text>
+                    <v-list-item-action-text
+                      >comment: {{ item.commentCount }}</v-list-item-action-text
+                    >
                   </v-list-item-action>
                 </template>
-
               </v-list-item>
 
               <v-divider
                 v-if="index < sectionData.postVOList.length - 1"
                 :key="index"
               ></v-divider>
-              
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row>
+        <v-row
+          v-if="
+            Math.ceil(sectionData.postCount / perPage) > 1 && type != 'pinned'
+          "
+        >
           <v-col cols="8">
             <v-pagination
               color="#6A5ACD"
-              v-if="Math.ceil(sectionData.postCount / perPage) > 1"
               v-model="page"
               :length="Math.ceil(sectionData.postCount / perPage)"
               :total-visible="12"
@@ -135,7 +133,7 @@
     <PostDialog
       :subsectionList="this.subsectionList"
       :sectionId="this.sectionId"
-      :sectionName="this.sectionName"
+      :sectionName="this.sectionData.name"
       :showPostDialog="this.showPostDialog"
       @callBack="callBack"
     >
@@ -146,13 +144,12 @@
 <script>
 import {
   collectSection,
-  // getHighlightedPosts,
-  // getPinnedPosts,
-  // getAllPosts,
+  getHighlightedPosts,
+  getPinnedPosts,
+  getAllPosts,
   getPostsBySubsection,
   getSectionData,
-  // followOrUnfollowSection,
-  // searchPostInSection,
+  searchPostInSection,
 } from "@/api/section";
 
 import PostDialog from "@/views/home/section/components/PostDialog";
@@ -162,19 +159,30 @@ export default {
   name: "Section",
   data() {
     return {
+      sectionId: undefined,
+
+      // section info and post vo list
+      sectionData: {},
+
+      // pagination
       page: 1,
-      ifFilter: false,
-      showPostDialog: false,
       perPage: 10,
-      subsectionId: 0,
+
+      showPostDialog: false,
+
+      subsectionId: undefined,
       subsectionList: [],
-      itemLength: 20,
+
       whichPage: 1,
+
       // ability to collect(is login?)
       ableToCollect: this.$store.getters.roles.length > 0,
-      sectionId: undefined,
-      sectionName: "",
-      sectionData: {},
+
+      // filter type
+      type: "all",
+
+      // search
+      searchContent: "",
     };
   },
   components: {
@@ -185,58 +193,73 @@ export default {
       this.showPostDialog = flag;
       window.location.reload();
     },
-    collect() {
-      this.sectionData.isCollected = !this.sectionData.isCollected;
+    collectOrUnCollect() {
       collectSection(this.sectionId)
         .then((res) => {
           console.log(res.message);
           if (res.code === 20000) {
-            if (this.sectionData.isCollected)
-              this.$message.success("收藏版块成功！");
-            else this.$message.success("取消收藏成功！");
-          } else {
-            if (this.sectionData.isCollected)
-              this.$message.error("收藏版块失败！");
-            else this.$message.success("取消收藏失败！");
+            this.sectionData.isCollected = !this.sectionData.isCollected;
+            if (this.sectionData.isCollected) {
+              this.sectionData.collectCount++;
+              this.$message.success("收藏成功！");
+            } else {
+              this.sectionData.collectCount--;
+              this.$message.success("取消收藏成功！");
+            }
           }
         })
         .catch((err) => console.log("error: " + err));
     },
-    post() {
-      this.showPostDialog = true;
-    },
     stepToPost(postId) {
-      this.$router.push({ path: "/post/" + postId, params: { id: postId } });
+      this.$router.push({ path: "/post/" + postId });
     },
     onPageChange(page, perPage) {
-      if (this.subsectionId === 0)
-        getPostsBySubsection(this.sectionId, page, perPage)
+      const fetchData = (fn) => {
+        fn()
           .then((res) => {
-            this.sectionData = res.data;
-          })
-          .catch((err) => console.log("error: " + err));
-      else {
-        getPostsBySubsection(this.sectionId, this.subsectionId, page, perPage)
-          .then((res) => {
-            console.log(res.data.total);
             this.sectionData.postCount = res.data.total;
             this.sectionData.postVOList = res.data.postDataVOList;
           })
           .catch((err) => console.log("error: " + err));
+      };
+
+      if (this.type === "all") {
+        fetchData(() => getAllPosts(this.sectionId, page, perPage));
+      } else if (this.type === "highlighted") {
+        fetchData(() => getHighlightedPosts(this.sectionId, page, perPage));
+      } else if (this.type === "search")
+        fetchData(() =>
+          searchPostInSection(this.sectionId, this.searchContent, page, perPage)
+        );
+      else {
+        // subsection
+        fetchData(() =>
+          getPostsBySubsection(this.sectionId, this.subsectionId, page, perPage)
+        );
       }
     },
     jumpPage() {
       this.page = Number(this.whichPage);
       this.onPageChange(this.page, this.perPage);
     },
-    refreshList() {
-      this.subsectionId = 0;
+    refreshList(type) {
       this.page = 1;
-      getPostsBySubsection(this.sectionId, 1, 10)
-        .then((res) => {
-          this.sectionData = res.data;
-        })
-        .catch((err) => console.log("error: " + err));
+      this.type = type;
+      if (type === "all") {
+        this.onPageChange(this.page, this.perPage);
+      } else if (type === "highlighted") {
+        this.onPageChange(this.page, this.perPage);
+      } else if (type === "search") {
+        this.onPageChange(this.page, this.perPage);
+      } else if (type === "pinned") {
+        getPinnedPosts(this.sectionId).then((res) => {
+          this.sectionData.postCount = res.data.total;
+          this.sectionData.postVOList = res.data.postDataVOList;
+        });
+      } else {
+        // subsection
+        this.getPostBySubsection(type);
+      }
     },
     getPostBySubsection(id) {
       this.page = 1;
@@ -254,16 +277,7 @@ export default {
         })
         .catch((err) => console.log("error: " + err));
     },
-    followOrUnfollow() {
-      // TODO: finish
-    },
     report() {
-      // TODO: finish
-    },
-    getPinnedPost() {
-      // TODO: finish
-    },
-    getHighlightedPosts() {
       // TODO: finish
     },
   },
@@ -271,11 +285,8 @@ export default {
     this.sectionId = this.$route.params.sectionId;
     getSectionData(this.sectionId, 1, this.perPage)
       .then((res) => {
-        console.log(res.data)
         this.sectionData = res.data;
         this.subsectionList = res.data.subSectionList;
-        this.sectionName = res.data.name;
-        console.log(this.sectionData);
       })
       .catch((err) => console.log("error: " + err));
   },

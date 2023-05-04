@@ -110,7 +110,7 @@ export function deleteMyPost(postId) {
     method: "delete",
   });
 }
-export function getUserCards(userId) {
+export function getUserCard(userId) {
   return request({
     url: `/account/${userId}/card`,
     method: "get",

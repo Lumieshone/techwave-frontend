@@ -15,46 +15,50 @@
             }.jpg`)})`"
           >
             <!-- <img src=https://source.unsplash.com/random > -->
-            <div class="text-h3 carousel__title" style="text-stroke:black">{{ slide }}</div>
+            <div class="text-h3 carousel__title" style="text-stroke: black">
+              {{ slide }}
+            </div>
           </div>
         </v-row>
       </v-carousel-item>
     </v-carousel>
-    <h2 style="margin-top:20px;margin-bottom:20px">热门新闻</h2>
+    <h2 style="margin-top: 20px; margin-bottom: 20px">热门新闻</h2>
     <v-row align="center" justify="center">
       <v-col md="12">
         <v-card>
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
-              <template>
-                <v-list-item
-                  v-for="item in newsInfo"
-                  :key="item.id"
-                  @click="step_to_post(item.id)"
-                >
+              <template v-for="item in newsInfo">
+                <v-list-item @click="stepToPost(item.id)" :key="item.id">
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#E6E6FA" label small>
-                        {{ item.commentCounts }}
+                        {{ item.commentCount }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title
                         v-text="item.title"
                       ></v-list-item-title>
-                      <v-list-item-subtitle
-                        v-text="item.summary"
-                      ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.poster"
+                        v-text="item.author"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.updateTime"
+                        v-text="item.time"
                       ></v-list-item-action-text>
+                    </v-list-item-action>
+                    <v-list-item-action>
+                      <v-list-item-action-text
+                        >like:{{ item.likeCount }}
+                      </v-list-item-action-text>
+                      <v-list-item-action-text
+                        >comment:
+                        {{ item.commentCount }}</v-list-item-action-text
+                      >
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -65,41 +69,46 @@
       </v-col>
     </v-row>
 
-    <h2 style="margin-top:20px;margin-bottom:20px">热门帖子</h2>
+    <h2 style="margin-top: 20px; margin-bottom: 20px">热门帖子</h2>
     <v-row align="center" justify="center">
       <v-col md="12">
         <v-card>
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
-              <template>
-                <v-list-item
-                  v-for="item in postsInfo"
-                  :key="item.id"
-                  @click="step_to_post(item.id)"
-                >
+              <template v-for="item in postsInfo">
+                <v-list-item @click="stepToPost(item.id)" :key="item.id">
                   <template>
                     <v-list-item-avatar>
                       <v-chip color="#E6E6FA" label small>
-                        {{ item.commentCounts }}
+                        {{ item.commentCount }}
                       </v-chip>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title
                         v-text="item.title"
                       ></v-list-item-title>
-                      <v-list-item-subtitle
-                        v-text="item.summary"
-                      ></v-list-item-subtitle>
+                      <!--                    <v-list-item-subtitle-->
+                      <!--                      v-text="item.title"-->
+                      <!--                    ></v-list-item-subtitle>-->
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.poster"
+                        v-text="item.author"
                       ></v-list-item-action-text>
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-list-item-action-text
-                        v-text="item.updateTime"
+                        v-text="item.time"
                       ></v-list-item-action-text>
+                    </v-list-item-action>
+                    <v-list-item-action>
+                      <v-list-item-action-text
+                        >like:{{ item.likeCount }}
+                      </v-list-item-action-text>
+                      <v-list-item-action-text
+                        >comment:
+                        {{ item.commentCount }}</v-list-item-action-text
+                      >
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -121,10 +130,9 @@ export default {
     return {
       slides: [
         "发现最新的电子产品资讯",
-        "与校内的同道中人讨论电子产品",
-        "与同学做交易，更加信得过",
-        "学号认证，你我更加安全",
-        "济客空间，欢迎你的到来",
+        "TechWave，欢迎你的到来",
+        "与科技同行，畅游数码世界",
+        "拓展科技视野，获取前沿资讯",
       ],
 
       postsInfo: [],
@@ -132,8 +140,8 @@ export default {
     };
   },
   methods: {
-    step_to_post(post_id) {
-      this.$router.push({ path: "/post/" + post_id, params: { id: post_id } });
+    stepToPost(postId) {
+      this.$router.push({ path: "/post/" + postId, params: { id: postId } });
     },
   },
   mounted() {

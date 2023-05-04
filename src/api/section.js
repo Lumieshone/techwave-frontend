@@ -80,13 +80,3 @@ export function getHighlightedPosts(sectionId, page, perPage) {
     },
   });
 }
-
-export function followOrUnfollowSection(sectionId) {
-  return request({
-    url: `/section/follow`,
-    method: "post",
-    params: {
-      sectionId,
-    },
-  });
-}

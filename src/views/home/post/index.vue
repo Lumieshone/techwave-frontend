@@ -1,13 +1,16 @@
 <template>
   <v-container>
-    <!-- corresponding sections -->
-    <v-btn text :to="`/forum`">论坛</v-btn>
-    <span>></span>
-    <v-btn text :to="`/section/${postData.sectionId}`"
-      >{{ postData.sectionName }}
-    </v-btn>
-    <span>></span>
-    <v-btn text>{{ postData.subsectionName }}</v-btn>
+    <v-breadcrumbs>
+      <v-breadcrumbs-item to="forum">论坛 </v-breadcrumbs-item>
+      <v-icon>mdi-chevron-right</v-icon>
+      <v-breadcrumbs-item :to="`/section/${postData.sectionId}`"
+        >{{ postData.sectionName }}
+      </v-breadcrumbs-item>
+      <v-icon>mdi-chevron-right</v-icon>
+      <v-breadcrumbs-item>{{ postData.subsectionName }} </v-breadcrumbs-item>
+    </v-breadcrumbs>
+
+    <!-- TODO: 加上空骨架 -->
 
     <!-- title -->
     <h1 style="margin-bottom: 20px; margin-top: 10px">{{ postData.title }}</h1>
@@ -15,122 +18,74 @@
     <p>帖子浏览量: {{ postData.browseNumber }}</p>
 
     <!-- 是否收藏 -->
-    <v-btn :disabled="!isLogin" v-on:click="openCollectDialog">
+    <v-btn :disabled="!isLogin" @click="openCollectDialog">
       <v-icon :color="postData.isCollected ? 'orange' : 'grey'"
         >mdi-star
       </v-icon>
       {{ isLogin ? "收藏" : "请先登录再收藏" }}
     </v-btn>
 
-    <!-- 收藏文件夹 -->
-    <v-dialog v-model="showCollectDialog" width="30%">
-      <v-card>
-        <v-card-title>选择收藏文件夹</v-card-title>
-        <v-card-text>
-          <v-select
-            v-model="folderId"
-            :items="folders"
-            item-text="folderName"
-            item-value="id"
-            label="选择收藏夹"
-            color="#7d73be"
-          ></v-select>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="#7d73be"
-            class="ma-2 white--text"
-            small
-            @click="closeCollectDialog"
-            >取消
-          </v-btn>
-          <v-btn
-            color="#7d73be"
-            class="ma-2 white--text"
-            small
-            @click="collect"
-          >
-            确定
-          </v-btn></v-card-actions
-        >
-      </v-card>
+    <v-dialog v-model="showCollectDialog" width="50%">
+      <select-collect
+        :folders="folders"
+        :postId="postId"
+        @closeCollectDialog="showCollectDialog = false"
+        @collectSuccess="
+          postData.isCollected = true;
+          showCollectDialog = false;
+        "
+      ></select-collect>
     </v-dialog>
 
+    <!-- 是否点赞 -->
+    <v-btn :disabled="!isLogin" @click="likeOrUnlike">
+      <v-icon :color="postData.isLiked ? 'red' : 'grey'">mdi-thumb-up </v-icon
+      >{{ postData.likeCount }}
+      {{ isLogin ? "点赞" : "请先登录再点赞" }}
+    </v-btn>
+
+    <!-- 是否只看楼主 -->
+    <v-btn @click="changeOnlySeeHost">
+      <v-icon :color="isOnlyHost ? 'orange' : 'grey'">mdi-account </v-icon>
+      {{ isOnlyHost ? "取消只看楼主" : "只看楼主" }}
+    </v-btn>
+
+    <!-- 举报 -->
+    <v-btn @click="showReportDialog=true" v-show="isLogin">
+      <v-icon>mdi-alert-circle-outline </v-icon>举报
+    </v-btn>
+
     <!-- 一楼 -->
-    <v-container>
-      <v-card>
-        <v-card-title>
-          <span style="margin: 5px">{{ postData.floor }} 楼 </span>
-          <span style="margin: 5px">{{ postData.author }}</span>
-          <v-avatar>
-            <img :src="postData.avatar" :alt="postData.author" />
-          </v-avatar>
-        </v-card-title>
-        <v-card-subtitle
-          ><span>{{ postData.time }}</span></v-card-subtitle
-        >
-        <v-card-text>
-          <div v-html="postData.content"></div>
-        </v-card-text>
-      </v-card>
-    </v-container>
+    <post-body
+      :author="postData.author"
+      :avatar="postData.avatar"
+      :content="postData.content"
+      :time="postData.time"
+    ></post-body>
 
     <!-- 浏览评论 -->
-    <v-col
+    <div
       v-for="singleCommentVOList in postData.commentVOList"
       :key="singleCommentVOList.floor"
     >
-      <PostComment
+      <post-comment
         :commentData="singleCommentVOList"
         :postId="Number(postId)"
         :isLogin="Boolean(isLogin)"
+        :sectionId="postData.sectionId"
         @refresh="refreshList"
       />
-    </v-col>
+    </div>
 
     <!-- 分页 -->
     <v-pagination
-      v-if="Math.ceil(postData.total / perPage) > 1"
+      v-if="Math.ceil((postData.total - 1) / perPage) > 1"
       v-model="page"
-      :length="Math.ceil(postData.total / perPage)"
+      :length="Math.ceil((postData.total - 1) / perPage)"
       total-visible="7"
       color="#6A5ACD"
       @input="onPageChange(page, perPage)"
     ></v-pagination>
-
-    <!-- comment on post -->
-    <!-- <v-col>
-      <v-card>
-        <v-card-title>发表你的看法..</v-card-title>
-        <v-card-subtitle>请文明发言哦~</v-card-subtitle>
-        <v-card-text>
-          <v-textarea
-            v-model="commentContent"
-            color="#7d73be"
-            outlined
-            label="评论"
-          ></v-textarea>
-        </v-card-text>
-        <v-card-actions>
-          <v-file-input
-            v-model="comment_image_info"
-            accept="image/*"
-            small-chips
-            multiple
-            label="上传图片"
-          ></v-file-input>
-          <v-btn
-            color="blue"
-            class="ma-2 white--text"
-            small
-            @click="replyOnPost"
-            :disabled="!isLogin"
-          >
-            {{ isLogin ? "评论" : "请先登录再发表评论" }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col> -->
 
     <!-- 富文本 -->
     <div v-show="isLogin">
@@ -162,6 +117,18 @@
     >
       {{ isLogin ? "评论" : "请先登录再发表评论" }}
     </v-btn>
+
+    <!-- 举报 -->
+    <v-dialog width="50%" v-model="showReportDialog">
+      <report-post
+        :reportType="'post'"
+        :reportedId="postId"
+        :sectionId="sectionId"
+        @closeReportDialog="
+          showReportDialog = false;
+        "
+      ></report-post>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -173,7 +140,16 @@ import { getToken } from "@/utils/auth";
 import { IEditorConfig } from "@wangeditor/editor";
 
 import PostComment from "@/views/home/post/components/comment.vue";
-import { getPostInfo, collectOrUncollectPost, replyOnPost } from "@/api/post";
+import SelectCollect from "@/views/home/post/components/SelectCollect.vue";
+import PostBody from "./components/PostBody.vue";
+import ReportPost from "@/views/home/post/components/ReportPost.vue";
+
+import {
+  getPostInfo,
+  collectOrUncollectPost,
+  replyOnPost,
+  likeOrUnlikePost,
+} from "@/api/post";
 import { getFolders } from "@/api/account";
 
 export default {
@@ -181,17 +157,20 @@ export default {
   name: "Post",
   components: {
     PostComment,
+    SelectCollect,
+    PostBody,
+    ReportPost,
+    // rich text
     Editor,
     Toolbar,
   },
   data() {
     return {
       // is only host
-      isOnlyHost: false,
+      isOnlyHost: 0,
 
       // user collect folder
       folders: [],
-      folderId: undefined,
       showCollectDialog: false,
 
       // pagination
@@ -213,6 +192,9 @@ export default {
 
       // comment data (from backend)
       commentVOList: [],
+
+      // report
+      showReportDialog: false,
 
       // rich text
       editor: null,
@@ -248,6 +230,12 @@ export default {
     },
   },
   methods: {
+    // is only host
+    changeOnlySeeHost() {
+      this.isOnlyHost = this.isOnlyHost == 0 ? 1 : 0;
+      this.page = 1;
+      this.refreshList();
+    },
     // pagination
     onPageChange(page, perPage) {
       this.refreshList(page, perPage);
@@ -256,7 +244,6 @@ export default {
       getPostInfo(this.postId, page, perPage, this.isOnlyHost)
         .then((res) => {
           this.postData = res.data;
-          this.postData.floor = 1;
           this.postData.commentVOList.forEach(
             (c, index) => (c.floor = index + this.perPage * (this.page - 1) + 2)
           );
@@ -271,16 +258,11 @@ export default {
         return;
       }
 
-      // let fd = new FormData();
-      // fd.append("content", this.commentContent);
-      // this.comment_image_info.forEach((f) => fd.append("image", f));
-      // fd.append("postId", this.postId);
-
       replyOnPost({ content: this.commentContent, postId: this.postId })
         .then((res) => {
           if (res.code === 20000) {
             this.$message.success("回复成功！");
-            this.refreshList()
+            this.refreshList();
             this.commentContent = "<p>发表你的看法~</p>";
           }
         })
@@ -300,23 +282,24 @@ export default {
       this.showCollectDialog = true;
     },
 
-    closeCollectDialog() {
-      this.showCollectDialog = false;
-    },
-
-    collect() {
-      collectOrUncollectPost({ id: this.postId, folderId: this.folderId }).then(
-        () => {
-          this.postData.isCollected = !this.postData.isCollected;
-          this.$message.success("收藏成功");
-          this.showCollectDialog = false;
-        }
-      );
-    },
-
     // rich text
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
+    },
+
+    // like
+    likeOrUnlike() {
+      likeOrUnlikePost({ postId: this.postId }).then((res) => {
+        if (res.code === 20000) {
+          this.postData.isLiked = !this.postData.isLiked;
+          this.postData.likeCount += this.postData.isLiked ? 1 : -1;
+          if (this.postData.isLiked) {
+            this.$message.success("点赞成功！");
+          } else {
+            this.$message.success("取消点赞成功！");
+          }
+        }
+      });
     },
   },
   mounted() {
@@ -329,6 +312,7 @@ export default {
     this.refreshList();
   },
 
+  // rich text
   beforeDestroy() {
     const editor = this.editor;
     if (editor == null) return;
