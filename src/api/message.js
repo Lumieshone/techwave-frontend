@@ -8,17 +8,19 @@ export function getReply(page, perPage) {
   });
 }
 
-export function getLike() {
+export function getLike(page, perPage) {
   return request({
     url: "/message/like",
     method: "get",
+    params: { page: page, perPage: perPage },
   });
 }
 
-export function getNotification() {
+export function getNotification(page, perPage) {
   return request({
     url: "/message/notification",
     method: "get",
+    params: { page: page, perPage: perPage },
   });
 }
 

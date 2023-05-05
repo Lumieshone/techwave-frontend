@@ -2,45 +2,48 @@
   <v-container>
     <LoginReminder></LoginReminder>
     <v-row v-show="isLogin">
-      <v-col cols="2" class="pa-0">
-        <v-card height="100%" width="100%" color="#483D8B" tile>
+      <v-col cols="3" class="pa-0">
+        <v-card height="650px" width="100%" color="#483D8B" tile>
           <v-navigation-drawer color="#483D8B" width="100%" dark tile permanent>
             <v-list>
-              <v-list-item class="ml-4">
+              <v-list-item class="ml-8">
                 <v-list-item-avatar size="56">
                   <v-img :src="userAvatar"></v-img>
                 </v-list-item-avatar>
-                <v-list-item-title><h3>消息中心</h3></v-list-item-title>
+                <v-list-item-content>
+                  <v-list-item-title class="text-h6 ml-2">
+                    消息中心
+                  </v-list-item-title>
+                </v-list-item-content>
               </v-list-item>
             </v-list>
             <v-divider></v-divider>
             <v-list>
               <div v-for="(item, index) in items" :key="item.title">
-                <v-list-item :to="item.router" link class="pl-10">
+                <v-list-item :to="item.router" link class="pl-16 py-1">
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
+
                   <v-list-item-content>
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-divider
-                  v-if="index < items.length - 1"
-                  :key="index"
+                    v-if="index < items.length - 1"
+                    :key="index"
                 ></v-divider>
               </div>
             </v-list>
           </v-navigation-drawer>
         </v-card>
       </v-col>
-      <v-col cols="10" class="pa-0">
+      <v-col cols="9" class="pa-0">
         <v-card height="100%" width="100%" color="#483D8B" tile>
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-card height="580" class="mx-4 my-5">
-                  <router-view />
-                </v-card>
+                <router-view />
               </v-col>
             </v-row>
           </v-container>
@@ -58,8 +61,7 @@ export default {
   name: "Message",
   data() {
     return {
-      isLogin: this.$store.getters.roles.length != 0,
-
+      isLogin: this.$store.getters.roles.length !== 0,
       show: false,
       size: 2.5,
       // username:'莴苣某人',

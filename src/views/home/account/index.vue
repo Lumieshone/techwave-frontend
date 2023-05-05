@@ -30,7 +30,7 @@
     </v-row>
     <v-row v-show="isLogin">
       <v-col cols="3" class="pa-0">
-        <v-card height="100%" width="100%" color="#483D8B" tile>
+        <v-card height="650px" width="100%" color="#483D8B" tile>
           <v-navigation-drawer color="#483D8B" width="100%" dark tile permanent>
             <v-list>
               <v-list-item class="ml-4">

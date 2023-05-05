@@ -68,14 +68,14 @@
         <v-row justify="end" style="margin-top: 20px">
           <v-btn
             color="#6A5ACD"
-            class="ma-3 white--text"
+            class="ma-3 mt-5 white--text"
             @click="closePostDialog"
             >返回
           </v-btn>
           <v-btn
             color="#6A5ACD"
             :disabled="!valid"
-            class="ma-3 white--text"
+            class="ma-3 mt-5 white--text"
             @click="publishPost"
             >发布
           </v-btn>

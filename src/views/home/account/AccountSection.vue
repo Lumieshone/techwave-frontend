@@ -1,5 +1,5 @@
 <template>
-  <v-card height="550" class="mx-4 my-5">
+  <v-card height="580px" class="mx-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-toolbar
         flat
@@ -16,7 +16,7 @@
             :items="sectionInfo"
             class="elevation-1 px-5"
             hide-default-footer
-            height="435"
+            height="452"
         >
           <template v-slot:[`item.sectionAvatar`]="{ item }">
            <v-avatar class="my-2"><img
@@ -65,15 +65,6 @@
         @submit_1="submit_1"
     >
     </CreateSection>
-<!--    <EditSection-->
-<!--        :showEditDialog="this.showEditDialog"-->
-<!--        :Intro="item.sectionIntro"-->
-<!--        :SubsectionList="item.subSectionList"-->
-<!--        :SectionId="item.sectionId"-->
-<!--        @callBack_2="callBack_2"-->
-<!--        @submit_2="submit_2"-->
-<!--    >-->
-<!--    </EditSection>-->
   </v-card>
 </template>
 
