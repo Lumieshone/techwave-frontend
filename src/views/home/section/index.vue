@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row no-gutters justify="center">
-      <v-card width="90%">
+      <v-card width="90%" shaped>
         <v-banner single-line tile>
           <v-avatar>
             <img :src="sectionData.avatar" :alt="sectionData.name" />
@@ -11,41 +11,141 @@
           </v-chip>
           <span class="section_intro">介绍：{{ sectionData.summary }}</span>
           <template v-slot:actions>
-            <v-btn color="#6A5ACD" text v-on:click="collectOrUnCollect">
-              <v-icon :color="sectionData.isCollected ? 'orange' : 'grey'"
-                >mdi-bell</v-icon
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="#6A5ACD"
+                  text
+                  v-on:click="collectOrUnCollect"
+                  v-bind="attrs"
+                  v-on="on"
+                  small
+                >
+                  <v-icon :color="sectionData.isCollected ? 'orange' : 'grey'"
+                    >mdi-bell</v-icon
+                  >
+                  {{ sectionData.collectCount }}
+                </v-btn>
+              </template>
+              <span>收藏</span>
+            </v-tooltip>
+            <v-menu
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on" color="#6A5ACD" text small>
+                  <v-icon>mdi-share-variant</v-icon>
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-card-subtitle>分享到</v-card-subtitle>
+                <v-divider></v-divider>
+
+                <v-list dense>
+                  <v-list-item
+                    v-for="(item, index) in shareItems"
+                    :key="index"
+                    @click="share(item)"
+                  >
+                    <v-list-item-icon>
+                      <v-icon size="18" dense>{{ item.icon }}</v-icon>
+                    </v-list-item-icon>
+
+                    <v-list-item-content class="font-weight-regular">{{
+                      item.label
+                    }}</v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-menu>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="#6A5ACD"
+                  text
+                  @click="showPostDialog = true"
+                  v-bind="attrs"
+                  v-on="on"
+                  small
+                >
+                  <v-icon>mdi-square-edit-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>发帖</span>
+            </v-tooltip>
+            <div class="d-flex justify-center align-center">
+              <!-- TODO: 添加loading -->
+
+              <!-- <v-text-field
+                v-model="searchContent"
+                color="#6A5ACD"
+                dense
+                shaped
+                outlined
+                label="搜索帖子"
+              ></v-text-field> -->
+              <v-menu
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
               >
-              收藏{{ sectionData.collectCount }}
-            </v-btn>
-            <v-btn color="#6A5ACD" text @click="showPostDialog = true">
-              <v-icon>mdi-square-edit-outline</v-icon>
-              发帖
-            </v-btn>
-            <v-text-field
-              v-model="searchContent"
-              label="搜索帖子"
-            ></v-text-field>
-            <v-btn color="#6A5ACD" text @click="refreshList('search')">
-              <v-icon>mdi-magnify</v-icon>
-              搜索
-            </v-btn>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="#6A5ACD" text v-bind="attrs" v-on="on" small>
+                    <v-icon>mdi-magnify</v-icon>
+                  </v-btn>
+                </template>
+                <v-card width="300px" shaped>
+                  <v-card-title class="subtitle-2">版块内搜索</v-card-title>
+                  <v-card-text>
+                    <v-text-field
+                      v-model="searchContent"
+                      dense
+                      label="请输入搜索关键字"
+                      full-width
+                      color="#6A5ACD"
+                      clearable
+                      style="width: 200px"
+                    ></v-text-field>
+                  </v-card-text>
+                  <v-spacer></v-spacer>
+                  <v-card-actions>
+                    <v-btn color="#6A5ACD" text @click="searchContent = ''">
+                      清空</v-btn
+                    >
+                    <v-btn text color="#6A5ACD" @click="refreshList('search')"
+                      >搜索</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
+            </div>
           </template>
         </v-banner>
       </v-card>
     </v-row>
-    <v-row no-gutters justify="center">
-      <v-card width="90%">
+    <v-row no-gutters justify="center" style="margin-top: 25px">
+      <v-card width="90%" shaped>
         <v-tabs
           light
+          center-active
           color="#6A5ACD"
+          show-arrows
           next-icon="mdi-arrow-right-bold-box-outline"
           prev-icon="mdi-arrow-left-bold-box-outline"
-          show-arrows
         >
           <v-tabs-slider color="#6A5ACD"></v-tabs-slider>
-          <v-tab @change="refreshList('all')"> 全部帖子 </v-tab>
-          <v-tab @change="refreshList('pinned')">置顶</v-tab>
-          <v-tab @change="refreshList('highlighted')">精华</v-tab>
+          <v-tab @change="refreshList('all')">
+            <v-icon color="grey" small>mdi-expand-all-outline </v-icon>全部帖子
+          </v-tab>
+          <v-tab @change="refreshList('pinned')"
+            ><v-icon color="grey" small>mdi-arrow-up-bold</v-icon>置顶</v-tab
+          >
+          <v-tab @change="refreshList('highlighted')"
+            ><v-icon color="grey" small>mdi-marker</v-icon>精华</v-tab
+          >
           <v-tab
             v-for="subsection in sectionData.subSectionList"
             :key="subsection.id"
@@ -54,44 +154,11 @@
             {{ subsection.name }}
           </v-tab>
         </v-tabs>
-      </v-card>
-    </v-row>
-    <v-row no-gutters justify="center">
-      <v-card width="90%">
+
         <v-list subheader tile min-height="600" max-height="1000">
           <v-list-item-group active-class="deep-purple--text">
             <template v-for="(item, index) in sectionData.postVOList">
-              <v-list-item @click="stepToPost(item.id)" :key="item.id">
-                <template>
-                  <v-list-item-avatar>
-                    <v-chip color="#E6E6FA" label small>
-                      {{ item.commentCount }}
-                    </v-chip>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      v-text="item.author"
-                    ></v-list-item-action-text>
-                  </v-list-item-action>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      v-text="item.time"
-                    ></v-list-item-action-text>
-                  </v-list-item-action>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      >like:{{ item.likeCount }}
-                    </v-list-item-action-text>
-                    <v-list-item-action-text
-                      >comment: {{ item.commentCount }}</v-list-item-action-text
-                    >
-                  </v-list-item-action>
-                </template>
-              </v-list-item>
-
+              <single-post-item :item="item" :key="index"></single-post-item>
               <v-divider
                 v-if="index < sectionData.postVOList.length - 1"
                 :key="index"
@@ -153,6 +220,13 @@ import {
 } from "@/api/section";
 
 import PostDialog from "@/views/home/section/components/PostDialog";
+import SinglePostItem from "@/components/SinglePostItem.vue";
+
+import {
+  // toQQzone,
+  toWeibo,
+  // toQQ
+} from "@/utils/share";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -183,12 +257,51 @@ export default {
 
       // search
       searchContent: "",
+
+      // share
+      shareItems: [
+        // { label: "QQ", icon: "mdi-qqchat" },
+        { label: "微博", icon: "mdi-sina-weibo" },
+        // { label: "QQ空间", icon: "mdi-qrcode" },
+        { label: "复制链接", icon: "mdi-link" },
+      ],
     };
   },
   components: {
     PostDialog,
+    SinglePostItem,
   },
   methods: {
+    copyToClipboard(text) {
+      const tempInput = document.createElement("input");
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+    },
+    share(item) {
+      item = item.label;
+      let title = "快来TechWave看看这个版块吧！" + this.sectionData.name;
+      console.log(window.location.href);
+      // if (item == "QQ") {
+      //   toQQ(window.location.href, title);
+      // } else if (item == "微博") {
+      //   toWeibo(window.location.href, title);
+      // } else if (item == "QQ空间") {
+      //   toQQzone(window.location.href, title);
+      // } else if (item == "复制链接") {
+      //   this.$copyText(window.location.href).then(() => {
+      //     this.$message.success("复制成功！");
+      //   });
+      // }
+      if (item == "微博") {
+        toWeibo(window.location.href, title);
+      } else if (item == "复制链接") {
+        this.copyToClipboard(window.location.href);
+        this.$message.success("复制成功！");
+      }
+    },
     callBack(flag) {
       this.showPostDialog = flag;
       window.location.reload();

@@ -74,10 +74,19 @@ export function likeOrUnlikePost(data) {
   });
 }
 
-export function followOrUnfollowUser(data) {
+export function followOrUnfollowUser(userId) {
   return request({
     url: "/post/follow_user",
     method: "post",
-    data,
+    data: {
+      followingId: userId,
+    },
+  });
+}
+
+export function getIfFollowUser(userId) {
+  return request({
+    url: "/post/is_follow/" + userId,
+    method: "get",
   });
 }

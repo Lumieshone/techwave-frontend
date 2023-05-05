@@ -2,9 +2,10 @@
   <v-container>
     <v-carousel
       cycle
-      height="400"
+      height="200"
       hide-delimiter-background
       show-arrows-on-hover
+      style="border-radius: 20px"
     >
       <v-carousel-item v-for="(slide, i) in slides" :key="i">
         <v-row class="fill-height" align="center" justify="center">
@@ -14,115 +15,57 @@
               i + 1
             }.jpg`)})`"
           >
-            <!-- <img src=https://source.unsplash.com/random > -->
-            <div class="text-h3 carousel__title" style="text-stroke: black">
+            <div class="text-h4 carousel__title" style="text-stroke: black">
               {{ slide }}
             </div>
           </div>
         </v-row>
       </v-carousel-item>
     </v-carousel>
-    <h2 style="margin-top: 20px; margin-bottom: 20px">热门新闻</h2>
-    <v-row align="center" justify="center">
-      <v-col md="12">
-        <v-card>
+    <v-card shaped>
+      <v-card-title style="margin-top: 20px; margin-bottom: 20px"
+        >热门新闻</v-card-title
+      >
+      <v-card-subtitle>浏览最新的电子产品资讯！</v-card-subtitle>
+      <v-divider></v-divider>
+      <v-row align="center" justify="center">
+        <v-col md="12">
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
-              <template v-for="item in newsInfo">
-                <v-list-item @click="stepToPost(item.id)" :key="item.id">
-                  <template>
-                    <v-list-item-avatar>
-                      <v-chip color="#E6E6FA" label small>
-                        {{ item.commentCount }}
-                      </v-chip>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="item.title"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        v-text="item.author"
-                      ></v-list-item-action-text>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        v-text="item.time"
-                      ></v-list-item-action-text>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        >like:{{ item.likeCount }}
-                      </v-list-item-action-text>
-                      <v-list-item-action-text
-                        >comment:
-                        {{ item.commentCount }}</v-list-item-action-text
-                      >
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
+              <template v-for="(item, index) in newsInfo">
+                <single-post-item :item="item" :key="index"></single-post-item>
               </template>
             </v-list-item-group>
           </v-list>
-        </v-card>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
 
-    <h2 style="margin-top: 20px; margin-bottom: 20px">热门帖子</h2>
-    <v-row align="center" justify="center">
-      <v-col md="12">
-        <v-card>
+    <v-card shaped>
+      <v-card-title style="margin-top: 50px; margin-bottom: 20px"
+        >热门帖子</v-card-title
+      >
+      <v-card-subtitle>浏览当下的热门帖子，一起来交流！</v-card-subtitle>
+      <v-divider></v-divider>
+      <v-row align="center" justify="center">
+        <v-col md="12">
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
-              <template v-for="item in postsInfo">
-                <v-list-item @click="stepToPost(item.id)" :key="item.id">
-                  <template>
-                    <v-list-item-avatar>
-                      <v-chip color="#E6E6FA" label small>
-                        {{ item.commentCount }}
-                      </v-chip>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="item.title"
-                      ></v-list-item-title>
-                      <!--                    <v-list-item-subtitle-->
-                      <!--                      v-text="item.title"-->
-                      <!--                    ></v-list-item-subtitle>-->
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        v-text="item.author"
-                      ></v-list-item-action-text>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        v-text="item.time"
-                      ></v-list-item-action-text>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-list-item-action-text
-                        >like:{{ item.likeCount }}
-                      </v-list-item-action-text>
-                      <v-list-item-action-text
-                        >comment:
-                        {{ item.commentCount }}</v-list-item-action-text
-                      >
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
+              <template v-for="(item, index) in postsInfo">
+                <single-post-item :item="item" :key="index"></single-post-item>
               </template>
             </v-list-item-group>
           </v-list>
-        </v-card>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import { getNews, getHotPosts } from "@/api/homepage.js";
+import SinglePostItem from "@/components/SinglePostItem.vue";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "GetNews",
@@ -138,6 +81,9 @@ export default {
       postsInfo: [],
       newsInfo: [],
     };
+  },
+  components: {
+    SinglePostItem,
   },
   methods: {
     stepToPost(postId) {

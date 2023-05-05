@@ -65,7 +65,7 @@
             />
           </div>
         </template>
-        <v-row justify="end">
+        <v-row justify="end" style="margin-top: 20px">
           <v-btn
             color="#6A5ACD"
             class="ma-3 white--text"
@@ -185,12 +185,11 @@ export default {
           subsectionId: this.form.subsection,
           title: this.form.title,
           content: this.form.content,
-        })
-          .then((res) => {
-            console.log(res.message);
-            if (res.code === 20000) this.$message.success("发布帖子成功！");
-            this.$emit("callBack", false);
-          })
+        }).then((res) => {
+          console.log(res.message);
+          if (res.code === 20000) this.$message.success("发布帖子成功！");
+          this.$emit("callBack", false);
+        });
         this.clearDialog();
       }
     },

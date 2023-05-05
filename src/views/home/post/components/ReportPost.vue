@@ -1,17 +1,21 @@
 <template>
-  <v-card>
+  <v-card shaped>
     <v-card-title
       >举报{{ this.reportType === "reply" ? "回复" : "评论" }}</v-card-title
     >
-    <v-select
-      :items="reportSubtypes"
-      label="选择举报类型"
-      v-model="reportSubtype"
-    ></v-select>
-    <v-card-text>
+    <v-card-text class="mt-4">
+      <v-select
+        :items="reportSubtypes"
+        label="选择举报类型"
+        outlined
+        shaped
+        v-model="reportSubtype"
+        class="mx-auto"
+      ></v-select>
       <v-textarea
         color="#7d73be"
         outlined
+        shaped
         label="输入具体描述"
         v-model="reportReason"
       ></v-textarea>
@@ -24,7 +28,13 @@
         @click="closeReportDialog"
         >取消
       </v-btn>
-      <v-btn color="#7d73be" class="ma-2 white--text" small @click="submitReport">举报</v-btn>
+      <v-btn
+        color="#7d73be"
+        class="ma-2 white--text"
+        small
+        @click="submitReport"
+        >举报</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -77,7 +87,7 @@ export default {
         reportedId: this.reportedId,
       }).then(() => {
         this.$message("举报成功");
-        this.$emit("closeReportDialog")
+        this.$emit("closeReportDialog");
       });
     },
   },

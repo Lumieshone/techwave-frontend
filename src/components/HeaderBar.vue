@@ -40,7 +40,7 @@
       </v-tabs>
 
       <!-- 右部菜单栏 -->
-      <v-menu offset-y>
+      <v-menu offset-y open-on-hover>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="50" v-on:click.native="drawer = !drawer"
             ><img

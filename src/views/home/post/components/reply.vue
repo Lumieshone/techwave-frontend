@@ -1,36 +1,94 @@
 <template>
-  <v-container>
-    <v-list>
+  <div>
+    <v-list dense>
       <v-list-group :value="true">
         <v-list-item
           v-for="singleReplyData in replyData"
           :key="singleReplyData.replyId"
         >
-          <v-list-item-content>
+          <v-container>
             <v-row>
-              <v-col cols="8">
-                <v-list-item-title
-                  >{{ singleReplyData.authorName }} 回复
-                  {{ singleReplyData.toName }}:
-                  {{ singleReplyData.content }}</v-list-item-title
-                >
+              <!-- 左侧：回复内容 -->
+              <v-col class="pr-2" cols="8">
+                <v-list-item-title>
+                  <span>{{ singleReplyData.authorName }}</span> 回复
+                  <span>{{ singleReplyData.toName }}:</span>
+                  <span>{{ singleReplyData.content }}</span>
+                </v-list-item-title>
+                <v-list-item-subtitle class="caption">{{
+                  singleReplyData.time
+                }}</v-list-item-subtitle>
               </v-col>
-              <v-col cols="4">
+              <!-- 右侧：操作按钮 -->
+              <v-col cols="4" class="d-flex align-center justify-end">
+                <v-btn
+                  text
+                  small
+                  :disabled="!isLogin"
+                  v-show="isLogin && singleReplyData.ableToDelete"
+                >
+                  <span style="color: grey">删除</span>
+                </v-btn>
+                <v-btn
+                  text
+                  small
+                  @click="openReportDialog(singleReplyData.replyId)"
+                  v-show="isLogin"
+                  class="ml-2"
+                >
+                  <span style="color: grey">举报</span>
+                </v-btn>
+                <v-btn
+                  text
+                  small
+                  :disabled="!isLogin"
+                  @click="
+                    openReplyDialog(
+                      singleReplyData.authorName,
+                      singleReplyData.replyId
+                    )
+                  "
+                  class="ml-2"
+                >
+                  <span style="color: grey">评论</span>
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <!-- <v-row>
+              <v-col cols="12">
+                <v-list-item-subtitle>
+                  <span>{{ singleReplyData.authorName }}</span> 回复
+                  <span>{{ singleReplyData.toName }}:</span>
+                  <span>{{ singleReplyData.content }}</span>
+                </v-list-item-subtitle>
+              </v-col>
+            </v-row> -->
+
+            <!-- <v-row no-gutters>
+              <v-col cols="6" offset="6" justify="end">
                 <v-list-item-subtitle>
                   {{ singleReplyData.time }}
                 </v-list-item-subtitle>
                 <v-list-item-action>
                   <v-btn
-                    text
+                    fab
+                    small
                     :disabled="!isLogin"
                     v-show="isLogin && singleReplyData.ableToDelete"
-                    >删除</v-btn
                   >
-                  <v-btn text @click="openReportDialog(singleReplyData.replyId)" v-show="isLogin"
-                    >举报</v-btn
+                    <v-icon color="grey">mdi-delete</v-icon>
+                  </v-btn>
+                  <v-btn
+                    fab
+                    small
+                    @click="openReportDialog(singleReplyData.replyId)"
+                    v-show="isLogin"
+                    ><v-icon color="grey">mdi-alert</v-icon></v-btn
                   >
                   <v-btn
-                    text
+                    fab
+                    small
                     :disabled="!isLogin"
                     @click="
                       openReplyDialog(
@@ -38,19 +96,19 @@
                         singleReplyData.replyId
                       )
                     "
-                    >回复</v-btn
+                    ><v-icon color="grey">mdi-comment</v-icon></v-btn
                   >
                 </v-list-item-action>
               </v-col>
-            </v-row>
-          </v-list-item-content>
+            </v-row> -->
+          </v-container>
         </v-list-item>
       </v-list-group>
     </v-list>
 
     <!-- reply -->
     <v-dialog v-model="showReplyDialog" width="50%">
-      <v-card>
+      <v-card shaped>
         <v-card-title>回复给 {{ replyToUserName }}</v-card-title>
         <v-card-text>
           <v-textarea
@@ -77,7 +135,7 @@
 
     <!-- delete -->
     <v-dialog v-model="showDeleteDialog" width="30%">
-      <v-card>
+      <v-card shaped>
         <v-card-title>确认删除？</v-card-title>
         <v-card-actions>
           <v-btn
@@ -111,7 +169,7 @@
         "
       ></report-post>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>

@@ -1,70 +1,122 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-title>
-        <span style="margin: 5px">{{ commentData.floor }} 楼 </span>
-        <span style="margin: 5px">{{ commentData.authorName }}</span>
-        <v-hover v-slot:default="{ hover }">
-          <div>
-            <v-avatar>
-              <img :src="commentData.avatar" :alt="commentData.authorName" />
-            </v-avatar>
-            <user-card
-              :userId="commentData.authorId"
-              :avatar="commentData.avatar"
-              v-if="hover"
-              style="z-index: 1000; position: absolute; right: 0; top: 0"
-            ></user-card></div
-        ></v-hover>
-      </v-card-title>
-      <v-card-subtitle
-        ><span>{{ commentData.time }}</span></v-card-subtitle
-      >
-      <v-card-text>
-        <div v-html="commentData.content"></div>
-        <PostReply
-          :replyData="commentData.replyVOList"
-          :sectionId="sectionId"
-          :isLogin="Boolean(isLogin)"
-          @refresh="refresh"
-        ></PostReply>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          color="#7d73be"
-          fab
-          small
-          :disabled="!isLogin"
-          @click="openReplyDialog(commentData.commentId)"
-        >
-          <v-icon color="white">mdi-comment</v-icon>
-        </v-btn>
-        <v-btn
-          color="#7d73be"
-          fab
-          small
-          :disabled="!isLogin"
-          v-show="isLogin && commentData.ableToDelete"
-          @click="openDeleteDialog(commentData.commentId)"
-        >
-          <v-icon color="white">mdi-delete</v-icon>
-        </v-btn>
-        <v-btn
-          color="#7d73be"
-          fab
-          small
-          :disabled="!isLogin"
-          v-show="isLogin"
-          @click="showReportDialog = true"
-        >
-          <v-icon color="white">mdi-alert</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-
+  <div>
+    <v-row justify="center">
+      <v-col cols="12" md="11">
+        <v-card shaped class="mt-4 mb-4">
+          <v-row>
+            <v-col cols="2" align="center">
+              <v-row>
+                <v-col cols="10">
+                  <v-menu open-on-hover rounded>
+                    <template v-slot:activator="{ on }">
+                      <v-avatar>
+                        <img
+                          :src="commentData.avatar"
+                          :alt="commentData.authorName"
+                          v-on="on"
+                        />
+                      </v-avatar>
+                    </template>
+                    <user-card
+                      :userId="commentData.authorId"
+                      :avatar="commentData.avatar"
+                    ></user-card>
+                  </v-menu>
+                  <v-card-subtitle>{{ commentData.floor }} 楼</v-card-subtitle>
+                  <v-card-text
+                    v-text="commentData.authorName"
+                    class="font-weight-medium"
+                  ></v-card-text>
+                </v-col>
+                <v-col cols="2">
+                  <v-divider vertical></v-divider>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="10">
+              <v-row style="margin-top: 10px">
+                <div v-html="commentData.content"></div>
+              </v-row>
+              <v-row>
+                <v-col cols="12" v-if="commentData.replyVOList.length > 0">
+                  <v-divider></v-divider>
+                  <PostReply
+                    :replyData="commentData.replyVOList"
+                    :sectionId="sectionId"
+                    :isLogin="Boolean(isLogin)"
+                    @refresh="refresh"
+                  ></PostReply>
+                </v-col>
+              </v-row>
+              <v-row no-gutters class="d-flex justify-end">
+                <v-col cols="auto" class="d-flex align-center">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="#7d73be"
+                        fab
+                        small
+                        :disabled="!isLogin"
+                        @click="openReplyDialog(commentData.commentId)"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="white">mdi-comment</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>评论</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="#7d73be"
+                        fab
+                        small
+                        :disabled="!isLogin"
+                        class="ml-2"
+                        v-show="isLogin && commentData.ableToDelete"
+                        @click="openDeleteDialog(commentData.commentId)"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="white">mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>删除</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="#7d73be"
+                        fab
+                        small
+                        class="ml-2"
+                        :disabled="!isLogin"
+                        v-show="isLogin"
+                        @click="showReportDialog = true"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="white">mdi-alert</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>举报</span>
+                  </v-tooltip>
+                </v-col>
+                <v-col cols="auto" class="d-flex justify-end align-center">
+                  <v-card-text class="time caption"
+                    >发布时间 {{ commentData.time }}</v-card-text
+                  >
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col></v-row
+    >
     <!-- reply -->
     <v-dialog v-model="showReplyDialog" width="50%">
-      <v-card>
+      <v-card shaped>
         <v-card-title>回复给 {{ commentData.floor }} 楼</v-card-title>
         <v-card-text>
           <v-textarea
@@ -90,8 +142,8 @@
     </v-dialog>
 
     <!-- delete -->
-    <v-dialog v-model="showDeleteDialog" width="30%">
-      <v-card>
+    <v-dialog v-model="showDeleteDialog" width="50%">
+      <v-card shaped>
         <v-card-title>确认删除 {{ commentData.floor }} 楼？</v-card-title>
         <v-card-actions>
           <v-btn
@@ -122,7 +174,7 @@
         @closeReportDialog="showReportDialog = false"
       ></report-post>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>

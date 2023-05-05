@@ -1,134 +1,226 @@
 <template>
   <v-container>
-    <v-breadcrumbs>
-      <v-breadcrumbs-item to="forum">论坛 </v-breadcrumbs-item>
-      <v-icon>mdi-chevron-right</v-icon>
-      <v-breadcrumbs-item :to="`/section/${postData.sectionId}`"
-        >{{ postData.sectionName }}
-      </v-breadcrumbs-item>
-      <v-icon>mdi-chevron-right</v-icon>
-      <v-breadcrumbs-item>{{ postData.subsectionName }} </v-breadcrumbs-item>
-    </v-breadcrumbs>
-
-    <!-- TODO: 加上空骨架 -->
-
-    <!-- title -->
-    <h1 style="margin-bottom: 20px; margin-top: 10px">{{ postData.title }}</h1>
-    <p>帖子id: {{ postId }}</p>
-    <p>帖子浏览量: {{ postData.browseNumber }}</p>
-
-    <!-- 是否收藏 -->
-    <v-btn :disabled="!isLogin" @click="openCollectDialog">
-      <v-icon :color="postData.isCollected ? 'orange' : 'grey'"
-        >mdi-star
-      </v-icon>
-      {{ isLogin ? "收藏" : "请先登录再收藏" }}
-    </v-btn>
-
-    <v-dialog v-model="showCollectDialog" width="50%">
-      <select-collect
-        :folders="folders"
-        :postId="postId"
-        @closeCollectDialog="showCollectDialog = false"
-        @collectSuccess="
-          postData.isCollected = true;
-          showCollectDialog = false;
-        "
-      ></select-collect>
-    </v-dialog>
-
-    <!-- 是否点赞 -->
-    <v-btn :disabled="!isLogin" @click="likeOrUnlike">
-      <v-icon :color="postData.isLiked ? 'red' : 'grey'">mdi-thumb-up </v-icon
-      >{{ postData.likeCount }}
-      {{ isLogin ? "点赞" : "请先登录再点赞" }}
-    </v-btn>
-
-    <!-- 是否只看楼主 -->
-    <v-btn @click="changeOnlySeeHost">
-      <v-icon :color="isOnlyHost ? 'orange' : 'grey'">mdi-account </v-icon>
-      {{ isOnlyHost ? "取消只看楼主" : "只看楼主" }}
-    </v-btn>
-
-    <!-- 举报 -->
-    <v-btn @click="showReportDialog=true" v-show="isLogin">
-      <v-icon>mdi-alert-circle-outline </v-icon>举报
-    </v-btn>
-
-    <!-- 一楼 -->
-    <post-body
-      :author="postData.author"
-      :avatar="postData.avatar"
-      :content="postData.content"
-      :time="postData.time"
-    ></post-body>
-
-    <!-- 浏览评论 -->
-    <div
-      v-for="singleCommentVOList in postData.commentVOList"
-      :key="singleCommentVOList.floor"
-    >
-      <post-comment
-        :commentData="singleCommentVOList"
-        :postId="Number(postId)"
-        :isLogin="Boolean(isLogin)"
-        :sectionId="postData.sectionId"
-        @refresh="refreshList"
-      />
+    <!-- 空骨架 -->
+    <div v-if="Object.keys(postData).length === 0">
+      <v-skeleton-loader
+        class="mb-10"
+        boilerplate
+        elevation="2"
+        type="list-item-avatar-three-line, image, article, image, article"
+      ></v-skeleton-loader>
     </div>
 
-    <!-- 分页 -->
-    <v-pagination
-      v-if="Math.ceil((postData.total - 1) / perPage) > 1"
-      v-model="page"
-      :length="Math.ceil((postData.total - 1) / perPage)"
-      total-visible="7"
-      color="#6A5ACD"
-      @input="onPageChange(page, perPage)"
-    ></v-pagination>
+    <div v-else>
+      <v-card shaped>
+        <v-row justify="center">
+          <v-col cols="12" md="11">
+            <v-card shaped color="#454e89" class="mt-4 mb-4">
+              <v-row justify="space-around">
+                <!-- title -->
+                <v-col cols="5" align="center">
+                  <div class="text-h5 white--text">
+                    {{ postData.title }}
+                  </div>
+                  <div class="text-caption white--text">
+                    帖子浏览量: {{ postData.browseNumber }}
+                  </div>
+                </v-col>
 
-    <!-- 富文本 -->
-    <div v-show="isLogin">
-      <template>
-        <div style="border: 1px solid #ccc">
-          <Toolbar
-            style="border-bottom: 1px solid #ccc"
-            :editor="editor"
-            :defaultConfig="toolbarConfig"
-            :mode="mode"
-          />
-          <Editor
-            style="height: 500px; overflow-y: hidden"
-            v-model="commentContent"
-            :defaultConfig="editorConfig"
-            :mode="mode"
-            @onCreated="onCreated"
+                <v-spacer></v-spacer>
+                <!-- router -->
+                <v-col cols="4">
+                  <v-btn text color="white" to="/forum" small> 论坛 </v-btn>
+                  <v-icon color="white" small>mdi-chevron-right</v-icon>
+                  <v-btn
+                    text
+                    color="white"
+                    :to="`/section/${postData.sectionId}`"
+                    small
+                  >
+                    {{ postData.sectionName }}
+                  </v-btn>
+                  <v-icon small color="white">mdi-chevron-right</v-icon>
+                  <v-btn text color="white" small>
+                    <!-- TODO: 子版块跳转 -->
+                    {{ postData.subsectionName }}
+                  </v-btn>
+                </v-col>
+                <!-- button group -->
+                <v-col cols="3" align="center">
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <!-- 是否收藏 -->
+                        <v-btn
+                          :disabled="!isLogin"
+                          @click="openCollectDialog"
+                          fab
+                          small
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon
+                            :color="postData.isCollected ? 'orange' : 'grey'"
+                            >mdi-star
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>收藏</span>
+                    </v-tooltip>
+
+                    <v-dialog v-model="showCollectDialog" width="50%">
+                      <select-collect
+                        :folders="folders"
+                        :postId="postId"
+                        @closeCollectDialog="showCollectDialog = false"
+                        @collectSuccess="
+                          postData.isCollected = true;
+                          showCollectDialog = false;
+                        "
+                      ></select-collect>
+                    </v-dialog>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <!-- 是否点赞 -->
+                        <v-btn
+                          :disabled="!isLogin"
+                          @click="likeOrUnlike"
+                          fab
+                          small
+                          class="ml-2"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon :color="postData.isLiked ? 'red' : 'grey'"
+                            >mdi-thumb-up </v-icon
+                          >{{ postData.likeCount }}
+                        </v-btn>
+                      </template>
+                      <span>点赞</span>
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <!-- 举报 -->
+                        <v-btn
+                          @click="showReportDialog = true"
+                          v-show="isLogin"
+                          fab
+                          small
+                          class="ml-2"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-alert-circle-outline </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>举报</span>
+                    </v-tooltip>
+
+                    <!-- 是否只看楼主 -->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          @click="changeOnlySeeHost"
+                          style="margin-left: 5px"
+                          fab
+                          small
+                          class="ml-2"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon :color="isOnlyHost ? 'orange' : 'grey'"
+                            >mdi-account
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>只看楼主</span>
+                    </v-tooltip>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- 一楼 -->
+        <post-body
+          :author="postData.author"
+          :avatar="postData.avatar"
+          :content="postData.content"
+          :time="postData.time"
+          :authorId="postData.authorId"
+        ></post-body>
+
+        <!-- 浏览评论 -->
+        <div
+          v-for="singleCommentVOList in postData.commentVOList"
+          :key="singleCommentVOList.floor"
+        >
+          <post-comment
+            :commentData="singleCommentVOList"
+            :postId="Number(postId)"
+            :isLogin="Boolean(isLogin)"
+            :sectionId="postData.sectionId"
+            @refresh="refreshList"
           />
         </div>
-      </template>
+
+        <!-- 分页 -->
+        <v-pagination
+          style="margin-top: 30px"
+          v-if="Math.ceil((postData.total - 1) / perPage) > 1"
+          v-model="page"
+          :length="Math.ceil((postData.total - 1) / perPage)"
+          total-visible="7"
+          color="#6A5ACD"
+          @input="onPageChange(page, perPage)"
+        ></v-pagination>
+
+        <!-- 富文本 -->
+        <div
+          v-show="isLogin"
+          style="margin-left: 20px; margin-right: 20px; margin-top: 20px"
+        >
+          <template>
+            <div style="border: 1px solid #ccc">
+              <Toolbar
+                style="border-bottom: 1px solid #ccc"
+                :editor="editor"
+                :defaultConfig="toolbarConfig"
+                :mode="mode"
+              />
+              <Editor
+                style="height: 500px; overflow-y: hidden"
+                v-model="commentContent"
+                :defaultConfig="editorConfig"
+                :mode="mode"
+                @onCreated="onCreated"
+              />
+            </div>
+          </template>
+        </div>
+
+        <v-btn
+          color="#7d73be"
+          class="ma-2 white--text"
+          right
+          @click="replyOnPost"
+          :disabled="!isLogin"
+        >
+          {{ isLogin ? "评论" : "请先登录再发表评论" }}
+        </v-btn>
+
+        <!-- 举报 -->
+        <v-dialog width="50%" v-model="showReportDialog">
+          <report-post
+            :reportType="'post'"
+            :reportedId="postId"
+            :sectionId="sectionId"
+            @closeReportDialog="showReportDialog = false"
+          ></report-post>
+        </v-dialog>
+      </v-card>
     </div>
-
-    <v-btn
-      color="#7d73be"
-      class="ma-2 white--text"
-      small
-      @click="replyOnPost"
-      :disabled="!isLogin"
-    >
-      {{ isLogin ? "评论" : "请先登录再发表评论" }}
-    </v-btn>
-
-    <!-- 举报 -->
-    <v-dialog width="50%" v-model="showReportDialog">
-      <report-post
-        :reportType="'post'"
-        :reportedId="postId"
-        :sectionId="sectionId"
-        @closeReportDialog="
-          showReportDialog = false;
-        "
-      ></report-post>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -322,3 +414,20 @@ export default {
 </script>
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
+<style scoped>
+.v-breadcrumbs__item--active {
+  background-color: #7c4dff;
+  color: #fff;
+}
+.v-btn-group__button {
+  color: white;
+}
+.v-btn-group__button--active {
+  color: purple;
+}
+.v-toolbar__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+</style>

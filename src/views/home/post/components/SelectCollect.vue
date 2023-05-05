@@ -1,6 +1,6 @@
 <template>
   <!-- 收藏文件夹 -->
-  <v-card>
+  <v-card shaped>
     <v-card-title>选择收藏文件夹</v-card-title>
     <v-card-text>
       <v-select

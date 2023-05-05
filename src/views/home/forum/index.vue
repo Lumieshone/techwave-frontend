@@ -1,14 +1,11 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card shaped>
       <v-card-title>
-        <!-- <v-avatar size="50"
-          ><img
-            :src="isLogin ? avatar : ''"
-            :alt="isLogin ? this.$store.getters.name : '登录'"
-        /></v-avatar> -->
         {{ isLogin ? "我的收藏" : "登录后查看收藏~" }}
       </v-card-title>
+      <v-card-subtitle>查看您收藏的版块</v-card-subtitle>
+      <v-divider></v-divider>
       <v-card-text>
         <v-row>
           <v-col
@@ -16,20 +13,9 @@
             v-for="collectSectionInfo in collectSectionsInfo"
             :key="collectSectionInfo.sectionId"
           >
-            <v-card :to="`/section/${collectSectionInfo.sectionId}`">
-              <v-card-title>
-                <v-avatar size="50"
-                  ><img
-                    :src="collectSectionInfo.avatar"
-                    :alt="collectSectionInfo.name"
-                /></v-avatar>
-                {{ collectSectionInfo.name }}
-              </v-card-title>
-              <v-card-text v-text="collectSectionInfo.summary"></v-card-text>
-              <v-card-text
-                >follower: {{ collectSectionInfo.collectCount }}</v-card-text
-              >
-            </v-card>
+            <single-section-item
+              :item="collectSectionInfo"
+            ></single-section-item>
           </v-col>
         </v-row>
       </v-card-text>
@@ -45,8 +31,7 @@
       </v-card-actions>
     </v-card>
 
-    <v-divider></v-divider>
-    <v-card min-height="500">
+    <v-card min-height="500" shaped style="margin-top: 40px">
       <v-card-title>推荐版块</v-card-title>
       <v-card-text>
         <v-col cols="10" class="mx-auto">
@@ -57,6 +42,7 @@
             dense
             color="#7d73be"
             clearable
+            shaped
             :append-icon="searchLoading ? 'mdi-loading' : 'mdi-magnify'"
             @click:append="search()"
           ></v-text-field>
@@ -68,18 +54,7 @@
             v-for="sectionInfo in sectionsInfo"
             :key="sectionInfo.sectionId"
           >
-            <v-card :to="`/section/${sectionInfo.sectionId}`">
-              <v-card-title>
-                <v-avatar size="50"
-                  ><img :src="sectionInfo.avatar" :alt="sectionInfo.name"
-                /></v-avatar>
-                {{ sectionInfo.name }}
-              </v-card-title>
-              <v-card-text v-text="sectionInfo.summary"></v-card-text>
-              <v-card-text
-                >follower: {{ sectionInfo.collectCount }}</v-card-text
-              >
-            </v-card>
+            <single-section-item :item="sectionInfo"></single-section-item>
           </v-col>
         </v-row>
       </v-card-text>
@@ -104,10 +79,14 @@ import {
   getSearchSections,
 } from "@/api/homepage";
 
+import SingleSectionItem from "@/components/SingleSectionItem.vue";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Forum",
-
+  components: {
+    SingleSectionItem,
+  },
   data() {
     return {
       // search
