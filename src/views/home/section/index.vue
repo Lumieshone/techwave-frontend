@@ -302,9 +302,11 @@ export default {
         this.$message.success("复制成功！");
       }
     },
-    callBack(flag) {
+    callBack(flag, ifPost) {
       this.showPostDialog = flag;
-      window.location.reload();
+      if (ifPost) {
+        window.location.reload();
+      }
     },
     collectOrUnCollect() {
       collectSection(this.sectionId)
