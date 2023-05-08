@@ -30,9 +30,7 @@ router.beforeEach(async (to, from, next) => {
       // moderator
       else if (to.path.includes("/moderator-dashboard")) {
         const sectionId = to.params.sectionId;
-        console.log(sectionId);
         let isModerator = false;
-        console.log(sectionId);
         store.getters.roles.forEach((role) => {
           if (role.name == "moderator" && role.sectionId == sectionId) {
             isModerator = true;

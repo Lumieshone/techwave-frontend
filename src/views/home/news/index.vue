@@ -33,7 +33,11 @@
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
               <template v-for="(item, index) in newsInfo">
-                <single-post-item :item="item" :key="index"></single-post-item>
+                <single-post-item
+                  :item="item"
+                  :key="index"
+                  :isModeratorAndAbleToDelete="false"
+                ></single-post-item>
               </template>
             </v-list-item-group>
           </v-list>
@@ -52,7 +56,11 @@
           <v-list subheader tile>
             <v-list-item-group active-class="brown--text">
               <template v-for="(item, index) in postsInfo">
-                <single-post-item :item="item" :key="index"></single-post-item>
+                <single-post-item
+                  :item="item"
+                  :key="index"
+                  :isModeratorAndAbleToDelete="false"
+                ></single-post-item>
               </template>
             </v-list-item-group>
           </v-list>

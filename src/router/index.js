@@ -41,7 +41,6 @@ export const constantRoutes = [
   },
 
   {
-    // TODO: 加上权限控制
     path: "/admin-dashboard",
     component: () => import("@/views/admin-dashboard/index"),
     meta: { title: "管理员中台" },
@@ -63,7 +62,6 @@ export const constantRoutes = [
   },
 
   {
-    // TODO: 加上权限控制
     path: "/moderator-dashboard/:sectionId/",
     component: () => import("@/views/moderator-dashboard/index"),
     meta: { title: "版主中台" },
