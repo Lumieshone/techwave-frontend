@@ -92,8 +92,8 @@
                   field="Avatar"
                   v-model="show"
                   @crop-success="cropSuccess"
-                  :width="300"
-                  :height="300"
+                  :width="100"
+                  :height="100"
                   img-format="jpg"
                   :size="size"
                 >
