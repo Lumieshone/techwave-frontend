@@ -77,16 +77,6 @@
               <span>发帖</span>
             </v-tooltip>
             <div class="d-flex justify-center align-center">
-              <!-- TODO: 添加loading -->
-
-              <!-- <v-text-field
-                v-model="searchContent"
-                color="#6A5ACD"
-                dense
-                shaped
-                outlined
-                label="搜索帖子"
-              ></v-text-field> -->
               <v-menu
                 :close-on-content-click="false"
                 transition="scale-transition"
@@ -113,9 +103,14 @@
                   <v-spacer></v-spacer>
                   <v-card-actions>
                     <v-btn color="#6A5ACD" text @click="searchContent = ''">
-                      清空</v-btn
+                      <v-icon color="#6A5ACD" small>mdi-delete-outline</v-icon
+                      >清空</v-btn
                     >
-                    <v-btn text color="#6A5ACD" @click="refreshList('search')"
+                    <v-btn text color="#6A5ACD" @click="refreshList('search')">
+                      <v-icon color="#6A5ACD" small
+                        >{{
+                          isSearchLoading ? "mdi-loading" : "mdi-map-search"
+                        }} </v-icon
                       >搜索</v-btn
                     >
                   </v-card-actions>
@@ -158,7 +153,12 @@
         <v-list subheader tile min-height="600" max-height="1000">
           <v-list-item-group active-class="deep-purple--text">
             <template v-for="(item, index) in sectionData.postVOList">
-              <single-post-item :item="item" :key="index"></single-post-item>
+              <single-post-item
+                :item="item"
+                :key="index"
+                :isModeratorAndAbleToDelete="isModeratorAndAbleToDelete"
+                @delete-post="onDeletePost"
+              ></single-post-item>
               <v-divider
                 v-if="index < sectionData.postVOList.length - 1"
                 :key="index"
@@ -257,6 +257,7 @@ export default {
 
       // search
       searchContent: "",
+      isSearchLoading: false,
 
       // share
       shareItems: [
@@ -265,6 +266,12 @@ export default {
         // { label: "QQ空间", icon: "mdi-qrcode" },
         { label: "复制链接", icon: "mdi-link" },
       ],
+
+      // whether the moderator can delete post
+      isModeratorAndAbleToDelete: false,
+
+      // is login
+      isLogin: this.$store.getters.roles.length > 0,
     };
   },
   components: {
@@ -309,6 +316,10 @@ export default {
       }
     },
     collectOrUnCollect() {
+      if (!this.isLogin) {
+        this.$message.error("请先登录！");
+        return;
+      }
       collectSection(this.sectionId)
         .then((res) => {
           console.log(res.message);
@@ -335,18 +346,21 @@ export default {
             this.sectionData.postCount = res.data.total;
             this.sectionData.postVOList = res.data.postDataVOList;
           })
-          .catch((err) => console.log("error: " + err));
+          .finally(() => {
+            this.isSearchLoading = false;
+          });
       };
 
       if (this.type === "all") {
         fetchData(() => getAllPosts(this.sectionId, page, perPage));
       } else if (this.type === "highlighted") {
         fetchData(() => getHighlightedPosts(this.sectionId, page, perPage));
-      } else if (this.type === "search")
+      } else if (this.type === "search") {
+        this.isSearchLoading = true;
         fetchData(() =>
           searchPostInSection(this.sectionId, this.searchContent, page, perPage)
         );
-      else {
+      } else {
         // subsection
         fetchData(() =>
           getPostsBySubsection(this.sectionId, this.subsectionId, page, perPage)
@@ -371,39 +385,53 @@ export default {
           this.sectionData.postCount = res.data.total;
           this.sectionData.postVOList = res.data.postDataVOList;
         });
-      } else {
-        // subsection
-        this.getPostBySubsection(type);
       }
     },
     getPostBySubsection(id) {
       this.page = 1;
       this.subsectionId = id;
-      console.log(id);
-      getPostsBySubsection(this.sectionId, id, 1, 10)
-        .then((res) => {
-          if (res.code === 20000) {
-            console.log(res.data.total);
-            this.sectionData.postCount = res.data.total;
-            this.sectionData.postVOList = res.data.postDataVOList;
-          } else {
-            console.log(res.msg);
-          }
-        })
-        .catch((err) => console.log("error: " + err));
+      getPostsBySubsection(this.sectionId, id, 1, 10).then((res) => {
+        if (res.code === 20000) {
+          this.sectionData.postCount = res.data.total;
+          this.sectionData.postVOList = res.data.postDataVOList;
+        }
+      });
     },
-    report() {
-      // TODO: finish
+    judgeIfModerator() {
+      this.$store.getters.roles.forEach((role) => {
+        if (role.name == "moderator" && role.sectionId == this.sectionId) {
+          this.isModeratorAndAbleToDelete = true;
+        }
+      });
+    },
+    onDeletePost() {
+      this.onPageChange(this.page, this.perPage);
     },
   },
   mounted() {
     this.sectionId = this.$route.params.sectionId;
-    getSectionData(this.sectionId, 1, this.perPage)
-      .then((res) => {
-        this.sectionData = res.data;
-        this.subsectionList = res.data.subSectionList;
-      })
-      .catch((err) => console.log("error: " + err));
+
+    // get the subsection id if the param has it
+    let subsectionId = undefined;
+    subsectionId = this.$route.query.subsectionId;
+    console.log(subsectionId);
+
+    getSectionData(this.sectionId, 1, this.perPage).then((res) => {
+      this.subsectionList = res.data.subSectionList;
+
+      this.sectionData = res.data;
+
+      // if the subsection id is not undefined, then get the post by subsection
+      if (subsectionId) {
+        this.sectionData.postVOList = [];
+        this.getPostBySubsection(subsectionId);
+      }
+    });
+
+    // judge if this user is moderator
+    if (this.isLogin) {
+      this.judgeIfModerator();
+    }
   },
 };
 </script>

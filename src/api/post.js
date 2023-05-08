@@ -90,3 +90,10 @@ export function getIfFollowUser(userId) {
     method: "get",
   });
 }
+
+export function deletePost(postId) {
+  return request({
+    url: "/post/" + postId,
+    method: "delete",
+  });
+}

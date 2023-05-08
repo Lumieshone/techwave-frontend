@@ -40,8 +40,12 @@
                     {{ postData.sectionName }}
                   </v-btn>
                   <v-icon small color="white">mdi-chevron-right</v-icon>
-                  <v-btn text color="white" small>
-                    <!-- TODO: 子版块跳转 -->
+                  <v-btn
+                    text
+                    color="white"
+                    small
+                    :to="`/section/${postData.sectionId}?subsectionId=${postData.subsectionId}`"
+                  >
                     {{ postData.subsectionName }}
                   </v-btn>
                 </v-col>

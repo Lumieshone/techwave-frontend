@@ -1,19 +1,17 @@
 <template>
   <v-dialog v-model="this.showDialog" persistent width="22%">
-    <v-card class="mx-auto my-auto">
+    <v-card class="mx-auto my-auto" shaped>
       <v-toolbar color="#483D8B" cards dense dark>
         <v-icon>mdi-application-edit-outline</v-icon>
-        <v-card-title class="text--lighten-5">
-          <strong>确认</strong>
-        </v-card-title>
+        <v-card-title class="text--lighten-5"> 确认 </v-card-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeConfirm">
+        <v-btn icon @click="closeConfirm" small>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-form lazy-validation class="pa-4 pt-0">
-        <v-card-text class="ma-4 text--lighten-5">
-          <strong> <slot>确认？</slot></strong>
+      <v-form lazy-validation>
+        <v-card-text>
+          <slot>确认？</slot>
         </v-card-text>
         <v-row justify="end">
           <v-btn
