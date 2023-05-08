@@ -174,7 +174,7 @@ export default {
       this.$refs.form.resetValidation();
     },
     closePostDialog() {
-      this.$emit("callBack", false);
+      this.$emit("callBack", false, false);
       this.clearDialog();
     },
     publishPost() {
@@ -188,7 +188,7 @@ export default {
         }).then((res) => {
           console.log(res.message);
           if (res.code === 20000) this.$message.success("发布帖子成功！");
-          this.$emit("callBack", false);
+          this.$emit("callBack", false, true);
         });
         this.clearDialog();
       }
