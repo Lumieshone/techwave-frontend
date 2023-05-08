@@ -20,7 +20,7 @@
             <v-divider></v-divider>
             <v-list>
               <div v-for="(item, index) in items" :key="item.title">
-                <v-list-item :to="item.router" @click="read(item.type)" link class="pl-16 py-2">
+                <v-list-item :to="item.router" @click="read(item.type)" link class="pl-16 py-1">
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
