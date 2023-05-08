@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580" class="mx-4 my-5">
+  <v-card height="580" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-form
       ref="form"
@@ -93,6 +93,7 @@ export default {
   name: "AccountInfo",
   data() {
     return {
+      loading: false,
       isLogin: this.$store.getters.roles.length !== 0,
       title: "个人信息",
       isReadonly: true,
@@ -142,6 +143,7 @@ export default {
     },
   },
   mounted() {
+    this.loading = true;
     if (this.isLogin) {
       getUserInfo()
         .then((res) => {
@@ -152,6 +154,7 @@ export default {
             this.phoneNum = res.data.phoneNumber;
             this.gender = res.data.gender;
             this.intro = res.data.summary;
+            this.loading = false;
           } else {
             this.$message.error("用户信息获取失败！");
           }

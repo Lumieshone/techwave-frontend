@@ -1,12 +1,12 @@
 <template>
-  <v-card height="580px" class="ma-4 my-5">
+  <v-card height="580px" class="ma-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-col>
         <v-list
             tile
             dense
-            min-height="470"
+            min-height="460"
             max-height="1000"
         >
           <v-divider></v-divider>
@@ -43,17 +43,17 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row v-if="this.total > 10">
+        <v-row v-if="this.total > perPage">
           <v-col cols="8">
             <v-pagination
                 circle
                 class="left"
                 color="#6A5ACD"
-                v-if="Math.ceil(total / limit) > 1"
-                v-model="curPage"
-                :length="Math.ceil(total/ limit)"
+                v-if="Math.ceil(total / perPage) > 1"
+                v-model="page"
+                :length="Math.ceil(total/ perPage)"
                 :total-visible="10"
-                @input="onPageChange(curPage, limit)"
+                @input="onPageChange(page)"
             ></v-pagination>
           </v-col>
           <v-col cols="4">
@@ -86,14 +86,15 @@ export default {
   data(){
     return {
       title:"我的帖子",
+      loading: false,
       postId:0,
       control:false,
       showConfirm:false,
       valid: true,
       isEdit:false,
-      curPage: 1,
+      page: 1,
       if_filter: false,
-      limit: 8,
+      perPage: 8,
       whichPage: 1,
       total:20,
       posts:[]
@@ -112,22 +113,17 @@ export default {
       this.$router.push({path: '/post/'+ postId, params:{id:postId}})
     },
     jumpPage() {
-      this.curPage = Number(this.whichPage);
+      this.page = Number(this.whichPage);
+      this.onPageChange(this.page)
     },
-    onPageChange(curPage, limit) {
-      getMyPost(curPage,limit)
+    onPageChange(page) {
+      this.loading = true;
+      getMyPost(page,this.perPage)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
             this.posts = res.data.myPosts;
-          })
-          .catch((err) => console.log("error: " + err));
-    },
-    refreshList() {
-      this.curPage = 1;
-      getMyPost(1,this.limit)
-          .then(res => {
-            this.posts = res.data.myPosts;
+            this.loading = false;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -138,11 +134,13 @@ export default {
 
   },
   mounted() {
-    getMyPost(1,this.limit)
+    this.loading = true;
+    getMyPost(1,this.perPage)
         .then((res) => {
           console.log(res.data.total)
           this.total = res.data.total;
           this.posts = res.data.myPosts;
+          this.loading = false;
         })
         .catch((err) => console.log("error: " + err))
   },

@@ -1,10 +1,10 @@
 <template>
-  <v-card height="100%" class="ma-4 my-5">
+  <v-card height="580" class="ma-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-col>
         <v-list
-            min-height="480"
+            min-height="460"
             max-height="1000"
         >
           <v-divider></v-divider>
@@ -27,7 +27,7 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row v-if="this.total > 10">
+        <v-row v-if="this.total > perPage">
           <v-col cols="8">
             <v-pagination
                 circle
@@ -75,20 +75,13 @@ export default {
     },
     jumpPage() {
       this.page = Number(this.whichPage);
+      this.onPageChange(this.page);
     },
     onPageChange(page) {
       getLike(page, this.perPage)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
-            this.likes = res.data.myLikes;
-          })
-          .catch((err) => console.log("error: " + err))
-    },
-    refreshList() {
-      this.page = 1;
-      getLike(this.page, this.perPage)
-          .then((res) => {
             this.likes = res.data.myLikes;
           })
           .catch((err) => console.log("error: " + err))

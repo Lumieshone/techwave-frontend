@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580px" class="mx-4 my-5">
+  <v-card height="580px" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-row class="ml-5 mt-3 mr-n16">
       <v-col cols="8">
@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       title: "安全设置",
+      loading: false,
       email: "",
       dialogVisible_1: false,
       dialogVisible_2: false,
@@ -85,11 +86,13 @@ export default {
     },
   },
   mounted() {
+    this.loading = true;
     getUserInfo()
       .then((res) => {
         if (res.code === 20000) {
           console.log("获取邮箱成功");
           this.email = res.data.email;
+          this.loading = false;
         } else {
           this.$message.error("用户邮箱获取失败！");
         }

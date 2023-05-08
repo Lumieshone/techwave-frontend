@@ -24,6 +24,19 @@ export function getNotification(page, perPage) {
   });
 }
 
+export function getCount(){
+  return request({
+      url: "/message/count",
+      method: "get",
+  });
+}
+export function readMessage(type) {
+    return request({
+        url: "/message/read",
+        method: "post",
+        data: { type: type},
+    });
+}
 export function getMessageList() {
   return request({
     url: "/message/list",

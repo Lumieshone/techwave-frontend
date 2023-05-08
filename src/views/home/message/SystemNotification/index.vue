@@ -1,10 +1,10 @@
 <template>
-  <v-card height="100%" class="ma-4 my-5">
+  <v-card height="580" class="ma-4 my-5" :loading="this.loading" >
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-col>
         <v-list
-            min-height="480"
+            min-height="460"
             max-height="1000"
             two-line
         >
@@ -28,7 +28,7 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row v-if="this.total > 10">
+        <v-row v-if="this.total > perPage">
           <v-col cols="8">
             <v-pagination
                 circle
@@ -63,6 +63,7 @@ export default {
   data(){
     return {
       title:"系统通知",
+      loading: false,
       page: 1,
       perPage: 6,
       whichPage: 1,
@@ -73,13 +74,16 @@ export default {
   methods:{
     jumpPage() {
       this.page = Number(this.whichPage);
+      this.onPageChange(this.page);
     },
     onPageChange(page) {
+      this.loading = true;
       getNotification(page, this.perPage)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
             this.notifications = res.data.myNotifications;
+            this.loading = false;
           })
           .catch((err) => console.log("error: " + err))
     },
@@ -93,11 +97,13 @@ export default {
     },
   },
   mounted() {
+    this.loading = true;
     getNotification(1, this.perPage)
         .then((res) => {
           console.log(res.data.total)
           this.total = res.data.total;
           this.notifications = res.data.myNotifications;
+          this.loading = false;
         })
         .catch((err) => console.log("error: " + err))
   },

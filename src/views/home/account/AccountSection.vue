@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580px" class="mx-4 my-5">
+  <v-card height="580px" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-toolbar
         flat
@@ -81,6 +81,7 @@ export default {
   data(){
     return {
       title:"我的版块",
+      loading: false,
       showSectionDialog: false,
       showEditDialog: false,
       headers: [
@@ -139,11 +140,13 @@ export default {
     },
   },
   mounted() {
+    this.loading = true;
     getUserSections()
         .then(res => {
       if(res.code === 20000){
         console.log("获取用户版块信息成功")
         this.sectionInfo = res.data.sectionInfo
+        this.loading = false;
       }
       else{
         console.log(res.msg)

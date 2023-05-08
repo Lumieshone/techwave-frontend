@@ -20,13 +20,20 @@
             <v-divider></v-divider>
             <v-list>
               <div v-for="(item, index) in items" :key="item.title">
-                <v-list-item :to="item.router" link class="pl-16 py-1">
+                <v-list-item :to="item.router" @click="read(item.type)" link class="pl-16 py-2">
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-content class="pt-0">
+                      <v-list-item-title>
+                        <v-badge
+                            color="red"
+                            :offset-x="-3"
+                            :content="item.count"
+                            :value="item.count">
+                        {{ item.title }}
+                        </v-badge>
+                      </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-divider
@@ -59,40 +66,63 @@ import LoginReminder from "@/components/LoginReminder";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Message",
+  computed:{
+      items() {
+        return [
+          {
+            title: "我的消息",
+            icon: "mdi-message",
+            router: "/message/my-message",
+            count: this.$store.getters.listCount,
+            type: "message"
+          },
+          {
+            title: "系统通知",
+            icon: "mdi-bell",
+            router: "/message/system-notification",
+            count: this.$store.getters.notificationCount,
+            type: "system"
+          },
+          {
+            title: "收到的赞",
+            icon: "mdi-thumb-up",
+            router: "/message/received-like",
+            count: this.$store.getters.likeCount,
+            type: "like"
+          },
+          {
+            title: "回复我的",
+            icon: "mdi-reply",
+            router: "/message/reply-me",
+            count: this.$store.getters.replyCount,
+            type: "reply"
+          },
+        ];
+      },
+  },
   data() {
     return {
       isLogin: this.$store.getters.roles.length !== 0,
       show: false,
       size: 2.5,
-      // username:'莴苣某人',
-      // userAvatar:require("@/assets/avatar.jpg"),
       userAvatar: "",
       username: "",
-      items: [
-        {
-          title: "我的消息",
-          icon: "mdi-message",
-          router: "/message/my-message",
-        },
-        {
-          title: "系统通知",
-          icon: "mdi-bell",
-          router: "/message/system-notification",
-        },
-        {
-          title: "收到的赞",
-          icon: "mdi-thumb-up",
-          router: "/message/received-like",
-        },
-        { title: "回复我的", icon: "mdi-reply", router: "/message/reply-me" },
-      ],
     };
   },
   //注册组件
   components: {
     LoginReminder,
   },
-  methods: {},
+  methods: {
+    read(type){
+      this.$store.dispatch(
+          "count/updateState",type
+      ).then(()=>{
+        console.log(this.$store.getters.total)
+        console.log(this.items)
+      }).catch((err) => console.log("error: " + err))
+    }
+  },
   mounted() {
     if (this.isLogin) {
       console.log("获取用户信息成功");
@@ -102,3 +132,6 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+</style>

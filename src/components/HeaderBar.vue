@@ -29,10 +29,47 @@
           <v-icon left dense> mdi-facebook-messenger </v-icon>
           交流论坛
         </v-tab>
-        <v-tab class="mx-2 white--text" to="/message">
-          <v-icon left dense> mdi-message </v-icon>
-          我的消息
-        </v-tab>
+        <v-menu offset-y open-on-hover>
+          <template v-slot:activator="{ on, attrs }">
+            <v-tab
+                class="mx-2 white--text"
+                id="myTab"
+                to="/message"
+                v-bind="attrs"
+                v-on="on">
+              <v-badge
+                  color="red"
+                  :content="total"
+                  :value="total"
+                  style="overflow-x: visible"
+              >
+              <v-icon left dense> mdi-message </v-icon>
+              我的消息
+              </v-badge>
+            </v-tab>
+          </template>
+          <v-list>
+            <v-list-item
+                v-for="item in items"
+                :key="item.title"
+                :to="item.router"
+                @click="read(item.type)"
+                link >
+              <v-icon left small> {{ item.icon }} </v-icon>
+              <v-list-item-content class="pt-0">
+                <v-list-item-title>
+                  <v-badge
+                      color="red"
+                      :offset-x="-2"
+                      :content="item.count"
+                      :value="item.count">
+                    {{ item.title }}
+                  </v-badge>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-tab class="mx-2 white--text" to="/account">
           <v-icon left dense> mdi-account </v-icon>
           个人中心
@@ -52,10 +89,6 @@
           /></v-avatar>
         </template>
         <v-list>
-          <v-list-item v-if="isLogin" to="/message">
-            <v-icon left dense> mdi-account </v-icon>
-            <v-list-item-title>消息</v-list-item-title>
-          </v-list-item>
           <v-list-item v-if="!isLogin" @click="login()">
             <v-icon left dense> mdi-login </v-icon>
             <v-list-item-title>登录</v-list-item-title>
@@ -74,10 +107,47 @@
 <script>
 export default {
   name: "HeaderBar",
+  computed:{
+    items() {
+      return [
+        {
+          title: "我的消息",
+          icon: "mdi-message",
+          router: "/message/my-message",
+          count: this.$store.getters.listCount,
+          type: "message"
+        },
+        {
+          title: "系统通知",
+          icon: "mdi-bell",
+          router: "/message/system-notification",
+          count: this.$store.getters.notificationCount,
+          type: "system"
+        },
+        {
+          title: "收到的赞",
+          icon: "mdi-thumb-up",
+          router: "/message/received-like",
+          count: this.$store.getters.likeCount,
+          type: "like"
+        },
+        {
+          title: "回复我的",
+          icon: "mdi-reply",
+          router: "/message/reply-me",
+          count: this.$store.getters.replyCount,
+          type: "reply"
+        },
+      ];
+    },
+    total(){
+      return this.$store.getters.total
+    }
+  },
   data() {
     return {
       drawer: false,
-      isLogin: this.$store.getters.roles.length != 0,
+      isLogin: this.$store.getters.roles.length !== 0,
       avatar: this.$store.getters.avatar,
       name: this.$store.getters.name,
     };
@@ -97,8 +167,31 @@ export default {
           console.log(err);
         });
     },
+    read(type){
+      this.$store.dispatch(
+          "count/updateState",type
+      ).then(()=>{
+        console.log(this.$store.getters.total)
+        console.log(this.items)
+      }).catch((err) => console.log("error: " + err))
+    }
   },
+  mounted() {
+    this.$store.dispatch(
+        "count/setState"
+    )
+        .then(()=>{
+          console.log(this.items)
+        })
+        .catch((err) => console.log("error: " + err))
+
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-tab {
+  width: 11% !important;
+}
+
+</style>

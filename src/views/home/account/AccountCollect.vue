@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580px" class="mx-4 my-5">
+  <v-card height="580px" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-card width="100%">
@@ -66,7 +66,7 @@
         <v-list
             tile
             dense
-            height="210%"
+            height="400"
         >
           <v-list-item-group
               active-class="deep-purple--text"
@@ -92,7 +92,7 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-row v-if="this.total > 10">
+        <v-row v-if="this.total > perPage">
           <v-col cols="8">
             <v-pagination
                 circle
@@ -102,7 +102,7 @@
                 v-model="page"
                 :length="Math.ceil(total/ perPage)"
                 :total-visible="10"
-                @input="onPageChange(page, perPage)"
+                @input="onPageChange(page)"
             ></v-pagination>
           </v-col>
           <v-col cols="4">
@@ -142,6 +142,7 @@ export default {
   data() {
     return {
       title: "我的收藏",
+      loading: false,
       showConfirm: false,
       dialogVisible: false,
       valid: true,
@@ -173,13 +174,16 @@ export default {
     },
     jumpPage() {
       this.page = Number(this.whichPage);
+      this.onPageChange(this.page);
     },
-    onPageChange(curPage, limit) {
-      getCollectInfo(this.folderId, curPage, limit)
+    onPageChange(page) {
+      this.loading = true;
+      getCollectInfo(this.folderId, page, this.perPage)
           .then((res) => {
             console.log(res.data.total)
             this.total = res.data.total;
             this.collects = res.data.folderPostDTOList;
+            this.loading = false;
           })
           .catch((err) => console.log("error: " + err));
     },
@@ -231,6 +235,7 @@ export default {
 
   },
   mounted() {
+    this.loading = true;
     getFolders()
         .then((res) => {
           this.folders = res.data.folders;
@@ -242,6 +247,7 @@ export default {
           console.log(res.data.total)
           this.total = res.data.total;
           this.collects = res.data.folderPostDTOList;
+          this.loading = false;
         })
         .catch((err) => console.log("error: " + err))
   },
