@@ -68,7 +68,7 @@ export default {
           .then((res) => {
             if(res.code === 20000){
               this.$message.success("删除成功！")
-              window.location.reload();
+              this.$emit("submit",false)
             }
             else
               this.$message.error(res.message);
