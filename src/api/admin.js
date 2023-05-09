@@ -16,11 +16,11 @@ export function banUser(data) {
   });
 }
 
-export function denyReport(data) {
+export function denyReport(reportId) {
   return request({
-    url: "/admin/report",
+    url: `/admin/report/${reportId}`,
     method: "delete",
-    data,
+    
   });
 }
 

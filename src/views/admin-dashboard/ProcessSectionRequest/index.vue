@@ -25,33 +25,23 @@
         single-line
         hide-details
       ></v-text-field>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-title class="text-h5">请确认是否通过该版块申请？</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeApprove">取消</v-btn>
-              <v-btn color="blue darken-1" text @click="approveItemConfirm">确认</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">请确认是否不通过该版块申请？</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">取消</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">确认</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+      
+      <!-- 确认框 -->
+      <confirm
+      :showConfirm="dialog"
+      @close="closeApprove"
+      @confirm="approveItemConfirm">
+      确认通过该版块申请？
+      </confirm>
+      <confirm
+      :showConfirm="dialogDelete"
+      @close="closeDelete"
+      @confirm="deleteItemConfirm">
+      确认不通过该版块申请？
+      </confirm>
       </v-toolbar>
+
+    <!-- 操作栏 -->
     </template>
     <!-- eslint-disable-next-line -->
     <template v-slot:item.avatar="{ item }">
@@ -106,7 +96,8 @@
 </template>
 
 <script>
-import{getSectionRequest, passSectionRequest} from "@/api/admin.js"
+import {getSectionRequest, passSectionRequest} from "@/api/admin.js"
+import Confirm from "@/components/Confirm.vue"
 
 export default {
   name: "ProcessSectionRequest",
@@ -134,6 +125,9 @@ export default {
     dialog: false,
     dialogDelete: false,
   }),
+  components:{
+    Confirm,
+  },
   watch: {
     dialog (val) {
       val || this.closeApprove()
