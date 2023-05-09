@@ -161,7 +161,12 @@ export default {
   methods: {
     submit(flag) {
       this.dialogVisible = flag
-      window.location.reload();
+      getFolders()
+          .then((res) => {
+            this.folders = res.data.folders;
+            this.folderId = res.data.folders[0].id
+          })
+          .catch((err) => console.log("error: " + err));
     },
     callBack(flag) {
       this.dialogVisible = flag
@@ -217,7 +222,11 @@ export default {
               .then((res) => {
                 if (res.code === 20000) {
                   this.$message.success("重命名成功！")
-                  window.location.reload();
+                  getFolders()
+                      .then((res) => {
+                        this.folders = res.data.folders;
+                      })
+                      .catch((err) => console.log("error: " + err));
                 } else
                   this.$message.error(res.message);
               })

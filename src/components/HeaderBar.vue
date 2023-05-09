@@ -55,12 +55,13 @@
                 :to="item.router"
                 @click="read(item.type)"
                 link >
-              <v-icon left small> {{ item.icon }} </v-icon>
-              <v-list-item-content class="pt-0">
+              <v-icon left small class="pl-1"> {{ item.icon }} </v-icon>
+              <v-list-item-content class="pt-0 pl-2">
                 <v-list-item-title>
                   <v-badge
                       color="red"
-                      :offset-x="-2"
+                      :offset-x="-1"
+                      :offset-y="7"
                       :content="item.count"
                       :value="item.count">
                     {{ item.title }}
@@ -191,7 +192,7 @@ export default {
 
 <style scoped>
 .v-tab {
-  width: 11% !important;
+  width: 155px !important;
 }
 
 </style>

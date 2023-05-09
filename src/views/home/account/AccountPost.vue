@@ -71,6 +71,7 @@
         :showConfirm="this.showConfirm"
         :postId="this.postId"
         @close="closeConfirm"
+        @submit="submit"
     >
     </DeletePost>
   </v-card>
@@ -102,12 +103,18 @@ export default {
   },
   methods:{
     submit(flag){
-      this.dialogVisible = flag
-      window.location.reload();
+      this.showConfirm = flag
+      getMyPost(1,this.perPage)
+          .then((res) => {
+            console.log(res.data.total)
+            this.total = res.data.total;
+            this.posts = res.data.myPosts;
+            this.loading = false;
+          })
+          .catch((err) => console.log("error: " + err))
     },
     closeConfirm(flag){
       this.showConfirm = flag
-      window.location.reload();
     },
     stepToPost(postId){
       this.$router.push({path: '/post/'+ postId, params:{id:postId}})
