@@ -219,7 +219,7 @@
           <report-post
             :reportType="'post'"
             :reportedId="postId"
-            :sectionId="sectionId"
+            :sectionId="postData.sectionId"
             @closeReportDialog="showReportDialog = false"
           ></report-post>
         </v-dialog>

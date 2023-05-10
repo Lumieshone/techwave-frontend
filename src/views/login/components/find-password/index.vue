@@ -1,11 +1,12 @@
 <template>
-  <v-card
+  <v-card shaped width="50%" class="mx-auto"
     ><v-card-title>找回密码 - Find Password</v-card-title>
+    <v-divider></v-divider>
     <v-card-text>
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="handleFindPassword">
-          <v-row>
-            <v-col cols="10">
+          <v-row justify="center" align="center">
+            <v-col cols="9">
               <validation-provider
                 v-slot="{ errors }"
                 name="Mail"
@@ -14,15 +15,17 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
-                  label="Mail"
+                  label="邮箱"
                   color="#7d73be"
                   required
                 ></v-text-field>
               </validation-provider>
             </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="2">
-              <v-btn @click="sendEmailCode()">发送验证码</v-btn>
+            <v-col cols="3">
+              <v-btn @click="sendEmailCode()" text>
+                <v-icon left>mdi-email</v-icon>
+                发送验证码
+              </v-btn>
             </v-col>
           </v-row>
 
@@ -34,7 +37,7 @@
             <v-text-field
               v-model="verify_code"
               :error-messages="errors"
-              label="VerifyCode"
+              label="验证码"
               required
               color="#7d73be"
             ></v-text-field>
@@ -46,9 +49,9 @@
             rules="required|min:8|max:20"
           >
             <v-text-field
-              :append-icon="show_password1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show_password1 ? 'text' : 'password'"
-              @click:append="show_password1 = !show_password1"
+              :append-icon="showPassword1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword1 ? 'text' : 'password'"
+              @click:append="showPassword1 = !showPassword1"
               v-model="old_password"
               :error-messages="errors"
               label="Old Password"
@@ -64,12 +67,12 @@
             rules="required|min:8|max:20|"
           >
             <v-text-field
-              :append-icon="show_password1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show_password1 ? 'text' : 'password'"
-              @click:append="show_password1 = !show_password1"
+              :append-icon="showPassword1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show ? 'text' : 'password'"
+              @click:append="showPassword1 = !showPassword1"
               v-model="new_password"
               :error-messages="errors"
-              label="New Password"
+              label="新密码"
               color="#7d73be"
               required
             ></v-text-field>
@@ -86,21 +89,21 @@
               @click:append="show_password2 = !show_password2"
               v-model="repeat_password"
               :error-messages="errors"
-              label="Repeat Password"
+              label="再次输入密码"
               color="#7d73be"
               required
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="close_find_password_dialog"
-            >
-              Close
-            </v-btn>
-            <v-btn color="blue darken-1" type="submit" :disabled="invalid" text>
-              Save
-            </v-btn>
+            <div class="d-flex justify-space-around">
+              <v-btn @click="closeFindPasswordDialog" class="mr-4">
+                <v-icon>mdi-close</v-icon>
+                取消
+              </v-btn>
+              <v-btn type="submit" :disabled="invalid" text>
+                <v-icon>mdi-content-save</v-icon>
+                保存
+              </v-btn>
+            </div>
           </validation-provider>
         </form>
       </validation-observer>
@@ -151,7 +154,7 @@ export default {
       new_password: "",
       repeat_password: "",
 
-      show_password1: false,
+      showPassword1: false,
       show_password2: false,
     };
   },
@@ -160,11 +163,15 @@ export default {
     ValidationObserver,
   },
   methods: {
-    close_find_password_dialog() {
-      this.$emit("close_find_password_dialog");
+    closeFindPasswordDialog() {
+      this.$emit("closeFindPasswordDialog");
     },
 
     sendEmailCode() {
+      if (!this.email) {
+        this.$message("请输入邮箱！");
+        return;
+      }
       sendEmailCode(this.email)
         .then(() => {
           this.$message("发送成功！");
