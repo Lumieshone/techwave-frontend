@@ -46,21 +46,8 @@
             label="编辑版块简介"
             required
         ></v-text-field>
-        <v-text-field
-            v-model="name"
-            v-if="select===choices[2]"
-            maxlength="20"
-            dense
-            outlined
-            prepend-icon="mdi-draw-pen"
-            :counter="20"
-            :rules="nameRules"
-            color="#483D8B"
-            label="修改板块名称"
-            required
-        ></v-text-field>
         <v-select
-            v-if="select===choices[3]"
+            v-if="select===choices[2]"
             v-model="subSelect"
             :items="subChoices"
             prepend-icon="mdi-tag-heart-outline"
@@ -70,7 +57,7 @@
         </v-select>
         <v-combobox
             v-model="model"
-            v-if="select===choices[3] && subSelect===subChoices[0]"
+            v-if="select===choices[2] && subSelect===subChoices[0]"
             :filter="filter"
             color="#483D8B"
             prepend-icon="mdi-tag-plus-outline"
@@ -156,7 +143,7 @@
           </template>
         </v-combobox>
         <v-select
-            v-if="select===choices[3] && (subSelect===subChoices[1] || subSelect===subChoices[2])"
+            v-if="select===choices[2] && (subSelect===subChoices[1] || subSelect===subChoices[2])"
             v-model="subSection"
             :items="subSections"
             prepend-icon="mdi-tag-search-outline"
@@ -168,7 +155,7 @@
         </v-select>
         <v-text-field
             v-model="subSectionName"
-            v-if="select===choices[3] && subSelect===subChoices[1]"
+            v-if="select===choices[2] && subSelect===subChoices[1]"
             maxlength="20"
             dense
             outlined
@@ -205,7 +192,7 @@ import {
   editSectionAvatar,
   editSectionDescription,
   deleteSubsection,
-  renameSubsection, changeSectionName
+  renameSubsection
 } from "@/api/moderator";
 
 export default {
@@ -219,7 +206,7 @@ export default {
   data() {
     return {
       showDialog: this.showEditDialog,
-      choices:['头像','简介','名称','子版块'],
+      choices:['头像','简介','子版块'],
       subChoices:['新建','重命名','删除'],
       subSections:this.SubsectionList,
       subSection:'',
@@ -246,7 +233,6 @@ export default {
       items: [
         { header: '创建子版块' }
       ],
-      name: "",
       nonce: 1,
       menu: false,
       model: [],
@@ -304,19 +290,6 @@ export default {
           this.clearDialog()
         }
         else if(this.select===this.choices[2]){
-          changeSectionName(this.id,this.name)
-              .then((res) => {
-                console.log(res.message);
-                if (res.code === 20000) {
-                  this.$message.success("修改名称成功！");
-                  this.$emit("submit_2", false);
-                }
-                else this.$message.error("修改名称失败~");
-              })
-              .catch((err) => console.log("error: " + err));
-          this.clearDialog()
-        }
-        else if(this.select===this.choices[3]){
           if(this.subSelect===this.subChoices[0])
           {
             let subsections = []

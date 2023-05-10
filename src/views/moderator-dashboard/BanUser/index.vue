@@ -1,17 +1,81 @@
 <template>
-  <p>封禁账户</p>
+    <v-card height="580" class="ma-4 mb-6">
+        <v-card-title v-text="title"></v-card-title>
+        <div style="margin-left: 20px;">
+            <v-text-field label="请输入用户ID" style="width:360px" variant="outlined"></v-text-field>
+            <v-combobox style="width:360px" label="选择时长" :items="['1天', '15天', '30天', '180天']"></v-combobox>
+<!--          <v-date-picker v-model="banDate" />-->
+            <v-btn variant="outlined">
+                封禁
+            </v-btn>
+        </div>
+        <div style="font-weight: bold;margin-left: 20px;margin-top: 50px;">封禁用户列表</div>
+        <v-row no-gutters justify="center">
+            <v-col>
+                <v-data-table :headers="headers" :items="pinnedPostInfo" class="elevation-1 px-5" hide-default-footer
+                    height="460">
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn @click="unban(item.userId)" v-bind="attrs" v-on="on">
+                                    解封
+                                </v-btn>
+                            </template>
+                            <span>解除封禁</span>
+                        </v-tooltip>
+                    </template>
+                </v-data-table>
+            </v-col>
+        </v-row>
+    </v-card>
 </template>
 
 <script>
+import { getBannedUsers } from "@/api/moderator";
+import { unbanUser } from "@/api/moderator";
 export default {
-  name: "BanUser",
-  data() {
-    return {
-      sectionId: null,
-    };
-  },
-  mounted() {
-    this.sectionId = this.$route.params.sectionId;
-  },
+    name: "BanUser",
+    data() {
+        return {
+            sectionId: null,
+            title: '封禁用户',
+          banDate:"",
+            headers: [
+                {
+                    text: '用户ID',
+                    align: 'start',
+                    sortable: false,
+                    value: 'userId',
+                },
+                { text: '用户名', value: 'userName', sortable: false },
+                { text: '解禁时间', value: 'banUntil', sortable: false },
+                { text: '操作', value: 'actions', sortable: false },
+            ],
+            pinnedPostInfo: []
+        };
+    },
+    methods:{
+        unban(id){
+            console.log(id, this.$route.params.sectionId)
+            unbanUser({targetId:id, sectionId:this.$route.params.sectionId})
+          window.location.reload();
+        }
+    },
+    mounted() {
+        this.sectionId = this.$route.params.sectionId;
+        getBannedUsers(this.$route.params.sectionId)
+            .then(res => {
+                if (res.code === 20000) {
+                    console.log("获取置顶板块成功")
+                    console.log(res.data.postDataVOList)
+                    this.pinnedPostInfo = res.data
+                }
+                else {
+                    console.log(res.msg)
+                    this.$message.error("置顶板块信息获取失败！")
+                }
+            })
+            .catch((err) => console.log("error: " + err));
+    },
 };
 </script>

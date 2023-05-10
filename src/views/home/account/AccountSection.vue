@@ -136,7 +136,7 @@ export default {
       this.$router.push({path: '/section/'+ item.sectionId, params:{id:item.sectionId}})
     },
     stepToManage(item){
-      this.$router.push({path: '/moderator-dashboard/'+ item.sectionId, params:{id:item.sectionId}})
+      this.$router.push({path: '/moderator-dashboard/'+ item.sectionId+'/edit-section', params:{id:item.sectionId}})
     },
   },
   mounted() {

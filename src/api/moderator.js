@@ -33,13 +33,13 @@ export function changeSectionName(sectionId, name) {
   });
 }
 
-export function addSubsection(sectionId, name) {
+export function addSubsection(sectionId, subsections) {
   return request({
     url: "/moderator/add_subsection",
     method: "post",
     data: {
       sectionId,
-      name,
+      subsections,
     },
   });
 }
@@ -82,6 +82,13 @@ export function getSectionInfo(sectionId) {
   });
 }
 
+export function getSectionInfoById(sectionId) {
+    return request({
+        url: `/moderator/sectionById/${sectionId}`,
+        method: "get",
+    });
+}
+
 export function searchUser(content, page, perPage) {
     return request({
         url: "/moderator/search",
@@ -105,7 +112,7 @@ export function transferSection(sectionId, transferredId) {
     });
 }
 
-export function getPostReport(page, perPage, sectionId) {
+export function getPostReport(sectionId,page, perPage) {
     return request({
         url: "/moderator/post_report",
         method: "get",
@@ -117,7 +124,7 @@ export function getPostReport(page, perPage, sectionId) {
     });
 }
 
-export function getCommentReport(page, perPage, sectionId) {
+export function getCommentReport( sectionId,page, perPage) {
     return request({
         url: "/moderator/comment_report",
         method: "get",
@@ -129,19 +136,23 @@ export function getCommentReport(page, perPage, sectionId) {
     });
 }
 
-export function denyPostReport(data) {
+export function denyPostReport(reportId) {
     return request({
         url: "/moderator/post_report",
         method: "delete",
-        data,
+        params: {
+            reportId,
+        },
     });
 }
 
-export function acceptPostReport(data) {
+export function acceptPostReport(targetId) {
     return request({
         url: "/moderator/post",
         method: "delete",
-        data,
+        params: {
+            targetId,
+        },
     });
 }
 
@@ -153,27 +164,34 @@ export function denyCommentReport(data) {
     });
 }
 
-export function acceptCommentReport(data) {
+export function acceptCommentReport(targetId,reportType) {
     return request({
         url: "/moderator/comment",
         method: "delete",
-        data,
+        data:{
+            targetId: targetId,
+            reportType: reportType,
+        },
     });
 }
 
-export function pinOrNotPinPost(data) {
+export function pinOrNotPinPost(id) {
     return request({
         url: "/moderator/pin_post",
         method: "post",
-        data,
+        data:{
+           postId: id
+        },
     });
 }
 
-export function highlightOrNotHighlightPost(data) {
+export function highlightOrNotHighlightPost(id) {
     return request({
         url: "/moderator/highlight_post",
         method: "post",
-        data,
+        data:{
+            postId: id
+        },
     });
 }
 
@@ -202,4 +220,5 @@ export function unbanUser(data) {
         data,
     });
 }
+
 

@@ -69,11 +69,14 @@
 </template>
 
 <script>
+import {getSectionInfo} from "@/api/moderator";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "ModeratorDashboard",
   data() {
     return {
+      isLogin: this.$store.getters.roles.length !== 0,
       drawer: true,
       mini: true,
       sectionId: null,
@@ -95,6 +98,21 @@ export default {
   },
   mounted() {
     this.sectionId = this.$route.params.sectionId;
+    if (this.isLogin) {
+      getSectionInfo(this.sectionId)
+          .then((res) => {
+            if (res.code === 20000) {
+              console.log("获取板块信息成功");
+              this.sectionAvatar = res.data.avatar;
+              this.sectionName = res.data.name;
+              this.intro = res.data.description;
+              console.log(this.sectionName,res.data.name)
+            } else {
+              this.$message.error("板块信息获取失败！");
+            }
+          })
+          .catch((err) => console.log("error: " + err));
+    }
   },
 };
 </script>
