@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580px" class="mx-4 my-5" :loading="this.loading">
+  <v-card height="570" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-card width="100%">
@@ -64,9 +64,8 @@
           </v-btn>
         </v-row>
         <v-list
-            tile
             dense
-            height="400"
+            height="390"
         >
           <v-list-item-group
               active-class="deep-purple--text"

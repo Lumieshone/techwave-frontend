@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580" class="ma-4 my-5">
+  <v-card height="570" class="ma-4 my-5">
     <v-card-title v-text="title"></v-card-title>
     <v-row no-gutters justify="center">
       <v-col>
