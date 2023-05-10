@@ -1,5 +1,5 @@
 <template>
-  <v-card height="580px" class="mx-4 my-5" :loading="this.loading">
+  <v-card height="570" class="mx-4 my-5" :loading="this.loading">
     <v-card-title v-text="title"></v-card-title>
     <v-row class="ml-5 mt-3 mr-n16">
       <v-col cols="8">

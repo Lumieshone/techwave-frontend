@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '济客空间',
+  title: 'TechWave',
 
   /**
    * @type {boolean} true | false

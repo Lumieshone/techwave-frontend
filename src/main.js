@@ -7,7 +7,9 @@ import VueParticles from 'vue-particles'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import Chat from 'jwchat';
 // Message
 import Message from './components/Message/index.js'
 Vue.prototype.$message = Message
@@ -16,6 +18,8 @@ Vue.config.productionTip = false
 
 Vue.prototype.$baseURL = process.env.VUE_APP_BASE_API
 Vue.use(VueParticles)
+Vue.use(Chat)
+Vue.use(ElementUI)
 
 // if (process.env.NODE_ENV === 'development') {
 //   const { mockXHR } = require('../mock')
