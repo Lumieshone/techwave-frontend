@@ -322,7 +322,6 @@ export default {
       }
       collectSection(this.sectionId)
         .then((res) => {
-          console.log(res.message);
           if (res.code === 20000) {
             this.sectionData.isCollected = !this.sectionData.isCollected;
             if (this.sectionData.isCollected) {
@@ -414,7 +413,6 @@ export default {
     // get the subsection id if the param has it
     let subsectionId = undefined;
     subsectionId = this.$route.query.subsectionId;
-    console.log(subsectionId);
 
     getSectionData(this.sectionId, 1, this.perPage).then((res) => {
       this.subsectionList = res.data.subSectionList;
