@@ -84,3 +84,11 @@ export function reportUser(data) {
     });
 }
 
+export function createChatList(targetId) {
+    return request({
+        url: "/message/create_chat_list",
+        method: "post",
+        data: { targetId: targetId },
+    });
+}
+

@@ -19,15 +19,16 @@
         @click="followOrUnfollow"
         >{{ this.ifFollow ? "已关注" : "未关注" }}</v-btn
       >
-      <!-- TODO: 私信跳转 -->
-      <v-btn color="#7d73be" class="ma-2 white--text" small>私信</v-btn>
+      <v-btn color="#7d73be" class="ma-2 white--text" small @click="goToChat"
+        >私信</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
 <script>
 import { getUserCard } from "@/api/account";
-
 import { followOrUnfollowUser, getIfFollowUser } from "@/api/post";
+import { createChatList } from "@/api/message";
 
 export default {
   name: "UserCard",
@@ -64,6 +65,19 @@ export default {
         this.$message.error("请先登录");
       }
     },
+    goToChat() {
+      createChatList(this.userId).then((res) => {
+        if (res.code === 20000) {
+          console.log("create chat list success");
+          this.$router.push({
+            path: "/message/my-message",
+            query: {
+              userId: this.userId,
+            },
+          });
+        }
+      });
+    },
   },
   mounted() {
     getUserCard(this.userId).then((response) => {
@@ -73,6 +87,5 @@ export default {
       this.ifFollow = response.data;
     });
   },
-  // TODO: 添加关注用户和私聊功能
 };
 </script>
