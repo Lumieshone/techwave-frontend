@@ -117,12 +117,13 @@ export default {
     read(type){
       if(type !== 'message')
         this.$store.dispatch(
-            "count/updateState", { type: "message", count: 0 }
+            "count/updateState", { type: type, count: 0 }
         ).then(()=>{
-          console.log(this.$store.getters.total)
+          console.log("total",this.$store.getters.total)
           console.log(this.items)
         }).catch((err) => console.log("error: " + err))
     }
+
   },
   mounted() {
     if (this.isLogin) {

@@ -70,7 +70,7 @@ const actions = {
                                 commit('setNotificationCount', 0)
                                 break;
                             case "message":
-                                commit('minusTotal',state.listCount)
+                                commit('minusTotal',count)
                                 commit('minusListCount', count)
                                 break;
                             case "reply":

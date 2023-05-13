@@ -76,11 +76,14 @@ export function sendMessage(data) {
     });
 }
 
-export function reportUser(data) {
+export function reportUser(fd) {
     return request({
         url: "/message/report_user",
         method: "post",
-        data,
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        data: fd,
     });
 }
 
