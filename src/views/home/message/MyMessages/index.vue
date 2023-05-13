@@ -11,11 +11,11 @@
                 :item-height="62"
                 height="497">
             <template v-slot:default="{ item,index }">
-              <v-list-item :key="index" class="pl-8">
+              <v-list-item :key="index" class="pl-8" @click="openChat(item.userId,index)">
                 <v-list-item-avatar>
                   <v-img :src="item.avatar"></v-img>
                 </v-list-item-avatar>
-                <v-list-item-content @click="openChat(item.userId,index)">
+                <v-list-item-content>
                   <template >
                     <v-list-item-title>
                         {{ item.name }}
@@ -24,7 +24,7 @@
                   </template>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-menu offset-y open-on-hover>
+                  <v-menu offset-y open-on-click>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                           icon
@@ -45,7 +45,8 @@
                       <v-list-item
                           dense
                           v-for="item in items"
-                          :key="item.title">
+                          :key="item.title"
+                      >
                         <v-icon left small> {{ item.icon }} </v-icon>
                         <v-list-item-content>
                           <v-list-item-title>
@@ -230,6 +231,7 @@ export default {
           text: msg,
           time: msgObj.date
         }
+        console.log("data.targetId"+data.targetId)
         sendMessage(data)
             .then((res) => {
               if (res.code === 20000) {
@@ -246,6 +248,8 @@ export default {
     },
     openChat(userId,index){
       this.selectedItem = index
+      this.targetId = userId
+      console.log(this.selectedItem)
       getMessageHistory(userId)
           .then((res) => {
             if (res.code === 20000) {
@@ -308,6 +312,37 @@ export default {
           }
         })
         .catch((err) => console.log("error: " + err));
+    let id = undefined;
+    id = this.$route.query.userId;
+    if(id){
+      for (let i = 0; i < this.followLists.length; i++) {
+        if(this.followLists[i].userId === id)
+        {
+          this.selectedItem = i
+          console.log("this.selctedItem="+this.selectedItem)
+          break
+        }
+      }
+      this.targetId = id
+      getMessageHistory(id)
+          .then((res) => {
+            if (res.code === 20000) {
+              console.log("获取私信消息成功");
+              this.isBlocked = res.data.isBlocked
+              this.listData = res.data.myHistories
+            } else {
+              console.log(res.msg);
+              this.$message.error("私信消息获取失败！");
+            }
+          })
+          .catch((err) => console.log("error: " + err));
+      this.$store.dispatch(
+          "count/updateState",
+          { type: "message", count: this.followLists[this.selectedItem].count }
+      ).then(()=>{
+        console.log(this.$store.getters.total)
+      }).catch((err) => console.log("error: " + err))
+    }
   },
   // 实时-时间
   beforeDestroy() {
