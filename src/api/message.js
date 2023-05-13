@@ -86,7 +86,7 @@ export function reportUser(data) {
 
 export function createChatList(targetId) {
     return request({
-        url: "/message/create_chat_list",
+        url: "/message/create_chat",
         method: "post",
         data: { targetId: targetId },
     });
