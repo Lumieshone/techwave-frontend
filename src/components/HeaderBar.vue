@@ -179,15 +179,15 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch(
-        "count/setState"
-    )
-        .then(()=>{
-          console.log(this.items)
-        })
-        .catch((err) => console.log("error: " + err))
-
-  }
+    if (this.isLogin) {
+      this.$store
+          .dispatch("count/setState")
+          .then(() => {
+            console.log(this.items);
+          })
+          .catch((err) => console.log("error: " + err));
+    }
+  },
 };
 </script>
 
