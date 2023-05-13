@@ -31,6 +31,9 @@ const mutations = {
     minusTotal(state,count) {
         state.total -= count;
     },
+    minusListCount(state,count) {
+        state.listCount -= count;
+    },
 };
 
 const actions = {
@@ -52,7 +55,7 @@ const actions = {
                 });
         });
     },
-    updateState({commit},type) {
+    updateState({commit},{ type, count }) {
         return new Promise((resolve, reject) => {
             readMessage(type)
                 .then((res) => {
@@ -68,7 +71,7 @@ const actions = {
                                 break;
                             case "message":
                                 commit('minusTotal',state.listCount)
-                                commit('setListCount', 0)
+                                commit('minusListCount', count)
                                 break;
                             case "reply":
                                 commit('minusTotal',state.replyCount)

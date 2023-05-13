@@ -115,12 +115,13 @@ export default {
   },
   methods: {
     read(type){
-      this.$store.dispatch(
-          "count/updateState",type
-      ).then(()=>{
-        console.log(this.$store.getters.total)
-        console.log(this.items)
-      }).catch((err) => console.log("error: " + err))
+      if(type !== 'message')
+        this.$store.dispatch(
+            "count/updateState", { type: "message", count: 0 }
+        ).then(()=>{
+          console.log(this.$store.getters.total)
+          console.log(this.items)
+        }).catch((err) => console.log("error: " + err))
     }
   },
   mounted() {

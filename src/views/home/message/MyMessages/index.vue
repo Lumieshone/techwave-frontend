@@ -15,12 +15,47 @@
                 <v-list-item-avatar>
                   <v-img :src="item.avatar"></v-img>
                 </v-list-item-avatar>
-                <v-list-item-content>
+                <v-list-item-content @click="openChat(item.userId,index)">
                   <template >
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
-                    <v-list-item-subtitle v-text="item.dept"></v-list-item-subtitle>
+                    <v-list-item-title>
+                        {{ item.name }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle v-text="item.recentChat"></v-list-item-subtitle>
                   </template>
                 </v-list-item-content>
+                <v-list-item-action>
+                  <v-menu offset-y open-on-hover>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                          icon
+                          small
+                          v-bind="attrs"
+                          v-on="on">
+                        <v-badge
+                            color="red"
+                            :offset-y="10"
+                            :offset-x="40"
+                            :content="item.count"
+                            :value="item.count">
+                        </v-badge>
+                        <v-icon small>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item
+                          dense
+                          v-for="item in items"
+                          :key="item.title">
+                        <v-icon left small> {{ item.icon }} </v-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{item.title}}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-list-item-action>
               </v-list-item>
               <v-divider
                   :key="index"
@@ -50,151 +85,102 @@
 </template>
 
 <script>
+import {getMessageHistory, getMessageList, sendMessage} from "@/api/message";
+import {getUserInfo} from "@/api/account";
+
+export function formatNum(num){
+  return num < 10 ? "0" + num : num
+}
 const defaultImg = "https://jike-space.oss-cn-shanghai.aliyuncs.com/2023-05-05/0472a75ecd3540d59e44b035c0a9096b-Avatar.jpg"
 export default {
   name: "MyMessages",
   data(){
     return{
       title:"我的消息",
+      isBlocked: false,
       loading: false,
-      selectedItem: 0,
-      listData:[
-        {
-          date: "2020/04/25 21:19:07",
-          "text": { "text": "起床不" },
-          "mine": false,
-          "name": "留恋人间不羡仙",
-          "img": defaultImg
-        },
-        {
-          "date": "2020/04/25 21:19:07",
-          "text": { "text": "<audio data-src='https://www.w3school.com.cn/i/horse.mp3'/>" },
-          "mine": false,
-          "name": "只盼流星不盼雨",
-          "img": defaultImg
-        },
-        {
-          "date": "2020/04/25 21:19:07",
-          "text": { "text": "<img data-src='"+defaultImg+"' />" },
-          "mine": false,
-          "name": "只盼流星不盼雨",
-          "img": defaultImg
-        },
-        {
-          "date": "2020/04/25 21:19:07",
-          "text": { "text": "<img data-src='"+defaultImg+"'/>" },
-          "mine": false,
-          "name": "只盼流星不盼雨",
-          "img": defaultImg
-        },
-        {
-          "date": "2020/04/16 21:19:07",
-          "text": { "text": "你好" },
-          "mine": true,
-          "name": "JwChat",
-          "img": defaultImg
-        },
-        {
-          "date": "2021/03/02 13:14:21",
-          "mine": false,
-          "name": "留恋人间不羡仙",
-          "img": defaultImg,
-          "text": {"text": "你好呀"}
-        },
-        {
-          "date": "2020/04/25 21:19:07",
-          "text": {
-            "text": "<i class='el-icon-document-checked' style='font-size:2rem;'/>",
-            "subLink":{
-              "text": "a.txt",
-              "prop": {
-                underline: false
-              }
-            },
-          },
-          "mine": false,
-          "name": "留恋人间不羡仙",
-          "img": defaultImg
-        },
+      selectedItem: -1,
+      targetId: 0,
+      items:[
+        {title: "举报用户", icon:"mdi mdi-alert-octagram-outline"},
+        {title:"拉黑用户",icon:"mdi-cancel"},
+        {title:"清空记录",icon:"mdi-delete-sweep"}
       ],
-      name_A: "狗蛋",
-      name_B: "傻逼",
-      avatar_A: "",
-      avatar_B: "",
+      listData:[
+        // {
+        //   date: "2020/04/25 21:19:07",
+        //   text: { text: "起床不" },
+        //   mine: false,
+        //   name: "留恋人间不羡仙",
+        //   img: defaultImg
+        // },
+        // {
+        //   date: "2020/04/25 21:19:07",
+        //   text: { text: "<img data-src='"+defaultImg+"'/>" },
+        //   mine: false,
+        //   name: "只盼流星不盼雨",
+        //   img: defaultImg
+        // },
+        // {
+        //   date: "2020/04/16 21:19:07",
+        //   text: { text: "你好" },
+        //   mine: true,
+        //   name: "JwChat",
+        //   img: defaultImg
+        // },
+        // {
+        //   date: "2021/03/02 13:14:21",
+        //   mine: false,
+        //   name: "留恋人间不羡仙",
+        //   img: defaultImg,
+        //   text: {text: "你好呀"}
+        // },
+      ],
+      myName: "狗蛋",
+      myAvatar: defaultImg,
       timeDate:new Date(),
       // 输入框中的文字
       inputMsg: "",
       // 工具栏配置
       tool: {
-        show: ['file'],
+        showEmoji: true, // 是否显示表情图标
         callback: this.toolEvent,
       },
       followLists:[
         {
+          userId:4,
           avatar: defaultImg,
           name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
+          recentChat: '最简单、最便捷',
+          count: 1
         },
         {
+          userId:4,
           avatar: defaultImg,
           name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
+          recentChat: '最简单、最便捷',
+          count: 1
         },
         {
+          userId:4,
           avatar: defaultImg,
           name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
+          recentChat: '最简单、最便捷',
+          count: 1
         },
         {
+          userId:4,
           avatar: defaultImg,
           name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
+          recentChat: '最简单、最便捷',
+          count: 1
         },
         {
+          userId:4,
           avatar: defaultImg,
           name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
-        },
-        {
-          avatar: defaultImg,
-          name: 'JwChat',
-          dept: '最简单、最便捷',
-          callback: this.bindCover
+          recentChat: '最简单、最便捷',
+          count: 1
         },
       ],
       // 组件配置
@@ -204,12 +190,22 @@ export default {
         callback: this.bindCover,
         historyConfig: {
           show: true,
-          tip: "滚动到顶时候显示的提示",
+          tip: "已经滚动到底了哦~",
         }
       },
     }
   },
   methods:{
+    // 实时-时间-数据转换
+    formatDate(value) {
+      let year = value.getFullYear()
+      let month = formatNum(value.getMonth() + 1)
+      let day = formatNum(value.getDate())
+      let hour = formatNum(value.getHours())
+      let min = formatNum(value.getMinutes())
+      let sec = formatNum(value.getSeconds())
+      return year + "/" + month + "/" + day + " " + hour + ":" + min + ":" + sec
+    },
     // 点击聊天框列中的用户和昵称触发事件
     talkEvent(play) {
       console.log(play);
@@ -220,14 +216,54 @@ export default {
       const msg = this.inputMsg;
       if (!msg) return;
       const msgObj = {
-        date: this.timeDate,
+        date: this.formatDate(this.timeDate),
         text: { text: msg },
         mine: true,
-        name: this.name_A,
-        img: this.avatar_A,
+        name: this.myName,
+        img: this.myAvatar,
       };
-      this.listData.push(msgObj);
-      // 发送请求
+      if(!this.isBlocked){
+        this.listData.push(msgObj);
+        // 发送请求
+        const data = {
+          targetId: this.targetId,
+          text: msg,
+          time: msgObj.date
+        }
+        sendMessage(data)
+            .then((res) => {
+              if (res.code === 20000) {
+                console.log(res.msg)
+              } else {
+                console.log(res.msg);
+                this.$message.error("发送失败！");
+              }
+            })
+            .catch((err) => console.log("error: " + err));
+      }
+      else
+        this.$message.error("您已被对方拉黑，无法发送消息！")
+    },
+    openChat(userId,index){
+      this.selectedItem = index
+      getMessageHistory(userId)
+          .then((res) => {
+            if (res.code === 20000) {
+              console.log("获取私信消息成功");
+              this.isBlocked = res.data.isBlocked
+              this.listData = res.data.myHistories
+            } else {
+              console.log(res.msg);
+              this.$message.error("私信消息获取失败！");
+            }
+          })
+          .catch((err) => console.log("error: " + err));
+      this.$store.dispatch(
+          "count/updateState", { type: "message", count: this.followLists[index].count }
+      ).then(()=>{
+        console.log(this.$store.getters.total)
+      }).catch((err) => console.log("error: " + err))
+      this.followLists[index].count = 0
     },
     /**
      * @description:
@@ -248,6 +284,30 @@ export default {
     setInterval(function(){
       self.timeDate = new Date()
     },1000)
+    getUserInfo()
+        .then((res) => {
+          if (res.code === 20000) {
+            console.log("获取用户信息成功");
+            this.myName = res.data.username;
+            this.myAvatar = res.data.avatar;
+          } else {
+            console.log(res.msg);
+            this.$message.error("用户信息获取失败！");
+          }
+        })
+        .catch((err) => console.log("error: " + err));
+    getMessageList()
+        .then((res) => {
+          if (res.code === 20000) {
+            console.log("获取用户私信列表成功");
+            this.followLists = res.data.myLists
+            this.targetId = res.data.myLists[0].userId
+          } else {
+            console.log(res.msg);
+            this.$message.error("用户私信列表获取失败！");
+          }
+        })
+        .catch((err) => console.log("error: " + err));
   },
   // 实时-时间
   beforeDestroy() {
