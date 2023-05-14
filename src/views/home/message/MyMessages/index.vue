@@ -40,7 +40,7 @@
           <v-list-item-group v-model="selectedItem">
             <v-virtual-scroll
                 :items="followLists"
-                :item-height="62"
+                :item-height="56"
                 height="484">
             <template v-slot:default="{ item,index }">
               <v-list-item :key="index" class="pl-8" @click="openChat(item.userId,index)">
@@ -103,6 +103,13 @@
         @submit="submit_2"
     >
     </BlockConfirm>
+    <DeleteHistory
+        :dialogVisible="this.dialogVisible_3"
+        :targetId="this.targetId"
+        @callBack="callBack_3"
+        @submit="submit_3"
+    >
+    </DeleteHistory>
   </v-card>
 </template>
 
@@ -111,6 +118,7 @@ import {getMessageHistory, getMessageList, sendMessage} from "@/api/message";
 import {getUserInfo} from "@/api/account";
 import ReportUser from "@/views/home/message/MyMessages/ReposrtUser";
 import BlockConfirm from "@/views/home/message/MyMessages/BlockConfirm";
+import DeleteHistory from "@/views/home/message/MyMessages/DeleteHistory";
 
 export function formatNum(num){
   return num < 10 ? "0" + num : num
@@ -118,12 +126,13 @@ export function formatNum(num){
 const defaultImg = "https://jike-space.oss-cn-shanghai.aliyuncs.com/2023-05-05/0472a75ecd3540d59e44b035c0a9096b-Avatar.jpg"
 export default {
   name: "MyMessages",
-  components: {BlockConfirm, ReportUser},
+  components: {DeleteHistory, BlockConfirm, ReportUser},
   data(){
     return{
       title:"我的消息",
       dialogVisible_1:false,
       dialogVisible_2:false,
+      dialogVisible_3:false,
       isBlocked: false,
       loading: false,
       selectedItem: -1,
@@ -144,8 +153,7 @@ export default {
         showEmoji: true, // 是否显示表情图标
         callback: this.toolEvent,
       },
-      followLists:[
-      ],
+      followLists:[],
       // 组件配置
       config: {
         img: this.myAvatar,
@@ -166,9 +174,9 @@ export default {
       else if(id === 2){
         this.dialogVisible_2 = !this.dialogVisible_2
       }
-      // else if(id === 3){
-      //
-      // }
+      else if(id === 3){
+        this.dialogVisible_3 = !this.dialogVisible_3
+      }
     },
     callBack_1(flag){
       this.dialogVisible_1  = flag
@@ -182,6 +190,18 @@ export default {
     submit_2(flag){
       this.dialogVisible_2  = flag
       this.isBlocked = flag
+    },
+    callBack_3(flag){
+      this.dialogVisible_3  = flag
+    },
+    submit_3(flag){
+      this.dialogVisible_3  = flag
+      const index = this.followLists.findIndex(item => item.userId == this.targetId);
+      if(index !== -1)
+        this.followLists.splice(index,1);
+      this.targetId = 0;
+      this.selectedItem = -1;
+      this.listData = [];
     },
     // 实时-时间-数据转换
     formatDate(value) {

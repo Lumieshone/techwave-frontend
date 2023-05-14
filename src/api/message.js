@@ -52,11 +52,11 @@ export function getMessageHistory(targetId) {
     });
 }
 
-export function clearMessageHistory(targetId) {
+export function deleteHistory(targetId) {
     return request({
         url: "/message/history",
         method: "delete",
-        data: { targetId: targetId },
+        params: { targetId: targetId },
     });
 }
 
