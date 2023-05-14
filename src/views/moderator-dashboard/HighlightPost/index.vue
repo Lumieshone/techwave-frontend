@@ -4,7 +4,7 @@
     <v-toolbar
         flat
     >
-      <v-btn color="#6A5ACD" class="mt-1 ml-1 white--text" @click="dialog = true">
+      <v-btn color="primary" class="mt-1 ml-1 white--text" @click="dialog = true">
         <v-icon>mdi-plus</v-icon>
         帖子加精
       </v-btn>
@@ -30,13 +30,14 @@
     { text: '标题', value: 'title' },
     { text: '操作', value: 'action' }
   ]"
+                :hide-default-footer="results.length === 0"
                 class="my-table"
             >
               <template v-slot:[`item.title`]="{ item }">
                 <span>{{ item.title }}</span>
               </template>
               <template v-slot:[`item.action`]="{ item }">
-                <v-btn small color="success" @click="highlightPost(item.id)">加精</v-btn>
+                <v-btn small color="primary" @click="highlightPost(item.id)">加精</v-btn>
               </template>
             </v-data-table>
           </v-form>

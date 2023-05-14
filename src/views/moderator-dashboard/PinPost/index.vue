@@ -4,7 +4,7 @@
     <v-toolbar
         flat
     >
-      <v-btn color="#6A5ACD" class="mt-1 ml-1 white--text" @click="dialog = true">
+      <v-btn color="primary" class="mt-1 ml-1 white--text" @click="dialog = true">
         <v-icon>mdi-plus</v-icon>
         新增置顶帖子
       </v-btn>
@@ -31,12 +31,13 @@
     { text: '操作', value: 'action' }
   ]"
                 class="my-table"
+                :hide-default-footer="results.length === 0"
             >
               <template v-slot:[`item.title`]="{ item }">
                 <span>{{ item.title }}</span>
               </template>
               <template v-slot:[`item.action`]="{ item }">
-                <v-btn small color="success" @click="pinPost(item.id)">置顶</v-btn>
+                <v-btn small color="primary" @click="pinPost(item.id)">置顶</v-btn>
               </template>
             </v-data-table>
           </v-form>

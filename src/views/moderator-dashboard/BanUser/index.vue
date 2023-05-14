@@ -2,12 +2,23 @@
     <v-card height="580" class="ma-4 mb-6">
         <v-card-title v-text="title"></v-card-title>
         <div style="margin-left: 20px;">
-            <v-text-field label="请输入用户ID" style="width:360px" variant="outlined"></v-text-field>
-            <v-combobox style="width:360px" label="选择时长" :items="['1天', '15天', '30天', '180天']"></v-combobox>
-<!--          <v-date-picker v-model="banDate" />-->
-            <v-btn variant="outlined">
-                封禁
-            </v-btn>
+          <v-text-field
+              v-model="targetId"
+              label="用户ID"
+              type="number"
+              style="width: 350px"
+          />
+          <v-select
+              v-model="banUntil"
+              :items="['一个月', '三个月', '半年', '一年']"
+              label="封禁时间"
+              style="width: 350px"
+          />
+          <v-btn
+              @click="ban(targetId, banUntil)"
+          >
+            封禁用户
+          </v-btn>
         </div>
         <div style="font-weight: bold;margin-left: 20px;margin-top: 50px;">封禁用户列表</div>
         <v-row no-gutters justify="center">
@@ -32,11 +43,13 @@
 
 <script>
 import { getBannedUsers } from "@/api/moderator";
-import { unbanUser } from "@/api/moderator";
+import { unbanUser,banUser } from "@/api/moderator";
 export default {
     name: "BanUser",
     data() {
         return {
+          targetId: null,
+          banUntil: null,
             sectionId: null,
             title: '封禁用户',
           banDate:"",
@@ -48,6 +61,7 @@ export default {
                     value: 'userId',
                 },
                 { text: '用户名', value: 'userName', sortable: false },
+              { text: '封禁时间', value: 'createdAt', sortable: false },
                 { text: '解禁时间', value: 'banUntil', sortable: false },
                 { text: '操作', value: 'actions', sortable: false },
             ],
@@ -59,7 +73,21 @@ export default {
             console.log(id, this.$route.params.sectionId)
             unbanUser({targetId:id, sectionId:this.$route.params.sectionId})
           window.location.reload();
-        }
+        },
+      ban (targetId, banUntil) {
+          console.log(targetId,this.$route.params.sectionId,banUntil)
+        banUser(targetId,this.$route.params.sectionId,banUntil)
+            .then(res => {
+              if (res.code === 20000)
+                console.log("封禁用户成功")
+              else {
+                console.log(res.msg)
+                this.$message.error("封禁用户失败！")
+              }
+            })
+            .catch((err) => console.log("error: " + err));
+        window.location.reload();
+      }
     },
     mounted() {
         this.sectionId = this.$route.params.sectionId;

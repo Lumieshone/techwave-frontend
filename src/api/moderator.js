@@ -205,11 +205,15 @@ export function getBannedUsers(sectionId) {
     });
 }
 
-export function banUser(data) {
+export function banUser(targetId,sectionId,banUntil) {
     return request({
         url: "/moderator/ban_user",
         method: "post",
-        data,
+        data:{
+            targetId: targetId,
+            sectionId: sectionId,
+            banUntil: banUntil,
+        },
     });
 }
 

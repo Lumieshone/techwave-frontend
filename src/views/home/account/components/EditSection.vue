@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="this.showDialog" persistent width="30%">
     <v-card class="mx-auto">
-      <v-toolbar color="#483D8B" cards dark flat>
+      <v-toolbar color="#4350af" cards dark flat>
         <v-icon>mdi-application-edit-outline</v-icon>
         <v-card-title class="text-h6 font-weight-regular">
           <strong>编辑版块</strong>
@@ -16,7 +16,7 @@
             v-model="select"
             :items="choices"
             prepend-icon="mdi-checkbox-marked-outline"
-            color="#483D8B"
+            color="#4350af"
             label="选择要编辑的内容"
         >
         </v-select>
@@ -29,7 +29,7 @@
             outlined
             :show-size="1000"
             accept="image/*"
-            color="#483D8B"
+            color="#4350af"
             prepend-icon="mdi-panorama-outline"
         >
         </v-file-input>
@@ -42,7 +42,7 @@
             prepend-icon="mdi-draw-pen"
             :counter="20"
             :rules="introRules"
-            color="#483D8B"
+            color="#4350af"
             label="编辑版块简介"
             required
         ></v-text-field>
@@ -55,7 +55,7 @@
             prepend-icon="mdi-draw-pen"
             :counter="20"
             :rules="nameRules"
-            color="#483D8B"
+            color="#4350af"
             label="修改板块名称"
             required
         ></v-text-field>
@@ -65,14 +65,14 @@
             :items="subChoices"
             prepend-icon="mdi-tag-heart-outline"
             label="选择对子版块进行的操作"
-            color="#483D8B"
+            color="#4350af"
         >
         </v-select>
         <v-combobox
             v-model="model"
             v-if="select===choices[3] && subSelect===subChoices[0]"
             :filter="filter"
-            color="#483D8B"
+            color="#4350af"
             prepend-icon="mdi-tag-plus-outline"
             :hide-no-data="!search"
             :items="items"
@@ -161,7 +161,7 @@
             :items="subSections"
             prepend-icon="mdi-tag-search-outline"
             label="请选择子版块"
-            color="#483D8B"
+            color="#4350af"
             item-text="name"
             item-value="id"
         >
@@ -175,19 +175,19 @@
             prepend-icon="mdi-draw-pen"
             :counter="20"
             :rules="nameRules"
-            color="#483D8B"
+            color="#4350af"
             label="新名字"
             required
         ></v-text-field>
         <v-row justify="end">
           <v-btn
-              color="#6A5ACD"
+              color="#4350af"
               class="ma-3 white--text"
               @click="closeDialog"
           >返回
           </v-btn>
           <v-btn
-              color="#6A5ACD"
+              color="#4350af"
               :disabled="!valid"
               class="ma-3 white--text"
               @click="Submit"
