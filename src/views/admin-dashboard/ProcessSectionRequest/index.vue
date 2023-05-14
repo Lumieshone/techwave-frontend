@@ -55,6 +55,7 @@
         class="ma-2"
         color="green"
         dark
+        
         @click="approveItem(item)"
       >
         通过

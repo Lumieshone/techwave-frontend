@@ -53,3 +53,19 @@ export function getReport(page, perPage) {
     },
   });
 }
+
+export function getBanList(){
+  return request({
+    url:"/admin/ban_user",
+    method:"get",
+
+  })
+}
+
+export function unbanUser(data){
+  return request({
+    url:"admin/unban_user",
+    method:"post",
+    data
+  })
+}
