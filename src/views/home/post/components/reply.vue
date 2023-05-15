@@ -41,7 +41,7 @@
                 <v-btn
                   text
                   small
-                  :disabled="!isLogin"
+                  :disabled="!isLogin | isBanned"
                   @click="
                     openReplyDialog(
                       singleReplyData.authorName,
@@ -50,7 +50,9 @@
                   "
                   class="ml-2"
                 >
-                  <span style="color: grey">评论</span>
+                  <span style="color: grey">{{
+                    isBanned ? "当前被封禁中，无法发言" : "评论"
+                  }}</span>
                 </v-btn>
               </v-col>
             </v-row>
@@ -194,6 +196,7 @@ export default {
       toId: Number,
       content: String,
       ableToDelete: Boolean,
+      isBanned: Boolean,
     },
   },
   data() {

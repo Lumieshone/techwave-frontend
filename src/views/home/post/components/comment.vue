@@ -43,6 +43,7 @@
                   <PostReply
                     :replyData="commentData.replyVOList"
                     :sectionId="sectionId"
+                    :isBanned="Boolean(isBanned)"
                     :isLogin="Boolean(isLogin)"
                     @refresh="refresh"
                   ></PostReply>
@@ -56,7 +57,7 @@
                         color="#7d73be"
                         fab
                         small
-                        :disabled="!isLogin"
+                        :disabled="!isLogin | isBanned"
                         @click="openReplyDialog(commentData.commentId)"
                         v-bind="attrs"
                         v-on="on"
@@ -64,7 +65,9 @@
                         <v-icon color="white">mdi-comment</v-icon>
                       </v-btn>
                     </template>
-                    <span>评论</span>
+                    <span>{{
+                      isBanned ? "当前被封禁中，无法发言" : "评论"
+                    }}</span>
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -198,6 +201,7 @@ export default {
       replyVOList: Array,
       ableToDelete: Boolean,
       sectionId: Number,
+      isBanned: Boolean,
     },
     sectionId: Number,
     postId: Number,

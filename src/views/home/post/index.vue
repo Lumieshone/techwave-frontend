@@ -165,6 +165,7 @@
             :postId="Number(postId)"
             :isLogin="Boolean(isLogin)"
             :sectionId="postData.sectionId"
+            :isBanned="Boolean(postData.isBanned)"
             @refresh="refreshList"
           />
         </div>
@@ -209,9 +210,9 @@
           class="ma-2 white--text"
           right
           @click="replyOnPost"
-          :disabled="!isLogin"
+          :disabled="!isLogin | postData.isBanned"
         >
-          {{ isLogin ? "评论" : "请先登录再发表评论" }}
+          {{ replyOnPostMessage }}
         </v-btn>
 
         <!-- 举报 -->
@@ -259,6 +260,17 @@ export default {
     // rich text
     Editor,
     Toolbar,
+  },
+  computed: {
+    replyOnPostMessage: function () {
+      if (!this.isLogin) {
+        return "请先登录再发表评论";
+      } else if (this.postData.isBanned) {
+        return "当前正在封禁中，无法发言";
+      } else {
+        return "评论";
+      }
+    },
   },
   data() {
     return {

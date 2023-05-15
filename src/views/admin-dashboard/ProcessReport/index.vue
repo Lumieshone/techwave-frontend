@@ -101,7 +101,7 @@
       <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
         <v-icon
-          color="primary"
+          color="indigo"
           dark
           v-bind="attrs"
           v-on="on"
