@@ -19,6 +19,7 @@
     :items="reportData"
     :search="search"
     hide-default-footer
+    calculate-widths
     class="elevation-1"
   >
     <template v-slot:top>
@@ -97,7 +98,8 @@
     </template>
     <!--操作栏-->
     <!-- eslint-disable-next-line -->
-    <template v-slot:item.operation="{ item }">
+    <template v-slot:item.operation="{ item }" >
+      
       <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
         <v-icon
@@ -112,7 +114,7 @@
       </template>
       <span>封禁</span>
     </v-tooltip>
-    <v-spacer></v-spacer>
+    <!-- <v-spacer></v-spacer> -->
     <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
         <v-icon
@@ -244,8 +246,7 @@ export default {
       {text:'头像',sortable:false,value:'avatar'},
       {text:'举报理由',sortable:false,value:'reportReason'},
       {text:'图片',sortable:false,value:'image'},
-      {text:'操作',sortable:false,value:'operation'},
-      { text: '', value: 'data-table-expand' },
+      {text:'操作',sortable:false,value:'operation',width:'100'},
     ],
     headersOfBan:[{
         text:'封禁列表ID',
