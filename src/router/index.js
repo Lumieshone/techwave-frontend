@@ -94,6 +94,11 @@ export const constantRoutes = [
         meta: { title: "封禁用户" },
         component: () => import("@/views/moderator-dashboard/BanUser/index"),
       },
+      {
+        path: "/moderator-dashboard/:sectionId/moderator-transfer",
+        meta: { title: "版主转让" },
+        component: () => import("@/views/moderator-dashboard/ModeratorTransfer/index"),
+      },
     ],
   },
 

@@ -101,13 +101,13 @@ export function searchUser(content, page, perPage) {
     });
 }
 
-export function transferSection(sectionId, transferredId) {
+export function transferSection(sectionId, targetId) {
     return request({
         url: "/moderator/transfer_section",
         method: "post",
         data: {
             sectionId,
-            transferredId,
+            targetId,
         },
     });
 }

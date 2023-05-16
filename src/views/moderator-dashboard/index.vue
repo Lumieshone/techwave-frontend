@@ -17,12 +17,6 @@
       expand-on-hover
       :mini-variant.sync="mini"
     >
-      <!-- <v-list-item class="px-2">
-        <v-btn icon @click.stop="mini = !mini">
-          <v-icon>{{ mini ? "mdi-chevron-right" : "mdi-chevron-left" }}</v-icon>
-          <h3 v-if="!mini">ID：{{ sectionId }}</h3>
-        </v-btn>
-      </v-list-item> -->
       <v-list>
         <v-list-item
           :to="{ path: `/moderator-dashboard/${sectionId}/edit-section` }"
@@ -63,6 +57,14 @@
             <v-icon>mdi-account-off-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-title>封禁用户</v-list-item-title>
+        </v-list-item>
+        <v-list-item
+            :to="{ path: `/moderator-dashboard/${sectionId}/moderator-transfer` }"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-account-switch</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>版主转让</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>

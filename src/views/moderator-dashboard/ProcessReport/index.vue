@@ -111,7 +111,7 @@
 import {acceptCommentReport, acceptPostReport, denyPostReport, getCommentReport, getPostReport} from "@/api/moderator";
 
 export default {
-  name: "AccountSection",
+  name: "ProcessReport",
   data(){
     return {
       title1:"举报帖子列表",
@@ -153,43 +153,73 @@ export default {
       console.log(item.id)
       denyPostReport(item.id)
           .then(res => {
-            if(res.code === 20000)
+            if(res.code === 20000) {
               console.log("拒绝举报成功")
+              this.dialog = false;
+              getCommentReport(this.$route.params.sectionId,1,10)
+                  .then(res => {
+                    if (res.code === 20000) {
+                      this.reportCommentInfo = res.data.reportDataVOList
+                    }
+                  })
+                  .catch((err) => console.log("error: " + err));
+              getPostReport(this.$route.params.sectionId,1,10)
+                  .then(res => {
+                    if (res.code === 20000) {
+                      this.reportPostInfo = res.data.postReportDataVOList
+                    }
+                  })
+                  .catch((err) => console.log("error: " + err));
+            }
             else{
               console.log(res.msg)
               this.$message.error("拒绝举报失败！")
             }
           })
           .catch((err) => console.log("error: " + err));
-      window.location.reload();
     },
     acceptPostDelete(item){
       console.log(item.reportedId)
       acceptPostReport(item.reportedId)
           .then(res => {
             if(res.code === 20000)
+            {
               console.log("通过帖子举报成功")
+              this.dialog = false;
+              getPostReport(this.$route.params.sectionId,1,10)
+                  .then(res => {
+                    if (res.code === 20000) {
+                      this.reportPostInfo = res.data.postReportDataVOList
+                    }
+                  })
+            }
             else{
               console.log(res.msg)
               this.$message.error("通过帖子举报失败！")
             }
           })
           .catch((err) => console.log("error: " + err));
-      window.location.reload();
     },
     acceptCommentDelete(item){
       console.log(item.reportedId, item.reportType)
       acceptCommentReport(item.reportedId, item.reportType)
           .then(res => {
-            if(res.code === 20000)
+            if(res.code === 20000) {
               console.log("通过评论或回复举报成功")
+              this.dialog = false;
+              getCommentReport(this.$route.params.sectionId,1,10)
+                  .then(res => {
+                    if (res.code === 20000) {
+                      this.reportCommentInfo = res.data.reportDataVOList
+                    }
+                  })
+            }
             else{
               console.log(res.msg)
               this.$message.error("通过评论或回复举报失败！")
             }
           })
           .catch((err) => console.log("error: " + err));
-      window.location.reload();
     },
     editItem(item){
       console.log(item)

@@ -88,21 +88,37 @@ export default {
   methods: {
     unban(id) {
       console.log(id, this.$route.params.sectionId);
-      unbanUser({ targetId: id, sectionId: this.$route.params.sectionId });
-      window.location.reload();
+      unbanUser({ targetId: id, sectionId: this.$route.params.sectionId }).then((res) => {
+        if (res.code == 20000) {
+          this.$message.success("操作成功，更新中……");
+          this.dialog = false;
+          getBannedUsers(this.$route.params.sectionId).then((res) => {
+            if (res.code === 20000) {
+              this.pinnedPostInfo = res.data;
+            }
+          });
+        }
+      });
     },
     ban(targetId, banUntil) {
       console.log(targetId, this.$route.params.sectionId, banUntil);
       banUser(targetId, this.$route.params.sectionId, banUntil)
         .then((res) => {
-          if (res.code === 20000) console.log("封禁用户成功");
+          if (res.code === 20000){
+            console.log("封禁用户成功");
+            this.dialog = false;
+            getBannedUsers(this.$route.params.sectionId).then((res) => {
+              if (res.code === 20000) {
+                this.pinnedPostInfo = res.data;
+              }
+            });
+          }
           else {
             console.log(res.msg);
             this.$message.error("封禁用户失败！");
           }
         })
         .catch((err) => console.log("error: " + err));
-      window.location.reload();
     },
   },
   mounted() {
@@ -110,12 +126,11 @@ export default {
     getBannedUsers(this.$route.params.sectionId)
       .then((res) => {
         if (res.code === 20000) {
-          console.log("获取置顶板块成功");
-          console.log(res.data.postDataVOList);
+          console.log("获取封禁用户信息成功");
           this.pinnedPostInfo = res.data;
         } else {
           console.log(res.msg);
-          this.$message.error("置顶板块信息获取失败！");
+          this.$message.error("封禁用户获取失败！");
         }
       })
       .catch((err) => console.log("error: " + err));

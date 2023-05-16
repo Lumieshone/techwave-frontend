@@ -79,10 +79,10 @@
 </template>
 
 <script>
-import { getHighlightedPosts, searchPostInSection } from "@/api/section";
+import {getHighlightedPosts, searchPostInSection} from "@/api/section";
 import { highlightOrNotHighlightPost } from "@/api/moderator";
 export default {
-  name: "AccountSection",
+  name: "HighlightPost",
   data() {
     return {
       title: "加精帖子列表",
@@ -123,9 +123,19 @@ export default {
       this.showSectionDialog = !this.showSectionDialog;
     },
     highlightPost(id) {
-      highlightOrNotHighlightPost(id);
-      console.log(id);
-      window.location.reload();
+      highlightOrNotHighlightPost(id)
+          .then((res) => {
+            if (res.code === 20000) {
+              this.$message.success("操作成功，更新中……");
+              this.dialog = false;
+              getHighlightedPosts(this.$route.params.sectionId ,1, 10).then((res) => {
+                if (res.code === 20000) {
+                  this.pinnedPostInfo = res.data.postDataVOList;
+                }
+              });
+            }
+          })
+          .catch((err) => console.log("error: " + err));
     },
     search() {
       console.log(this.keyword);
