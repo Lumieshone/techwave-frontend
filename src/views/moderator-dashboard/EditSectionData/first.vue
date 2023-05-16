@@ -36,7 +36,7 @@
           prepend-icon="mdi-card-account-details-outline"
           :counter="100"
           color="#483D8B"
-          label="板块名称"
+          label="版块名称"
       ></v-textarea>
       <v-textarea
           v-model="intro"
@@ -49,7 +49,7 @@
           prepend-icon="mdi-face-man-shimmer"
           :counter="100"
           color="#483D8B"
-          label="板块介绍"
+          label="版块介绍"
       ></v-textarea>
       <v-row justify="end">
         <v-btn
@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       isLogin: this.$store.getters.roles.length !== 0,
-      title: "板块信息",
+      title: "版块信息",
       isReadonly: true,
       isFilled: true,
       isDisabled: false,
@@ -90,7 +90,7 @@ export default {
       id:this.SectionId,
       name: "",
       sectionAvatar: "",
-      introRules: [(v) => v.length <= 150 || "板块介绍不应超过150个字符"],
+      introRules: [(v) => v.length <= 150 || "版块介绍不应超过150个字符"],
       intro: ""
     };
   },
@@ -124,20 +124,20 @@ export default {
             .then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
-                this.$message.success("修改板块名称成功！");
+                this.$message.success("修改版块名称成功！");
                 window.location.reload();
               }
-              else this.$message.error("修改板块名称失败~");
+              else this.$message.error("修改版块名称失败~");
             })
             .catch((err) => console.log("error: " + err));
         editSectionDescription(this.sectionId,this.intro)
             .then((res) => {
               console.log(res.message);
               if (res.code === 20000) {
-                this.$message.success("修改板块简介成功！");
+                this.$message.success("修改版块简介成功！");
                 window.location.reload();
               }
-              else this.$message.error("修改板块简介失败~");
+              else this.$message.error("修改版块简介失败~");
             })
             .catch((err) => console.log("error: " + err));
       }
@@ -160,12 +160,12 @@ export default {
       getSectionInfo(this.sectionId)
           .then((res) => {
             if (res.code === 20000) {
-              console.log("获取板块信息成功");
+              console.log("获取版块信息成功");
               this.sectionAvatar = res.data.avatar;
               this.name = res.data.name;
               this.intro = res.data.description;
             } else {
-              this.$message.error("板块信息获取失败！");
+              this.$message.error("版块信息获取失败！");
             }
           })
           .catch((err) => console.log("error: " + err));

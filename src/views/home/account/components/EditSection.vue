@@ -56,7 +56,7 @@
             :counter="20"
             :rules="nameRules"
             color="#4350af"
-            label="修改板块名称"
+            label="修改版块名称"
             required
         ></v-text-field>
         <v-select

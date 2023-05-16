@@ -86,7 +86,7 @@ export default {
   },
   data(){
     return {
-      title:"板块资料编辑",
+      title:"版块资料编辑",
       showSectionDialog: false,
       showEditDialog: false,
       headers: [
@@ -97,7 +97,7 @@ export default {
           value: 'sectionName',
         },
         { text: '版块头像', value: 'sectionAvatar', sortable: false },
-        { text: '板块简介', value: 'sectionIntro', sortable: false },
+        { text: '版块简介', value: 'sectionIntro', sortable: false },
         { text: '版块操作', value: 'actions', sortable: false },
       ],
       item:[],

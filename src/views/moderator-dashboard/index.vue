@@ -108,13 +108,13 @@ export default {
       getSectionInfo(this.sectionId)
         .then((res) => {
           if (res.code === 20000) {
-            console.log("获取板块信息成功");
+            console.log("获取版块信息成功");
             this.sectionAvatar = res.data.avatar;
             this.sectionName = res.data.name;
             this.intro = res.data.description;
             console.log(this.sectionName, res.data.name);
           } else {
-            this.$message.error("板块信息获取失败！");
+            this.$message.error("版块信息获取失败！");
           }
         })
         .catch((err) => console.log("error: " + err));

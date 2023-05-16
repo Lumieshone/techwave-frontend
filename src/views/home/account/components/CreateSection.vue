@@ -243,13 +243,11 @@ export default {
         }
         createSection(fd)
             .then((res) => {
-              console.log(res.msg);
-              console.log(res.success)
               if (res.code === 20000) {
-                this.$message.success("创建版块成功！");
+                this.$message.success("已成功创建版块申请！");
                 this.$emit("submit_1", false);
               }
-              else this.$message.error("创建版块失败~");
+              else this.$message.error("创建版块申请失败~");
             })
             .catch((err) => console.log("error: " + err));
         this.clearDialog()
