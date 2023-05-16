@@ -151,7 +151,7 @@ export default {
     },
     deny1(item){
       console.log(item.id)
-      denyPostReport(item.id)
+      denyPostReport(item.userId,item.id)
           .then(res => {
             if(res.code === 20000) {
               console.log("拒绝举报成功")
@@ -180,7 +180,7 @@ export default {
     },
     acceptPostDelete(item){
       console.log(item.reportedId)
-      acceptPostReport(item.reportedId)
+      acceptPostReport(item.userId,item.reportedId)
           .then(res => {
             if(res.code === 20000)
             {
@@ -202,7 +202,7 @@ export default {
     },
     acceptCommentDelete(item){
       console.log(item.reportedId, item.reportType)
-      acceptCommentReport(item.reportedId, item.reportType)
+      acceptCommentReport(item.userId,item.reportedId, item.reportType)
           .then(res => {
             if(res.code === 20000) {
               console.log("通过评论或回复举报成功")

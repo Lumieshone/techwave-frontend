@@ -136,21 +136,23 @@ export function getCommentReport( sectionId,page, perPage) {
     });
 }
 
-export function denyPostReport(reportId) {
+export function denyPostReport(userId,reportId) {
     return request({
         url: "/moderator/post_report",
         method: "delete",
         params: {
+            userId,
             reportId,
         },
     });
 }
 
-export function acceptPostReport(targetId) {
+export function acceptPostReport(userId,targetId) {
     return request({
         url: "/moderator/post",
         method: "delete",
         params: {
+            userId,
             targetId,
         },
     });
@@ -164,11 +166,12 @@ export function denyCommentReport(data) {
     });
 }
 
-export function acceptCommentReport(targetId,reportType) {
+export function acceptCommentReport(userId,targetId,reportType) {
     return request({
         url: "/moderator/comment",
         method: "delete",
         data:{
+            userId:userId,
             targetId: targetId,
             reportType: reportType,
         },
