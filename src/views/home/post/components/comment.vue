@@ -57,7 +57,7 @@
                         color="#7d73be"
                         fab
                         small
-                        :disabled="!isLogin | isBanned"
+                        :disabled="!isLogin || isBanned"
                         @click="openReplyDialog(commentData.commentId)"
                         v-bind="attrs"
                         v-on="on"
@@ -201,11 +201,11 @@ export default {
       replyVOList: Array,
       ableToDelete: Boolean,
       sectionId: Number,
-      isBanned: Boolean,
     },
     sectionId: Number,
     postId: Number,
     isLogin: Boolean,
+    isBanned: Boolean,
   },
   components: {
     PostReply,

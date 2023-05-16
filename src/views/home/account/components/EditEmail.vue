@@ -111,7 +111,6 @@ export default {
                 this.$emit("callBack",this.email)
                 this.$emit("close",false)
                 this.clearDialog()
-                // window.location.reload();
               }
               else{
                 this.$message.error("密码输入错误！");

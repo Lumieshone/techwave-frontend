@@ -126,7 +126,7 @@ export default {
       highlightOrNotHighlightPost(id)
           .then((res) => {
             if (res.code === 20000) {
-              this.$message.success("操作成功，更新中……");
+              this.$message.success("操作成功！");
               this.dialog = false;
               getHighlightedPosts(this.$route.params.sectionId ,1, 10).then((res) => {
                 if (res.code === 20000) {

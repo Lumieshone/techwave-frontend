@@ -5,6 +5,10 @@
         TechWave版主中台 | ID {{ sectionId }} | 名称：{{ sectionName }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn @click="goToHome" text>
+        <v-icon left>mdi-home</v-icon>
+        回到首页
+      </v-btn>
       <v-btn @click="logout" text>
         <v-icon left>mdi-logout</v-icon>
         退出登录
@@ -100,6 +104,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    goToHome() {
+      this.$router.push("/home");
     },
   },
   mounted() {

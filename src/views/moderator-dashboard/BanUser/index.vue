@@ -90,7 +90,7 @@ export default {
       console.log(id, this.$route.params.sectionId);
       unbanUser({ targetId: id, sectionId: this.$route.params.sectionId }).then((res) => {
         if (res.code == 20000) {
-          this.$message.success("操作成功，更新中……");
+          this.$message.success("操作成功！");
           this.dialog = false;
           getBannedUsers(this.$route.params.sectionId).then((res) => {
             if (res.code === 20000) {

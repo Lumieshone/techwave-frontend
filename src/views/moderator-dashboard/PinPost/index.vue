@@ -126,7 +126,7 @@ export default {
     pinPost(id) {
       pinOrNotPinPost(id).then((res) => {
         if (res.code == 20000) {
-          this.$message.success("操作成功，更新中……");
+          this.$message.success("操作成功！");
           this.dialog = false;
           getPinnedPosts(this.$route.params.sectionId).then((res) => {
             if (res.code === 20000) {

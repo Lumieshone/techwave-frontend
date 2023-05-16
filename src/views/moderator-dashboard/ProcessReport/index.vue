@@ -150,11 +150,10 @@ export default {
       this.showSectionDialog = !this.showSectionDialog
     },
     deny1(item){
-      console.log(item.id)
       denyPostReport(item.userId,item.id)
           .then(res => {
             if(res.code === 20000) {
-              console.log("拒绝举报成功")
+              this.$message.success("拒绝举报成功")
               this.dialog = false;
               getCommentReport(this.$route.params.sectionId,1,10)
                   .then(res => {
@@ -184,7 +183,7 @@ export default {
           .then(res => {
             if(res.code === 20000)
             {
-              console.log("通过帖子举报成功")
+              this.$message.success("通过帖子举报成功")
               this.dialog = false;
               getPostReport(this.$route.params.sectionId,1,10)
                   .then(res => {
@@ -194,18 +193,15 @@ export default {
                   })
             }
             else{
-              console.log(res.msg)
               this.$message.error("通过帖子举报失败！")
             }
           })
-          .catch((err) => console.log("error: " + err));
     },
     acceptCommentDelete(item){
-      console.log(item.reportedId, item.reportType)
       acceptCommentReport(item.userId,item.reportedId, item.reportType)
           .then(res => {
             if(res.code === 20000) {
-              console.log("通过评论或回复举报成功")
+              this.$message.success("通过评论或回复举报成功")
               this.dialog = false;
               getCommentReport(this.$route.params.sectionId,1,10)
                   .then(res => {
@@ -225,24 +221,6 @@ export default {
       console.log(item)
       this.showEditDialog = !this.showEditDialog
       this.item = item
-    },
-    callBack_1(flag){
-      this.showSectionDialog  = flag
-    },
-    callBack_2(flag){
-      this.showEditDialog  = flag
-    },
-    submit_1(flag){
-      this.showSectionDialog = flag
-      window.location.reload();
-    },
-    submit_2(flag){
-      this.showEditDialog = flag
-      window.location.reload();
-    },
-    closeConfirm(flag){
-      this.showConfirm = flag
-      window.location.reload();
     },
     stepToSection(item){
       this.$router.push({path: '/post/'+ item.reportedId})

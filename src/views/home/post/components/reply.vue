@@ -10,7 +10,7 @@
             <v-row>
               <!-- 左侧：回复内容 -->
               <v-col class="pr-2" cols="8">
-                <v-list-item-title>
+                <v-list-item-title style="white-space: pre-wrap;">
                   <span>{{ singleReplyData.authorName }}</span> 回复
                   <span>{{ singleReplyData.toName }}:</span>
                   <span>{{ singleReplyData.content }}</span>
@@ -41,7 +41,7 @@
                 <v-btn
                   text
                   small
-                  :disabled="!isLogin | isBanned"
+                  :disabled="!isLogin || isBanned"
                   @click="
                     openReplyDialog(
                       singleReplyData.authorName,
@@ -51,7 +51,7 @@
                   class="ml-2"
                 >
                   <span style="color: grey">{{
-                    isBanned ? "当前被封禁中，无法发言" : "评论"
+                    isBanned ? "无法发言" : "评论"
                   }}</span>
                 </v-btn>
               </v-col>
@@ -196,8 +196,8 @@ export default {
       toId: Number,
       content: String,
       ableToDelete: Boolean,
-      isBanned: Boolean,
     },
+    isBanned: Boolean,
   },
   data() {
     return {
