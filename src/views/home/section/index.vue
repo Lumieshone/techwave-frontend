@@ -67,6 +67,7 @@
                   color="#6A5ACD"
                   text
                   @click="showPostDialog = true"
+                  :disabled="!isLogin || sectionData.isBanned"
                   v-bind="attrs"
                   v-on="on"
                   small
