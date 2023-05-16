@@ -101,7 +101,7 @@ export default {
       isDisabled: false,
       valid: true,
       avatar: require("@/assets/avatar.jpg"),
-      username: "",
+      username: this.$store.getters.username,
       account: "",
       phoneNum: "",
       gender: "",
@@ -134,6 +134,7 @@ export default {
             console.log(res.message);
             if (res.code === 20000) {
               this.$message.success("修改个人信息成功！");
+              this.$store.commit("user/SET_USERNAME",this.username);
             }
             else this.$message.error("修改个人信息失败~");
           })

@@ -108,10 +108,6 @@ export default {
       this.showSectionDialog = flag;
       // window.location.reload();
     },
-    closeConfirm(flag) {
-      this.showConfirm = flag;
-      window.location.reload();
-    },
     stepToSection(item) {
       this.$router.push({
         path: "/section/" + item.sectionId,

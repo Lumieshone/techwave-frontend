@@ -41,7 +41,7 @@
                   <v-list-item-title class="text-h6">
                     {{ username }}
                   </v-list-item-title>
-                  <v-list-item-subtitle>{{ userEmail }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>TW号：{{ account }}</v-list-item-subtitle>
                   <v-list-item-subtitle
                     class="pt-1"
                     @click="changeAvatar"
@@ -115,6 +115,11 @@ import { changeAvatar, getUserInfo } from "@/api/account";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Account",
+  computed:{
+    username(){
+      return this.$store.getters.username
+    }
+  },
   data() {
     return {
       isLogin: this.$store.getters.roles.length !== 0,
@@ -123,9 +128,8 @@ export default {
       // nickname:'莴苣某人',
       // userEmail:'2053382@tongji.edu.cn',
       // userAvatar:require("@/assets/avatar.jpg"),
-      userEmail: "",
-      userAvatar: "",
-      username: "",
+      userAvatar: this.$store.getters.avatar,
+      account:"",
       items: [
         { title: "个人信息", icon: "mdi-account-box", router: "/account/info" },
         { title: "我的收藏", icon: "mdi-star", router: "/account/collect" },
@@ -185,9 +189,7 @@ export default {
         .then((res) => {
           if (res.code === 20000) {
             console.log("获取用户信息成功");
-            this.username = res.data.username;
-            this.userEmail = res.data.email;
-            this.userAvatar = res.data.avatar;
+            this.account = res.data.account;
           } else {
             console.log(res.msg);
             this.$message.error("用户信息获取失败！");

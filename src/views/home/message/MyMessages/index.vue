@@ -40,7 +40,7 @@
           <v-list-item-group v-model="selectedItem">
             <v-virtual-scroll
                 :items="followLists"
-                :item-height="56"
+                :item-height="62"
                 height="484">
             <template v-slot:default="{ item,index }">
               <v-list-item :key="index" class="pl-8" @click="openChat(item.userId,index)">
