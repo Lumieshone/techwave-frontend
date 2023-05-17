@@ -103,6 +103,41 @@
           </template>
         </v-data-table>
       </v-col>
+      <!-- 添加一个确认框组件 -->
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">确认通过举报</v-card-title>
+
+          <v-card-text>你确定要通过该帖子的举报吗？</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <!-- 点击取消按钮，关闭确认框 -->
+            <v-btn color="blue darken-1" text @click="dialog = false">取消</v-btn>
+
+            <!-- 点击确定按钮，执行通过举报的逻辑，并关闭确认框 -->
+            <v-btn color="blue darken-1" text @click="confirmPostDelete()">确定</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialog2" max-width="290">
+        <v-card>
+          <v-card-title class="headline">确认通过举报</v-card-title>
+
+          <v-card-text>你确定要通过该评论或回复的举报吗？</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <!-- 点击取消按钮，关闭确认框 -->
+            <v-btn color="blue darken-1" text @click="dialog2 = false">取消</v-btn>
+
+            <!-- 点击确定按钮，执行通过举报的逻辑，并关闭确认框 -->
+            <v-btn color="blue darken-1" text @click="confirmCommentDelete()">确定</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </v-card>
 </template>
@@ -114,6 +149,10 @@ export default {
   name: "ProcessReport",
   data(){
     return {
+      selectedItem:null,
+      selectedItem2: null,
+      dialog2: false,
+      dialog : false,
       title1:"举报帖子列表",
       title2:"举报评论列表",
       showSectionDialog: false,
@@ -179,7 +218,25 @@ export default {
     },
     acceptPostDelete(item){
       console.log(item.reportedId)
-      acceptPostReport(item.userId,item.reportedId)
+      this.dialog = true;
+      this.selectedItem = item;
+    },
+    acceptCommentDelete(item){
+      console.log(item.reportedId)
+      this.dialog2 = true;
+      this.selectedItem2 = item;
+    },
+    editItem(item){
+      console.log(item)
+      this.showEditDialog = !this.showEditDialog
+      this.item = item
+    },
+    stepToSection(item){
+      this.$router.push({path: '/post/'+ item.reportedId})
+    },
+    confirmPostDelete() {
+      console.log(this.selectedItem)
+      acceptPostReport(this.selectedItem.userId,this.selectedItem.reportedId)
           .then(res => {
             if(res.code === 20000)
             {
@@ -196,9 +253,11 @@ export default {
               this.$message.error("通过帖子举报失败！")
             }
           })
+      this.dialog = false;
     },
-    acceptCommentDelete(item){
-      acceptCommentReport(item.userId,item.reportedId, item.reportType)
+    confirmCommentDelete() {
+      console.log(this.selectedItem2)
+      acceptCommentReport(this.selectedItem2.userId,this.selectedItem2.reportedId, this.selectedItem2.reportType)
           .then(res => {
             if(res.code === 20000) {
               this.$message.success("通过评论或回复举报成功")
@@ -216,14 +275,7 @@ export default {
             }
           })
           .catch((err) => console.log("error: " + err));
-    },
-    editItem(item){
-      console.log(item)
-      this.showEditDialog = !this.showEditDialog
-      this.item = item
-    },
-    stepToSection(item){
-      this.$router.push({path: '/post/'+ item.reportedId})
+      this.dialog2 = false;
     },
   },
   mounted() {
