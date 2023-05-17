@@ -3,7 +3,7 @@
     <LoginReminder></LoginReminder>
     <v-row v-show="isLogin">
       <v-col cols="3" class="pa-0">
-        <v-card height="640px" width="100%" color="#483D8B" tile>
+        <v-card height="638px" width="100%" color="#483D8B" tile>
           <v-navigation-drawer color="#483D8B" width="100%" dark tile permanent>
             <v-list>
               <v-list-item class="ml-8">
@@ -99,14 +99,15 @@ export default {
           },
         ];
       },
+    userAvatar(){
+        return this.$store.getters.avatar
+    }
   },
   data() {
     return {
       isLogin: this.$store.getters.roles.length !== 0,
       show: false,
       size: 2.5,
-      userAvatar: "",
-      username: "",
     };
   },
   //注册组件
@@ -128,7 +129,6 @@ export default {
   mounted() {
     if (this.isLogin) {
       console.log("获取用户信息成功");
-      this.username = this.$store.getters.username;
       this.userAvatar = this.$store.getters.avatar;
     }
   },

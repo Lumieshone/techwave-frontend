@@ -118,6 +118,9 @@ export default {
   computed:{
     username(){
       return this.$store.getters.username
+    },
+    userAvatar(){
+      return this.$store.getters.avatar;
     }
   },
   data() {
@@ -125,10 +128,6 @@ export default {
       isLogin: this.$store.getters.roles.length !== 0,
       show: false,
       size: 2.5,
-      // nickname:'莴苣某人',
-      // userEmail:'2053382@tongji.edu.cn',
-      // userAvatar:require("@/assets/avatar.jpg"),
-      userAvatar: this.$store.getters.avatar,
       account:"",
       items: [
         { title: "个人信息", icon: "mdi-account-box", router: "/account/info" },
@@ -166,7 +165,10 @@ export default {
       changeAvatar(fd)
         .then((res) => {
           console.log(res.message);
-          if (res.code === 20000) this.$message.success("修改头像成功！");
+          if (res.code === 20000) {
+            this.$message.success("修改头像成功！");
+            this.$store.dispatch("user/getInfo");
+          }
           else this.$message.error("修改头像失败~");
         })
         .catch((err) => console.log("error: " + err));

@@ -143,13 +143,15 @@ export default {
     },
     total(){
       return this.$store.getters.total
+    },
+    avatar(){
+      return this.$store.getters.avatar
     }
   },
   data() {
     return {
       drawer: false,
       isLogin: this.$store.getters.roles.length !== 0,
-      avatar: this.$store.getters.avatar,
       name: this.$store.getters.name,
     };
   },
