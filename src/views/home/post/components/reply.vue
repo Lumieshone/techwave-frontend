@@ -26,6 +26,7 @@
                   small
                   :disabled="!isLogin"
                   v-show="isLogin && singleReplyData.ableToDelete"
+                  @click="openDeleteDialog(singleReplyData.replyId)"
                 >
                   <span style="color: grey">删除</span>
                 </v-btn>
@@ -261,7 +262,6 @@ export default {
     openDeleteDialog(replyId) {
       this.showDeleteDialog = true;
       this.deleteReplyId = replyId;
-      console.log(this.deleteReplyId);
     },
     closeDeleteDialog() {
       this.showDeleteDialog = false;
