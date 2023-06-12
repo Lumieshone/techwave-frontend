@@ -3,11 +3,20 @@
     <v-card-title v-text="title"></v-card-title>
     <v-row style="margin-left: 20px" class="d-flex justify-center align-center">
       <v-col cols="2">
-        <v-text-field
-          v-model="targetId"
-          label="用户ID"
-          type="number"
-        />
+        <div>
+          <v-combobox
+              v-model="selectedUser"
+              :items="results"
+              label="选择用户"
+              item-text="username"
+              item-value="id"
+              placeholder="请搜索用户"
+              append-icon="mdi-magnify"
+              style="width: 400px"
+              @change="selectUser"
+              @keyup.enter="search"
+          ></v-combobox>
+        </div>
       </v-col>
       <v-col cols="2">
         <v-select
@@ -59,15 +68,18 @@
 </template>
 
 <script>
-import { getBannedUsers } from "@/api/moderator";
+import {getBannedUsers, searchUser} from "@/api/moderator";
 import { unbanUser, banUser } from "@/api/moderator";
 export default {
   name: "BanUser",
   data() {
     return {
+      selectedUser: null,
       targetId: null,
       banUntil: null,
       sectionId: null,
+      keyword: "",
+      results: [],
       title: "封禁用户",
       banDate: "",
       headers: [
@@ -86,6 +98,26 @@ export default {
     };
   },
   methods: {
+    selectUser() {
+      // 当选中某个用户时，将其对应的 ID 值存储在 this.targetId 中
+      this.targetId = this.selectedUser.id;
+    },
+    search() {
+      console.log(this.selectedUser)
+      searchUser(this.selectedUser, 1, 10)
+          .then(res => {
+            if(res.code === 20000){
+              console.log("搜索用户信息成功")
+              this.results = res.data.result
+            }
+            else{
+              console.log(res.msg)
+              this.$message.error("搜索用户信息获取失败！")
+            }
+          })
+          .catch((err) => console.log("error: " + err));
+      console.log(this.results)
+    },
     unban(id) {
       console.log(id, this.$route.params.sectionId);
       unbanUser({ targetId: id, sectionId: this.$route.params.sectionId }).then((res) => {
