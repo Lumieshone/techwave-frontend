@@ -390,7 +390,8 @@ export default {
     getPostBySubsection(id) {
       this.page = 1;
       this.subsectionId = id;
-      getPostsBySubsection(this.sectionId, id, 1, 10).then((res) => {
+      console.log(id)
+      getPostsBySubsection(id, 1, 10).then((res) => {
         if (res.code === 20000) {
           this.sectionData.postCount = res.data.total;
           this.sectionData.postVOList = res.data.postDataVOList;
